@@ -12,20 +12,11 @@ Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk d
 # Oude Resultaten
 Oude resultaten van het Moldel kun je vinden in de map 'results'.
 
-# Data Analyse
-Data analysis of Wie is de Mol history
-
-A jupyter notebook with analysis of 18 seasons of Wie is de Mol.
-
-Just clone or download the jupyter noteboook if you want to explore.
-
-Have fun
-
 # Credits
 Wij bedanken iedereen die ons meegeholpen heeft bij dit project, daaronder valt:
 * Jaap van Zessen (voor het gebruik van zijn sociale media analyse voor de Early Activity Layer)
+* Jesse van Elteren (voor zijn data analyses van Wie is de Mol)
 
 # Contact
-Als je meer wilt weten over dit project kun je een van ons contacteren:
-* Jesse van Elteren: jvanelteren@gmail.com
+Als je meer wilt weten over dit project kun je mij contacteren:
 * Multifacio: mfprojects@live.nl
