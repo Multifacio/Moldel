@@ -1,4 +1,5 @@
-from Data import *
+from Data.Player import *
+from .SuspicionLevel import *
 
 # Suspicion Levels must be determined manually by looking for early activity. "Wie is de Mol" is often recorded during
 # the month May and June, so during these months you have to check for activity. The recording of "Wie is de Mol" take

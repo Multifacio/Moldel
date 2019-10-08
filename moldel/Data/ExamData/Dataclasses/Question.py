@@ -1,5 +1,5 @@
+from __future__ import annotations
 from dataclasses import dataclass
-from Data import Player
 
 @dataclass
 class Question:
@@ -11,10 +11,10 @@ class Question:
         to this answer. Questions should always be a partitioning, meaning that every player is represented by
         exactly 1 answer.
     """
-    answer: dict
+    answers: dict
 
     def answer_for_player(self, player: Player) -> int:
         """ Get the answer number of the answer which contains the player """
-        for answer_num, players in self.answer:
+        for answer_num, players in self.answers:
             if player in players:
                 return answer_num

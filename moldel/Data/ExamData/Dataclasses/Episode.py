@@ -1,6 +1,6 @@
+from __future__ import annotations
 from dataclasses import dataclass
-from Data.ExamData.Dataclasses.Result import Result
-from Data.ExamData.Dataclasses.TestInput import TestInput
+from .TestInput import TestInput
 
 @dataclass
 class Episode:
@@ -14,7 +14,7 @@ class Episode:
         and the value is a Question instance.
         num_questions (int): The total number of questions the test had.
         skip_regression (bool): If true then the episode is not used for regression training and for regression
-        prediction. However every candidate that has dropped off will be excluded from being the Mol (even in episodes
+        prediction. However every player that has dropped off will be excluded from being the Mol (even in episodes
         with skip_regression equal to true).
     """
     players: list

@@ -3,15 +3,15 @@ from aenum import Enum, NoAlias
 
 PlayerData = namedtuple("PlayerData", ["name", "season", "is_mol"])
 class Player(Enum):
-    """ This enum contains all candidates that participated in 'Wie is de mol?' (if a candidate participated in multiple
-    seasons then you need an enum value for every season in which this candidate participated).
+    """ This enum contains all players that participated in 'Wie is de mol?' (if a player participated in multiple
+    seasons then you need an enum value for every season in which this player participated).
 
     Attributes:
-         name (str): The first name of the candidate (this is used for printing the results).
-         season (int): The season in which the candidate participated.
-         is_mol (bool): Boolean that represent whether this candidate was the Mol. If this value is true then this
-         candidate was the Mol. If this value is false then this candidate was not the Mol. Set this value to None if it
-         is unknown whether this candidate is the Mol.
+         name (str): The first name of the player (this is used for printing the results).
+         season (int): The season in which the player participated.
+         is_mol (bool): Boolean that represent whether this player was the Mol. If this value is true then this
+         player was the Mol. If this value is false then this player was not the Mol. Set this value to None if it
+         is unknown whether this player is the Mol.
     """
     _settings_ = NoAlias
 

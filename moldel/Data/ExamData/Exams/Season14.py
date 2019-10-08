@@ -1,4 +1,10 @@
-from Data import *
+from Data.Player import Player
+from ..Dataclasses.DropType import DropType
+from ..Dataclasses.Episode import Episode
+from ..Dataclasses.Question import Question
+from ..Dataclasses.Result import Result
+from ..Dataclasses.Season import Season
+from ..Dataclasses.TestInput import TestInput
 
 # Aflevering 1 - First (Rood scherm, maar niet afgevallen: Daphne) (10 vragen test)
 # Vragen:
@@ -339,5 +345,5 @@ episode9s = Episode(players9s, result9s,
                      Player.SUSAN_14: TestInput({20: 2})},
                     {9: question9s_9, 17: question9s_17, 20: question9s_20})
 
-season14 = (players1, {0.5: episode1f, 1: episode1s, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6,
-                       7: episode7, 8: episode8, 8.5: episode9f, 9: episode9s})
+season14 = Season(players1, {0.5: episode1f, 1: episode1s, 2: episode2, 3: episode3, 4: episode4, 5: episode5,
+                             6: episode6, 7: episode7, 8: episode8, 8.5: episode9f, 9: episode9s})

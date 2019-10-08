@@ -1,4 +1,10 @@
-from Data import *
+from Data.Player import Player
+from ..Dataclasses.DropType import DropType
+from ..Dataclasses.Episode import Episode
+from ..Dataclasses.Question import Question
+from ..Dataclasses.Result import Result
+from ..Dataclasses.Season import Season
+from ..Dataclasses.TestInput import TestInput
 
 # Aflevering 1 (afvaller: Vincent)
 # Vragen:
@@ -187,15 +193,14 @@ episode5 = Episode(players5, result5,
 # 14 - Hoeveel geld heeft de Mol verdiend tijdens de opdracht bij de rodeo?
 # 1: Thomas; 2: Imanuelle; 3: Diederik, Jochem, Sanne;
 # Antwoorden: Imanuelle (9, 4), Sanne (1, 1), Thomas (14, 3)
-players6 = [Player.DIEDERIK_17, Player.IMANUELLE_17, Player.JOCHEM_17, Player.SANNE_17,
-            Player.THOMAS_17]
+players6 = [Player.DIEDERIK_17, Player.IMANUELLE_17, Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17]
 question6_1 = Question({1: [Player.DIEDERIK_17, Player.JOCHEM_17, Player.THOMAS_17],
                         2: [Player.IMANUELLE_17, Player.SANNE_17]})
 question6_9 = Question({1: [Player.THOMAS_17], 2: [Player.JOCHEM_17], 3: [Player.IMANUELLE_17],
                         4: [Player.SANNE_17, Player.DIEDERIK_17]})
 question6_14 = Question({1: [Player.THOMAS_17], 2: [Player.IMANUELLE_17],
                          3: [Player.DIEDERIK_17, Player.JOCHEM_17, Player.SANNE_17]})
-result6 = Result(False, [Player.IMANUELLE_17, Player.DIEDERIK_17, Player.JOCHEM_17])
+result6 = Result(DropType.POSSIBLE_DROP, [Player.IMANUELLE_17, Player.DIEDERIK_17, Player.JOCHEM_17])
 episode6 = Episode(players6, result6,
                    {Player.IMANUELLE_17: TestInput({9: 4}), Player.SANNE_17: TestInput({1: 1}),
                     Player.THOMAS_17: TestInput({14: 3})},
@@ -213,17 +218,16 @@ episode6 = Episode(players6, result6,
 # 20 - Wie is de Mol?
 # 1: Diederik; 2: Imanuelle; 3: Jochem; 4: Sanne; 5: Thomas
 # Antwoorden: Imanuelle (17, 2), Diederik (10, 2), Jochem (20, 1) (1 Joker), Sanne (5, 5)
-players7 = [Player.DIEDERIK_17, Player.IMANUELLE_17, Player.JOCHEM_17, Player.SANNE_17,
-            Player.THOMAS_17]
-question7_5 = Question({1: [Player.IMANUELLE_17], 2: [Player.THOMAS_17], 3: [Player.SANNE_17],
-                        4: [Player.DIEDERIK_17], 5: [Player.JOCHEM_17]})
+players7 = [Player.DIEDERIK_17, Player.IMANUELLE_17, Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17]
+question7_5 = Question({1: [Player.IMANUELLE_17], 2: [Player.THOMAS_17], 3: [Player.SANNE_17], 4: [Player.DIEDERIK_17],
+                        5: [Player.JOCHEM_17]})
 question7_10 = Question({1: [Player.DIEDERIK_17, Player.IMANUELLE_17],
                          2: [Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17]})
 question7_17 = Question({1: [Player.THOMAS_17], 2: [Player.DIEDERIK_17], 3: [Player.JOCHEM_17],
                          4: [Player.IMANUELLE_17], 5: [Player.SANNE_17]})
-question7_20 = Question({1: [Player.DIEDERIK_17], 2: [Player.IMANUELLE_17], 3: [Player.JOCHEM_17],
-                         4: [Player.SANNE_17], 5: [Player.THOMAS_17]})
-result7 = Result(True, [Player.IMANUELLE_17])
+question7_20 = Question({1: [Player.DIEDERIK_17], 2: [Player.IMANUELLE_17], 3: [Player.JOCHEM_17], 4: [Player.SANNE_17],
+                         5: [Player.THOMAS_17]})
+result7 = Result(DropType.EXECUTION_DROP, [Player.IMANUELLE_17])
 episode7 = Episode(players7, result7,
                    {Player.IMANUELLE_17: TestInput({17: 2}), Player.DIEDERIK_17: TestInput({10: 2}),
                     Player.JOCHEM_17: TestInput({20: 1}, jokers = 1), Player.SANNE_17: TestInput({5: 5})},
@@ -238,13 +242,12 @@ episode7 = Episode(players7, result7,
 players8 = [Player.DIEDERIK_17, Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17]
 question8_1 = Question({1: [Player.DIEDERIK_17, Player.JOCHEM_17, Player.THOMAS_17],
                         2: [Player.SANNE_17]})
-question8_20 = Question({1: [Player.DIEDERIK_17], 2: [Player.JOCHEM_17], 3: [Player.SANNE_17],
-                         4: [Player.THOMAS_17]})
-result8 = Result(True, [Player.DIEDERIK_17])
+question8_20 = Question({1: [Player.DIEDERIK_17], 2: [Player.JOCHEM_17], 3: [Player.SANNE_17], 4: [Player.THOMAS_17]})
+result8 = Result(DropType.EXECUTION_DROP, [Player.DIEDERIK_17])
 episode8 = Episode(players8, result8,
                    {Player.THOMAS_17: TestInput({20: 2}), Player.SANNE_17: TestInput({20: 2}),
                     Player.DIEDERIK_17: TestInput({1: 2, 20: 2})},
                    {1: question8_1, 20: question8_20})
 
-season17 = (players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                       8: episode8})
+season17 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
+                             8: episode8})

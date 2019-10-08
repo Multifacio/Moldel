@@ -1,4 +1,10 @@
-from Data import *
+from Data.Player import Player
+from ..Dataclasses.DropType import DropType
+from ..Dataclasses.Episode import Episode
+from ..Dataclasses.Question import Question
+from ..Dataclasses.Result import Result
+from ..Dataclasses.Season import Season
+from ..Dataclasses.TestInput import TestInput
 
 # Aflevering 1 (afvaller: Ewout)
 # Vragen:
@@ -208,7 +214,7 @@ question7_14 = Question({1: [Player.KEES_13], 2: [Player.ZARAYDA_13], 3: [Player
                          5: [Player.DANIEL_13]})
 question7_20 = Question({1: [Player.CAROLIEN_13], 2: [Player.DANIEL_13], 3: [Player.KEES_13], 4: [Player.PAULIEN_13],
                          5: [Player.ZARAYDA_13]})
-result7 = Result(DropType.EXECUTION_PROP, [Player.DANIEL_13])
+result7 = Result(DropType.EXECUTION_DROP, [Player.DANIEL_13])
 episode7 = Episode(players7, result7,
                    {Player.ZARAYDA_13: TestInput({8: 3}), Player.CAROLIEN_13: TestInput({20: 3}),
                     Player.DANIEL_13: TestInput({20: 5}), Player.KEES_13: TestInput({14: 3})},
@@ -257,5 +263,5 @@ episode9 = Episode(players9, result9,
                     Player.CAROLIEN_13: TestInput({39: 3, 40: 2})},
                    {24: question9_24, 39: question9_39, 40: question9_40}, 40)
 
-season13 = (players1, {1: episode1, 2: episode2, 2.5: episode3f, 3: episode3s, 4: episode4, 5: episode5, 6: episode6,
-                       7: episode7, 8: episode8, 9: episode9})
+season13 = Season(players1, {1: episode1, 2: episode2, 2.5: episode3f, 3: episode3s, 4: episode4, 5: episode5,
+                             6: episode6, 7: episode7, 8: episode8, 9: episode9})

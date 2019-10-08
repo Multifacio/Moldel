@@ -2,7 +2,7 @@ from aenum import Enum, NoAlias
 
 class SuspicionLevel(Enum):
     """ The suspicion levels used for the Social Media Data. The values (float) of these enums correspond to the
-    relative probability decrease of being the mol when a candidate has this suspicion level. """
+    relative probability decrease of being the mol when a player has this suspicion level. """
     _settings_ = NoAlias
 
     NOT_UNLIKELY = 1.00

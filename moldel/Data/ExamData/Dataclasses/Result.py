@@ -1,5 +1,5 @@
+from __future__ import annotations
 from dataclasses import dataclass
-from Data.ExamData.Dataclasses import DropType
 
 @dataclass
 class Result:

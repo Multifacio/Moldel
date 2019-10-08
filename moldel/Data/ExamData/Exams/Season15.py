@@ -1,4 +1,10 @@
-from Data import *
+from Data.Player import Player
+from ..Dataclasses.DropType import DropType
+from ..Dataclasses.Episode import Episode
+from ..Dataclasses.Question import Question
+from ..Dataclasses.Result import Result
+from ..Dataclasses.Season import Season
+from ..Dataclasses.TestInput import TestInput
 
 # Aflevering 1 (afvaller: Pieter)
 # Vragen:
@@ -180,7 +186,8 @@ result5 = Result(DropType.POSSIBLE_DROP, [Player.VIKTOR_15])
 episode5 = Episode(players5, result5,
                    {Player.RIK_15: TestInput({18: 4}), Player.MARLIJN_15: TestInput({20: 2}),
                     Player.VIKTOR_15: TestInput({7: 2}), Player.MARGRIET_15: TestInput({15: 2}),
-                    Player.CAROLINA_15: TestInput({6: 1}), Player.MARTINE_15: TestInput({4: 2})},
+                    Player.CAROLINA_15: TestInput({6: 1}), Player.MARTINE_15: TestInput({4: 2}),
+                    Player.CHRIS_15: TestInput({17: 3})},
                    {4: question5_4, 6: question5_6, 7: question5_7, 15: question5_15, 17: question5_17,
                     18: question5_18, 20: question5_20})
 
@@ -293,9 +300,9 @@ question9_20 = Question({1: [Player.CHRIS_15], 2: [Player.MARGRIET_15], 3: [Play
 result9 = Result(DropType.EXECUTION_DROP, [Player.CHRIS_15])
 episode9 = Episode(players9, result9,
                    {Player.MARLIJN_15: TestInput(jokers = 1), Player.RIK_15: TestInput({1: 2}, jokers = 1),
-                    Player.MARGRIET_15: TestInput({16: 3}, jokers = 2)},
+                    Player.MARGRIET_15: TestInput({16: 3}, jokers = 2), Player.CHRIS_15: TestInput({20: 2})},
                    {1: question9_1, 16: question9_16, 20: question9_20})
 
 
-season15 = (players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                       8: episode8, 9: episode9})
+season15 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
+                             8: episode8, 9: episode9})

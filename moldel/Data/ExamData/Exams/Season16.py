@@ -1,4 +1,10 @@
-from Data import *
+from Data.Player import Player
+from ..Dataclasses.DropType import DropType
+from ..Dataclasses.Episode import Episode
+from ..Dataclasses.Question import Question
+from ..Dataclasses.Result import Result
+from ..Dataclasses.Season import Season
+from ..Dataclasses.TestInput import TestInput
 
 # Aflevering 1 (geen afvaller, alleen Klaas, Annemieke en Rop kregen hun scherm te zien)
 # Vragen:
@@ -91,7 +97,7 @@ episode2 = Episode(players2, result2,
 # 1: Annemieke, Klaas; 2: Remy, Taeke; 3: Ellie, Rop; 4: Cecile, Marjolein; 5: Tim;
 # 7 - Werd de Mol afgeschoten tijdens de Laser-opdracht:
 # 1: Tim, Annemieke, Rop, Marjolein, Ellie; 2: Klaas, Remy, Taeke, Cecille;
-# 8 - Pakte de Mol een verdubbelaar bij de Laser-opdracht?
+# 8 - Pakte de Mol een verdubbelaar bij de Laser-opdracht? (Te twijfelachtig om te gebruiken)
 # 1: Annemieke, Klaas, Taeke, Cecile 2: Tim, Remy, Rop, Ellie, Marjolein
 # 12 - Het team van de Mol kreeg bij aanvang van de Geld Matchen-opdracht:
 # 1: Rop, Ellie 2: Klaas, Tim; 3: Remy, Cecille, Marjolein 4: Taeke, Annemieke
@@ -118,6 +124,7 @@ question3_6 = Question({1: [Player.ANNEMIEKE_16, Player.KLAAS_16],
                         5: [Player.TIM_16]})
 question3_7 = Question({1: [Player.TIM_16, Player.ANNEMIEKE_16, Player.ROP_16, Player.MARJOLEIN_16, Player.ELLIE_16],
                         2: [Player.KLAAS_16, Player.REMY_16, Player.TAEKE_16, Player.CECILE_16]})
+# Deze vraag heb ik niet gebruikt, vanwege teveel twijfel over waar de antwoorden naar linken.
 question3_8 = Question({1: [Player.ANNEMIEKE_16, Player.KLAAS_16, Player.TAEKE_16, Player.CECILE_16],
                         2: [Player.TIM_16, Player.REMY_16, Player.ROP_16, Player.ELLIE_16, Player.MARJOLEIN_16]})
 question3_12 = Question({1: [Player.ROP_16, Player.ELLIE_16],
@@ -139,8 +146,8 @@ episode3 = Episode(players3, result3,
                     Player.TAEKE_16: TestInput({7: 2}), Player.MARJOLEIN_16: TestInput({19: 1}),
                     Player.KLAAS_16: TestInput({6: 5}), Player.CECILE_16: TestInput({20: 3}),
                     Player.TIM_16: TestInput({4: 3}), Player.ANNEMIEKE_16: TestInput({1: 1})},
-                   {1: question3_1, 4: question3_4, 6: question3_6, 7: question3_7, 8: question3_8,
-                    12: question3_12, 16: question3_16, 19: question3_19, 20: question3_20})
+                   {1: question3_1, 4: question3_4, 6: question3_6, 7: question3_7, 12: question3_12, 16: question3_16,
+                    19: question3_19, 20: question3_20})
 
 # Aflevering 4 (afvaller: Ellie)
 # Vragen:
@@ -173,7 +180,7 @@ result4 = Result(DropType.EXECUTION_DROP, [Player.ELLIE_16])
 episode4 = Episode(players4, result4,
                    {Player.TAEKE_16: TestInput({1: 1}), Player.ANNEMIEKE_16: TestInput({20: 8}, jokers = 3),
                     Player.CECILE_16: TestInput({17: 1}), Player.ELLIE_16: TestInput({5: 2}),
-                    Player.KLAAS_16: TestInput({20: 8}, jokers = 1)},
+                    Player.KLAAS_16: TestInput({20: 8}, jokers = 1), Player.MARJOLEIN_16: TestInput({4: 2})},
                    {1: question4_1, 4: question4_4, 5: question4_5, 17: question4_17, 20: question4_20})
 
 # Aflevering 5 (afvaller: Marjolein)
@@ -295,5 +302,5 @@ episode8 = Episode(players8, result8,
                     Player.TAEKE_16: TestInput(jokers = 1), Player.ANNEMIEKE_16: TestInput(immunity = True)},
                    {13: question8_13, 18: question8_18})
 
-season16 = (players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                       8: episode8})
+season16 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
+                             8: episode8})
