@@ -9,9 +9,9 @@ class Player(Enum):
     Attributes:
          name (str): The first name of the player (this is used for printing the results).
          season (int): The season in which the player participated.
-         is_mol (bool): Boolean that represent whether this player was the Mol. If this value is true then this
-         player was the Mol. If this value is false then this player was not the Mol. Set this value to None if it
-         is unknown whether this player is the Mol.
+         is_mol (bool): Boolean that represent whether this player was the Mol. If this value is true then this player
+            was the Mol. If this value is false then this player was not the Mol. Set this value to None if it is
+            unknown whether this player is the Mol.
     """
     _settings_ = NoAlias
 

@@ -11,11 +11,11 @@ class Episode:
         result (Result): Contains the data what happened during the execution (after the test).
         input (dict): What the players did during the test. The key is a player and the value is a TestInput instance.
         questions (dict): The questions of the test that were visible for the viewers. The key is the question number (int)
-        and the value is a Question instance.
+            and the value is a Question instance.
         num_questions (int): The total number of questions the test had.
         skip_regression (bool): If true then the episode is not used for regression training and for regression
-        prediction. However every player that has dropped off will be excluded from being the Mol (even in episodes
-        with skip_regression equal to true).
+            prediction. However every player that has dropped off will be excluded from being the Mol (even in episodes
+            with skip_regression equal to true).
     """
     players: list
     result: Result

@@ -7,9 +7,9 @@ class Question:
 
     Attributes:
         answers (dict): All the possible answers for this question. The key (int) is the answer number which starts
-        with 1 and are numbered from top to bottom, from left to right. The value is a list of players corresponding
-        to this answer. Questions should always be a partitioning, meaning that every player is represented by
-        exactly 1 answer.
+            with 1 and are numbered from top to bottom, from left to right. The value is a list of players corresponding
+            to this answer. Questions should always be a partitioning, meaning that every player is represented by
+            exactly 1 answer.
     """
     answers: dict
 
