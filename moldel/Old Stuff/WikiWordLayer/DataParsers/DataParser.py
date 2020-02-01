@@ -1,7 +1,6 @@
 import rootpath
 import string
 
-from Candidates import *
 from WikiWordLayer.DataParsers.Linker import LINKER
 
 class DataParser:
