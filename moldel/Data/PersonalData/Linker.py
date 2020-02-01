@@ -1,7 +1,7 @@
 from Data.Player import Player
 
 # The path where the wiki files are stored in plaintext
-WIKI_FILES_PATH = "Data/WikiWordData/WikiFiles/"
+WIKI_FILES_PATH = "Data/PersonalData/WikiFiles/"
 
 LINKER = {Player.EVELIEN_19: "Evelien_19.txt", Player.EVI_19: "Evi_19.txt", Player.JAMIE_19: "Jamie_19.txt",
           Player.MEREL_19: "Merel_19.txt", Player.NIELS_19: "Niels_19.txt", Player.NIKKIE_19: "Nikkie_19.txt",

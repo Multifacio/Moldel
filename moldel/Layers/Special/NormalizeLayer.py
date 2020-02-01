@@ -1,4 +1,4 @@
-from Layer import Layer
+from Layers.Layer import Layer
 
 class NormalizeLayer(Layer):
     """ The Normalize Layer will scale every likelihood by the same constant such that all likelihoods sum up to 1. """

@@ -4,7 +4,7 @@ import itertools
 from DistributionTransformers.NormalizeTransformer import NormalizeTransformer
 from EqualLayer import EqualLayer
 from FaceVisibilityLayers.Data import DATA
-from Layer import Layer, DataError
+from Layers.Layer import Layer, DataError
 
 class FaceVisibilityLayer(Layer):
     """ The Face Visibility Layer predict which candidate is the Mol based on how often this candidate appears during

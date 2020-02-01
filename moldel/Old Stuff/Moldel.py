@@ -5,7 +5,7 @@ from DistributionTransformers.LowerRemovalTransformer import LowerRemovalTransfo
 from DistributionTransformers.ManualExclusions import ManualExclusions
 from DistributionTransformers.RoundTransformer import RoundTransformer
 from EarlyActivityLayer.EarlyActivityLayer import EarlyActivityLayer
-from ExamLayer.ExamLayer import ExamLayer
+from Layers.ExamLayer import ExamLayer
 from FaceVisibilityLayers.FaceVisibilityLayer import FaceVisibilityLayer
 from Printers.PiechartPrinter import PiechartPrinter
 from WikiWordLayer.DataExtractors.Job_Extractor import Job_Extractor

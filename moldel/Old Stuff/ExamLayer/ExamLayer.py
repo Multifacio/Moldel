@@ -2,9 +2,9 @@ import math
 import random
 import numpy
 from DistributionTransformers.NormalizeTransformer import NormalizeTransformer
-from ExamLayer.Data.Data import EXAM_DATA
-from ExamLayer.Regression.GuessRegression import GuessRegression
-from Layer import Layer, DataError
+from Layers.ExamLayer import EXAM_DATA
+from Layers.ExamLayer import GuessRegression
+from Layers.Layer import Layer, DataError
 
 class ExamLayer(Layer):
     """ A Probability Distribution that is based on what the candidates answer on the 'Test' and how much 'Jokers' they use

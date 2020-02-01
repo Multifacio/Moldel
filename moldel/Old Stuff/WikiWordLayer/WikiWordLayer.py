@@ -1,5 +1,5 @@
 from DistributionTransformers.NormalizeTransformer import NormalizeTransformer
-from Layer import Layer
+from Layers.Layer import Layer
 from WikiWordLayer.DataExtractors.Output_Extractor import Output_Extractor
 from WikiWordLayer.DataParsers.DataParser import DataParser
 from WikiWordLayer.DataSelectors.Normal_Train_Selector import Normal_Train_Selector

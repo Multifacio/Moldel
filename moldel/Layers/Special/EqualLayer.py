@@ -1,4 +1,4 @@
-from Layer import Layer
+from Layers.Layer import Layer
 from Data.Player import Player
 
 class EqualLayer(Layer):

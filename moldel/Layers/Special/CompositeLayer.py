@@ -1,5 +1,5 @@
-from SpecialLayers.EqualLayer import EqualLayer
-from Layer import Layer
+from Layers.Special.EqualLayer import EqualLayer
+from Layers.Layer import Layer
 
 class CompositeLayer(Layer):
     """ The Composite Layer combines multiple layers by taking the product of likelihoods out of each layer for every player. """

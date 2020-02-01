@@ -1,7 +1,7 @@
 import numpy as np
 from Candidates import Candidates
-from ExamLayer.Data.Data import EXAM_DATA
-from ExamLayer.Regression.MLE_Gradient import MLE_Gradient
+from Layers.ExamLayer import EXAM_DATA
+from Layers.ExamLayer import MLE_Gradient
 
 class GuessRegression:
     """ The Guess Regression predicts how likely a candidate answers a random question correctly. """

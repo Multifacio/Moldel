@@ -1,5 +1,5 @@
 from DistributionTransformers.NormalizeTransformer import NormalizeTransformer
-from Layer import Layer, DataError
+from Layers.Layer import Layer, DataError
 
 class ManualLayer(Layer):
     """ The Manual Layer will set likelihoods to each candidate manually. """
