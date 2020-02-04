@@ -1,5 +1,7 @@
-from Layers.Layer import Layer
 from Data.ManualExclusionData import MANUAL_EXCLUSIONS
+from Data.Player import Player
+from Layers.Layer import Layer
+from typing import Dict, Set
 
 class ManualExclusionLayer(Layer):
     """ The Manual Exclusion Layer excludes certain players from being the Mol when an episode has passed (for these
@@ -13,7 +15,7 @@ class ManualExclusionLayer(Layer):
         """
         self.__layer = layer
 
-    def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: set) -> dict:
+    def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         layer_distribution = self.__layer.compute_distribution(predict_season, latest_episode, train_seasons)
         new_distribution = layer_distribution.copy()
         season_exclusions = MANUAL_EXCLUSIONS[predict_season]

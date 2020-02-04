@@ -1,6 +1,6 @@
 from aenum import Enum, NoAlias
 
-class Jobs(Enum):
+class Job(Enum):
     """ The most common jobs for the players. Each job has a corresponding list of words which belongs to that job."""
     _settings_ = NoAlias
 
