@@ -1,7 +1,7 @@
 # Introductie
 'Wie is de Mol?' is een programma op Nederland 1 dat elk jaar wordt uitgezonden. In dit programma moet kandidaten opdrachten doen waarmee je geld voor de pot kunt verdienen. Echter heb je ook een saboteur, die ook wel de 'Mol' wordt genoemd. De 'Mol' probeert te verhinderen dat er geld verdient wordt. De kandidaten moeten deze 'Mol' proberen te ontmaskeren. Bijna elke aflevering is er een test met vragen over de 'Mol' en de kandidaat die dan het minst weet over de 'Mol' valt af. Uiteindelijk blijven er op het einde 3 kandidaten over en degene die het meest weet over de 'Mol' is de winnaar van het spel en krijgt het bedrag dat in de pot zit. 
 
-Deze serie wordt al sinds 1999 uitgezonden en er zijn daarom inmiddels al 19 seizoenen gepasseerd. Ook de kijkers thuis proberen te achter halen tijdens de serie wie de 'Mol' is. Echter heeft het meerendeel van de kijkers het vaak fout wie de 'Mol' is. Daarom zijn we dit project gestart en doen we diepe analyses, simulaties en berekeningen om op een objectieve manier te kunnen bepalen wie de mol is.
+Deze serie wordt al sinds 1999 uitgezonden en er zijn daarom inmiddels al 19 seizoenen gepasseerd. Ook de kijkers thuis proberen te achter halen tijdens de serie wie de 'Mol' is. Echter heeft het meerendeel van de kijkers het vaak fout wie de 'Mol' is. Daarom ben ik dit project gestart en doe ik diepe analyses, simulaties en berekeningen om op een objectieve manier te kunnen bepalen wie de mol is.
 
 # Moldel
 Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk deze speler de 'Mol' is. Deze score komt tot stand door de volgende layers:
@@ -12,20 +12,11 @@ Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk d
 # Oude Resultaten
 Oude resultaten van het Moldel kun je vinden in de map 'results'.
 
-# Data Analyse
-Data analysis of Wie is de Mol history
-
-A jupyter notebook with analysis of 18 seasons of Wie is de Mol.
-
-Just clone or download the jupyter noteboook if you want to explore.
-
-Have fun
-
 # Credits
-Wij bedanken iedereen die ons meegeholpen heeft bij dit project, daaronder valt:
+Ik bedank iedereen die mij meegeholpen heeft bij dit project, daaronder valt:
 * Jaap van Zessen (voor het gebruik van zijn sociale media analyse voor de Early Activity Layer)
+* Jesse van Elteren: jvanelteren@gmail.com (voor zijn ideëen om de analyses beter te maken) 
 
 # Contact
-Als je meer wilt weten over dit project kun je een van ons contacteren:
-* Jesse van Elteren: jvanelteren@gmail.com
+Als je meer wilt weten over dit project kun je mij contacteren op:
 * Multifacio: mfprojects@live.nl
