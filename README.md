@@ -15,7 +15,7 @@ Oude resultaten van het Moldel kun je vinden in de map 'results'.
 # Credits
 Ik bedank iedereen die mij meegeholpen heeft bij dit project, daaronder valt:
 * Jaap van Zessen (voor het gebruik van zijn sociale media analyse voor de Early Activity Layer)
-* Jesse van Elteren: jvanelteren@gmail.com (voor zijn ideëen om de analyses beter te maken) 
+* Jesse van Elteren (voor zijn ideëen om de analyses beter te maken) 
 
 # Contact
 Als je meer wilt weten over dit project kun je mij contacteren op:
