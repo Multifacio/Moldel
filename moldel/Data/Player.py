@@ -13,8 +13,6 @@ class Player(Enum):
             was the Mol. If this value is false then this player was not the Mol. Set this value to None if it is
             unknown whether this player is the Mol.
     """
-    _settings_ = NoAlias
-
     ANNETTE_8 = PlayerData("Annette", 8, False)
     COEN_8 = PlayerData("Coen", 8, False)
     DENNIS_8 = PlayerData("Dennis", 8, True)
@@ -125,8 +123,8 @@ class Player(Enum):
     RUBEN_18 = PlayerData("Ruben", 18, False)
     SIMONE_18 = PlayerData("Simone", 18, False)
     STINE_18 = PlayerData("Stine", 18, False)
-    EVI_19 = PlayerData("Evi", 19, False)
     EVELIEN_19 = PlayerData("Evelien", 19, False)
+    EVI_19 = PlayerData("Evi", 19, False)
     JAMIE_19 = PlayerData("Jamie", 19, False)
     MEREL_19 = PlayerData("Merel", 19, True)
     NIELS_19 = PlayerData("Niels", 19, False)
