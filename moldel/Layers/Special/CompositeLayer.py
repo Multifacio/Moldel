@@ -1,9 +1,10 @@
 from Data.Player import Player
 from Layers.Special.EqualLayer import EqualLayer
+from Layers.Special.NormalizeLayer import NormalizeLayer
 from Layers.Layer import Layer
 from typing import Dict, List, Set
 
-class CompositeLayer(Layer):
+class InnerCompositeLayer(Layer):
     """ The Composite Layer combines multiple layers by taking the product of likelihoods out of each layer for every player. """
 
     def __init__(self, layers: List[Layer]):
@@ -22,3 +23,7 @@ class CompositeLayer(Layer):
             for player, likelihood in new_distribution.items():
                 new_distribution[player] = layer_distribution[player] * likelihood
         return new_distribution
+
+class CompositeLayer(NormalizeLayer):
+    def __init__(self, layers: List[Layer]):
+        super().__init__(InnerCompositeLayer(layers))

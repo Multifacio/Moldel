@@ -18,7 +18,7 @@ class WikiWordExtractor:
 
     # Job frequencies higher than this value will be set to this value in the input extraction to prevent overfitting
     # on outlier data. (Note that after this still the logarithm will be applied)
-    JOB_FREQUENCY_CUT_OFF = 16
+    JOB_FREQUENCY_CUT_OFF = 10
 
     def __init__(self, train_data: Dict[Player, WikiWordData]):
         """ Constructor of the Wiki Word Extractor (is used to determine which Job features need to be excluded).

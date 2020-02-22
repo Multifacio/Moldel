@@ -25,6 +25,8 @@ class PieChartPrinter(Printer):
             if likelihood >= self.include_threshold:
                 labels.append(player.value.name)
                 sizes.append(likelihood)
+        sizes_sum = sum(sizes)
+        sizes = [size / sizes_sum for size in sizes]
         plt.pie(sizes, labels=labels, autopct='%1.1f%%')
         plt.axis('equal')
         plt.show()

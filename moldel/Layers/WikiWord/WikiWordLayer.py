@@ -1,6 +1,8 @@
 from Data.Player import Player
+from Data.WikiWord.Linker import LINKER
 from Layers.Layer import Layer
-from Layers.Special.NormalizeLayer import NormalizeLayer
+from Layers.Special.EqualLayer import EqualLayer
+from Layers.Special.UppercutLayer import UppercutLayer
 from Layers.WikiWord.WikiWordExtractor import WikiWordExtractor
 from Layers.WikiWord.WikiWordParser import WikiWordParser
 from sklearn.linear_model import LogisticRegression
@@ -8,8 +10,6 @@ from typing import Dict, Set
 import numpy as np
 
 class InnerWikiWordLayer(Layer):
-    """ The Wiki Word Layer predicts which candidate is the Mol based on their wikipedia pages. """
-
     MAX_TRAINING_ITERATIONS = 1000 # For how many iterations the logistic regression has to be trained
 
     # How strong the regularization will be. Lower values means a stronger regularization, higher values means a weaker
@@ -18,8 +18,10 @@ class InnerWikiWordLayer(Layer):
     REGULARIZATION_PARAMETER = 0.2
 
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
-        train_data = WikiWordParser.parse(train_seasons)
+        if predict_season not in self.seasons_with_data():
+            return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
 
+        train_data = WikiWordParser.parse(train_seasons)
         extractor = WikiWordExtractor(train_data)
         train_input = []
         train_output = []
@@ -39,6 +41,12 @@ class InnerWikiWordLayer(Layer):
 
         return distribution
 
-class WikiWordLayer(NormalizeLayer):
+    @staticmethod
+    def seasons_with_data() -> Set[int]:
+        return {player.value.season for player in LINKER}
+
+class WikiWordLayer(UppercutLayer):
+    """ The Wiki Word Layer predicts which candidate is the Mol based on their wikipedia pages. """
+
     def __init__(self):
         super().__init__(InnerWikiWordLayer())
