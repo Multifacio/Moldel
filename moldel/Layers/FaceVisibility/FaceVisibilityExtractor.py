@@ -103,15 +103,11 @@ class FaceVisibilityExtractor:
             The input/feature encoding for this player in combination with the selected episodes.
         """
         relative_occurrence = 0
-        quantile_occurrences = np.zeros(len(self.FRAME_QUANTILES))
         for episode in selected_episodes:
             relative_occurrence += self.__get_relative_occurrence(player, parsed_videos[episode])
-            quantile_occurrences += self.__get_quantile_occurrences(player, parsed_videos[episode])
 
         relative_occurrence /= len(selected_episodes)
-        quantile_occurrences /= len(selected_episodes)
-        return np.concatenate((np.array([season, season ** 2, relative_occurrence, relative_occurrence ** 2,
-                season * relative_occurrence]), quantile_occurrences))
+        return np.array([relative_occurrence, season])
 
     @classmethod
     def __get_relative_occurrence(self, player: Player, parsed_video: ParsedVideo) -> float:
@@ -129,35 +125,3 @@ class FaceVisibilityExtractor:
             total_occurrence += len(parsed_video.player_occurrences[p])
         own_occurrence = len(parsed_video.player_occurrences[player]) * len(parsed_video.alive_players)
         return math.log(self.SMALL_LOG_ADDITION + own_occurrence / total_occurrence)
-
-    @classmethod
-    def __get_quantile_occurrences(self, player: Player, parsed_video: ParsedVideo) -> np.array:
-        """ Get the quantile occurrences of a player which is the relative occurrence during parts of the episode
-        (e.g. first, middle, last part of the episode) compared to the total occurrence of that same player during the
-        episode.
-
-        Parameters:
-            player (Player): The player for which we determine the quantile occurrences.
-            parsed_video (ParsedVideo): The video data about that episode.
-
-        Returns:
-            The quantile occurrences of that player, i.e. the spreading of the occurrences of that player during the
-            episode.
-        """
-        own_total_occurrence = len(parsed_video.player_occurrences[player])
-        all_frame_occurrences = []
-        for p in parsed_video.alive_players:
-            all_frame_occurrences.extend(parsed_video.player_occurrences[p])
-
-        bounds = []
-        for quantile in self.FRAME_QUANTILES:
-            bounds.append(np.quantile(all_frame_occurrences, quantile))
-        bounds.append(math.inf)
-
-        quantile_occurrences = []
-        for lowerbound, upperbound in zip(bounds, bounds[1:]):
-            occurrence = sum(lowerbound <= frame < upperbound for frame in parsed_video.player_occurrences[player])
-            occurrence = math.log(self.SMALL_LOG_ADDITION + min(occurrence / own_total_occurrence, self.QUANTILE_OCCURRENCE_UPPERBOUND))
-            quantile_occurrences.append(occurrence)
-
-        return np.array(quantile_occurrences)

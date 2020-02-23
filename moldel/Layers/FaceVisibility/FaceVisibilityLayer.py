@@ -4,17 +4,14 @@ from Layers.FaceVisibility.VideoParser import VideoParser
 from Layers.Layer import Layer
 from Layers.Special.EqualLayer import EqualLayer
 from Layers.Special.NormalizeLayer import NormalizeLayer
-from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsRegressor
 from typing import Dict, Set
 import numpy as np
 
 class InnerFaceVisibilityLayer(Layer):
     MAX_TRAINING_ITERATIONS = 1000000  # For how many iterations the logistic regression has to be trained
 
-    # How strong the regularization will be. Lower values means a stronger regularization, higher values means a weaker
-    # regularization. A strong regularization prevents overfitting and will bring the computed distribution more to
-    # an uniform distribution.
-    REGULARIZATION_PARAMETER = 100.0
+    DISTANCE_WEIGHTS = np.array([200.0, 1.0])
 
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         # Get the latest episode that is still available as data used for the prediction.
@@ -35,8 +32,8 @@ class InnerFaceVisibilityLayer(Layer):
             train_input.extend(input)
             train_output.extend(output)
 
-        classifier = LogisticRegression(solver='lbfgs', max_iter=self.MAX_TRAINING_ITERATIONS, penalty='l2',
-                                        C=self.REGULARIZATION_PARAMETER)
+        classifier = KNeighborsRegressor(n_neighbors = len(train_input), weights = 'distance', metric = 'wminkowski',
+                                         p = 2, metric_params = {'w': self.DISTANCE_WEIGHTS})
         classifier.fit(np.array(train_input), np.array(train_output))
 
         distribution = dict()
@@ -45,7 +42,9 @@ class InnerFaceVisibilityLayer(Layer):
         for player in season_players:
             if player in predict_data:
                 predict_input = predict_data[player]
-                distribution[player] = classifier.predict_proba(np.array([predict_input]))[0][1]
+                distribution[player] = classifier.predict(np.array([predict_input]))[0]
+                print(player)
+                print(distribution[player])
             else:
                 distribution[player] = 0.0
 
