@@ -1,20 +1,17 @@
 from Data.Player import Player
 from Layers.FaceVisibility.VideoParser import ParsedVideo, VideoParser
+from sklearn.preprocessing import PolynomialFeatures
+from statistics import mean
 from typing import Dict, List, Tuple, Set
 import itertools
 import math
 import numpy as np
 
 class FaceVisibilityExtractor:
-    # The quantiles in which the all occurrences in an episode get split up. These split ups are used to determine the
-    # quantile occurrences, which is the relative occurrence of the player in every quantile.
-    FRAME_QUANTILES = [0.0, 0.2, 0.4, 0.6, 0.8]
-
-    # The quantile occurrence for every quantile gets upperbounded by this value (so higher values will be made equal
-    # to this value).
-    QUANTILE_OCCURRENCE_UPPERBOUND = 0.2
-
+    # Since the logarithm of 0 is undefined, we add this small number before applying a logarithmic transformation.
     SMALL_LOG_ADDITION = 0.0001
+
+    POLYNOMIAL_DEGREE = 2
 
     @classmethod
     def get_train_data(self, season: int, predict_episode: int) -> Tuple[List[np.array], List[int]]:
@@ -102,16 +99,18 @@ class FaceVisibilityExtractor:
         Returns:
             The input/feature encoding for this player in combination with the selected episodes.
         """
-        relative_occurrence = 0
+        occur_values = []
         for episode in selected_episodes:
-            relative_occurrence += self.__get_relative_occurrence(player, parsed_videos[episode])
+            occur_values.append(self.__get_occur_value(player, parsed_videos[episode]))
 
-        relative_occurrence /= len(selected_episodes)
-        return np.array([relative_occurrence, season])
+        mean_occur = self.__trimmed_mean(occur_values)
+        polynomial_expander = PolynomialFeatures(degree=self.POLYNOMIAL_DEGREE, include_bias=False)
+        return polynomial_expander.fit_transform(np.array([[mean_occur, season]]))[0]
 
     @classmethod
-    def __get_relative_occurrence(self, player: Player, parsed_video: ParsedVideo) -> float:
-        """ Get the relative occurrence of a player in a given episode compared to the total occurrence of all players.
+    def __get_occur_value(self, player: Player, parsed_video: ParsedVideo) -> float:
+        """ Get the logarithmic relative occurrence of a player in a given episode compared to the total occurrence of
+        all players in that episode.
 
         Parameters:
             player (Player): The player of which we determine the relative occurrence.
@@ -125,3 +124,14 @@ class FaceVisibilityExtractor:
             total_occurrence += len(parsed_video.player_occurrences[p])
         own_occurrence = len(parsed_video.player_occurrences[player]) * len(parsed_video.alive_players)
         return math.log(self.SMALL_LOG_ADDITION + own_occurrence / total_occurrence)
+
+    @classmethod
+    def __trimmed_mean(self, occur_values: List[float]) -> float:
+        simple_mean = mean(occur_values)
+        if len(occur_values) <= 4:
+            return simple_mean
+        else:
+            deviations = [abs(occur_value - simple_mean) for occur_value in occur_values]
+            outlier_index = np.argmax(deviations)
+            del deviations[outlier_index]
+            return mean(deviations)
