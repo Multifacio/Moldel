@@ -1,8 +1,6 @@
 from Data.Player import Player
 from Layers.FaceVisibility.VideoParser import ParsedVideo, VideoParser
-from scipy import stats
-from sklearn.feature_selection import f_classif
-from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
 from typing import Dict, List, NamedTuple, Tuple, Set, Union
 import itertools
 import math
@@ -12,112 +10,49 @@ Encoding = NamedTuple("Encoding", [("season", int), ("occurrences", List[float])
 class FaceVisibilityExtractor:
     SMALL_LOG_ADDITION = 0.0001 # Small value that is added to prevent that the logarithm of 0.0 is taken.
 
-    def __init__(self, predict_season: int, train_seasons: Set[int], upto_episode: int, z_score_cut: float):
-        """ Constructor of the Face Visibility Extractor.
-
-        Parameters:
-            predict_season (int): The season for which we want to make predictions.
-            train_seasons (Set[int]): A set of season numbers (int) which are used for training.
-            upto_episode (int): The last episode up to (and including) which we use the FaceVisibility data in the
-            prediction season.
-        """
-        self.predict_season = predict_season
-        self.train_seasons = train_seasons
-        self.upto_episode = upto_episode
-        self.z_score_cut = z_score_cut
-
-    def get_train_data(self) -> Tuple[np.array, np.array]:
-        """ Get all the fully processed train data.
-
-        Returns:
-            A tuple where the first output is a 2 dimensional matrix of all fully processed train input and the second
-            output is an array of all fully processed train output.
-        """
-        all_train_data = []
-        for season in self.train_seasons:
-            all_train_data.extend(self.__get_season_train_data(season))
-
-        # Detrend the data by removing the regression between the season and the occurrences
-        self.time_regressions = []
-        train_input = []
-        for i in range(len(all_train_data[0].occurrences)):
-            X = np.array([np.array([d.season]) for d in all_train_data if d.is_mol])
-            y = np.array([d.occurrences[i] for d in all_train_data if d.is_mol])
-            regression = LinearRegression()
-            regression.fit(X, y)
-            occurrences = np.array([d.occurrences[i] for d in all_train_data])
-            predictions = regression.predict(np.array([[d.season] for d in all_train_data]))
-            train_input.append(occurrences - predictions)
-            self.time_regressions.append(regression)
-
-        train_input = np.array(train_input).T
-        train_output = np.array([1 if data_point.is_mol else 0 for data_point in all_train_data])
-        for input, label in zip(train_input, train_output):
-            if label == 1.0:
-                print("Mol")
-                print(input)
-            else:
-                pass
-                # print("Not Mol")
-                # print(input)
-
-        # Maximize and minimize all outliers for the prediction data by using z-scores
-        occurrences = train_input.flatten()
-        z_scores = stats.zscore(occurrences)
-        self.outlier_minimum = min([occ for occ, z in zip(occurrences, z_scores) if z >= -self.z_score_cut])
-        self.outlier_maximum = max([occ for occ, z in zip(occurrences, z_scores) if z <= self.z_score_cut])
-
-        # Take a weighted sum over all occurrences based on the ANOVA scores
-        self.weights = np.ones(len(train_input[0])) - f_classif(train_input, train_output)[1]
-        self.weights /= sum(self.weights)
-        train_input = np.expand_dims(np.matmul(train_input, self.weights), axis = 1)
-        print(train_input)
-
-        return train_input, train_output
-
-    def get_predict_data(self) -> Dict[Player, np.array]:
-        predict_data = self.__get_season_predict_data()
-        predictions = np.array([tr.predict(np.array([[self.predict_season]]))[0] for tr in self.time_regressions])
-        for player, encoding in predict_data.items():
-            features = np.array(encoding.occurrences) - predictions
-            features = np.maximum(features, np.full(features.shape, self.outlier_minimum))
-            features = np.minimum(features, np.full(features.shape, self.outlier_maximum))
-            predict_data[player] = np.expand_dims(np.inner(features, self.weights), axis = 0)
-        return predict_data
-
-    def __get_season_train_data(self, season: int) -> List[Encoding]:
+    @classmethod
+    def get_train_data(self, seasons: Set[int], upto_episode: int) -> List[Encoding]:
         """ Get all non-fully processed train data from a given season.
 
         Parameters:
             season (int): The season from which the train data will be obtained.
+            upto_episode (int): The last episode up to (and including) for which we use the FaceVisibility data in the
+                prediction season.
 
         Returns:
-            A list of all train data non-fully processed encodings
+            A list of all train data non-fully processed encodings.
         """
-        parsed_videos = self.__get_parsed_videos(season)
-        player_episodes = self.__get_players_with_episodes(season, parsed_videos)
         train_data = []
-        for player, episodes in player_episodes.items():
-            for selected_episodes in itertools.combinations(episodes, self.upto_episode):
-                encoding = self.__get_input_data(player, season, selected_episodes, parsed_videos, player.value.is_mol)
-                train_data.append(encoding)
+        for season in seasons:
+            parsed_videos = self.__get_parsed_videos(season)
+            player_episodes = self.__get_players_with_episodes(season, parsed_videos)
+            for player, episodes in player_episodes.items():
+                for selected_episodes in itertools.combinations(episodes, upto_episode):
+                    encoding = self.__get_input_data(player, season, selected_episodes, parsed_videos,
+                                                     player.value.is_mol)
+                    train_data.append(encoding)
         return train_data
 
-    def __get_season_predict_data(self) -> Dict[Player, Encoding]:
+    @classmethod
+    def get_predict_data(self, season: int, upto_episode: int) -> Dict[Player, Encoding]:
         """ Get all non-fully processed data from the predict season, i.e. the season in which we make a prediction.
 
         Parameters:
             season (int): The season for which we want to make predictions.
+            upto_episode (int): The last episode up to (and including) for which we use the FaceVisibility data in the
+                prediction season.
 
-        A dictionary with the non-fully processed feature encoding for every player in that given season
+        Returns:
+            A dictionary with the non-fully processed feature encoding for every player in that given season.
         """
-        parsed_videos = self.__get_parsed_videos(self.predict_season)
+        parsed_videos = self.__get_parsed_videos(season)
         predict_data = dict()
-        for player in parsed_videos[self.upto_episode].alive_players:
-            predict_data[player] = self.__get_input_data(player, self.predict_season,
-                                                         tuple(range(1, self.upto_episode + 1)), parsed_videos, None)
+        for player in parsed_videos[upto_episode].alive_players:
+            predict_data[player] = self.__get_input_data(player, season, tuple(range(1, upto_episode + 1)),
+                                                         parsed_videos, None)
         return predict_data
 
+    @classmethod
     def __get_parsed_videos(self, season: int) -> Dict[int, ParsedVideo]:
         """ Load the parsed videos for the given season.
 
@@ -137,6 +72,7 @@ class FaceVisibilityExtractor:
                 parsed_videos[episode] = parsed_video
         return parsed_videos
 
+    @classmethod
     def __get_players_with_episodes(self, season: int, parsed_videos: Dict[int, ParsedVideo]) -> Dict[Player, Set[int]]:
         """ Get the players that participated in this season with the corresponding episodes in which these players
         participated.
@@ -155,6 +91,7 @@ class FaceVisibilityExtractor:
             player_episodes[player] = episode_occurrences
         return player_episodes
 
+    @classmethod
     def __get_input_data(self, player: Player, season: int, selected_episodes: Tuple[int],
                          parsed_videos: Dict[int, ParsedVideo], is_mol: Union[bool, None]) -> np.array:
         """ Get the input/feature encoding for a player for a combination of selected episodes.
@@ -165,7 +102,7 @@ class FaceVisibilityExtractor:
             selected_episodes (Tuple[int]): The selected combination of episodes from which the features get extracted.
             parsed_videos (Dict[int, ParsedVideo]): The parsed video data of the episodes in this season.
             is_mol (Union[bool, None]): True if that player is the Mol, false if that player is not the Mol. None if it
-            is unknown whether that player is the Mol.
+                is unknown whether that player is the Mol.
         Returns:
             The input/feature encoding for the given player with this combination of episodes.
         """
@@ -175,6 +112,7 @@ class FaceVisibilityExtractor:
         occurrences.sort()
         return Encoding(season, occurrences, is_mol)
 
+    @classmethod
     def __get_relative_occurrence(self, player: Player, parsed_video: ParsedVideo) -> float:
         """ Get the relative occurrence of a player in a given episode compared to the total occurrence of all players.
 
