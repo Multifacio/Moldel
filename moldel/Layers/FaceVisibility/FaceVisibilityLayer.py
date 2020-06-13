@@ -1,17 +1,23 @@
+import math
+
 from Data.Player import Player
 from Layers.FaceVisibility.FaceVisibilityExtractor import FaceVisibilityExtractor
 from Layers.FaceVisibility.VideoParser import VideoParser
 from Layers.Layer import Layer
 from Layers.Special.EqualLayer import EqualLayer
 from Layers.Special.NormalizeLayer import NormalizeLayer
+from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsRegressor
+from sklearn.preprocessing import StandardScaler
 from typing import Dict, Set
 import numpy as np
 
 class InnerFaceVisibilityLayer(Layer):
     MAX_TRAINING_ITERATIONS = 1000000  # For how many iterations the logistic regression has to be trained
 
-    DISTANCE_WEIGHTS = np.array([200.0, 1.0])
+    MIN_SEASON_WEIGHT = -10.0
+    MAX_SEASON_WEIGHT = 10.0
+    STEP_SEASON_WEIGHT = 0.25
 
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         # Get the latest episode that is still available as data used for the prediction.
@@ -25,24 +31,24 @@ class InnerFaceVisibilityLayer(Layer):
         if max_episode == 0:
             return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
 
-        train_input = []
-        train_output = []
-        for train_season in train_seasons:
-            input, output = FaceVisibilityExtractor.get_train_data(train_season, max_episode)
-            train_input.extend(input)
-            train_output.extend(output)
+        train_input, train_output = FaceVisibilityExtractor.get_train_data(sorted(train_seasons), max_episode)
+        scaler = StandardScaler()
+        train_input = scaler.fit_transform(train_input)
 
-        classifier = KNeighborsRegressor(n_neighbors = len(train_input), weights = 'distance', metric = 'wminkowski',
-                                         p = 2, metric_params = {'w': self.DISTANCE_WEIGHTS})
-        classifier.fit(np.array(train_input), np.array(train_output))
+        nn_model = KNeighborsRegressor(n_neighbors = len(train_input) * 2 // 3, weights = 'distance',
+                                       metric = 'wminkowski', p = 2)
+        classifier = GridSearchCV(estimator = nn_model, param_grid =
+            {'metric_params': [{'w': [math.exp(i)] for i in np.arange(self.MIN_SEASON_WEIGHT, self.MAX_SEASON_WEIGHT,
+                                                                      self.STEP_SEASON_WEIGHT)}]})
+        classifier.fit(train_input, train_output)
 
         distribution = dict()
         predict_data = FaceVisibilityExtractor.get_predict_data(predict_season, max_episode)
         season_players = [player for player in Player if player.value.season == predict_season]
         for player in season_players:
             if player in predict_data:
-                predict_input = predict_data[player]
-                distribution[player] = classifier.predict(np.array([predict_input]))[0]
+                predict_input = scaler.transform(np.array([predict_data[player]]))
+                distribution[player] = classifier.predict(predict_input)[0]
                 print(player)
                 print(distribution[player])
             else:

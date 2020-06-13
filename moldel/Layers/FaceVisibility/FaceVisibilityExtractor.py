@@ -6,40 +6,32 @@ import math
 import numpy as np
 
 class FaceVisibilityExtractor:
-    # The quantiles in which the all occurrences in an episode get split up. These split ups are used to determine the
-    # quantile occurrences, which is the relative occurrence of the player in every quantile.
-    FRAME_QUANTILES = [0.0, 0.2, 0.4, 0.6, 0.8]
-
-    # The quantile occurrence for every quantile gets upperbounded by this value (so higher values will be made equal
-    # to this value).
-    QUANTILE_OCCURRENCE_UPPERBOUND = 0.2
-
     SMALL_LOG_ADDITION = 0.0001
 
     @classmethod
-    def get_train_data(self, season: int, predict_episode: int) -> Tuple[List[np.array], List[int]]:
+    def get_train_data(self, train_seasons: List[int], predict_episode: int) -> Tuple[np.array, np.array]:
         """ Get all train data from a given season.
 
         Parameters:
-            season (int): The season from which the train data will be obtained.
+            train_seasons (int): The season from which the train data will be obtained.
             predict_episode (int): The latest episode used in the predict season.
 
         Returns:
             A tuple consisting of a list of input features per case and a list of output results, where both lists have
             the same length and input item i corresponds to the ith output item.
         """
-        parsed_videos = self.__get_parsed_videos(season)
-        player_episodes = self.__get_players_with_episodes(season, parsed_videos)
-
         input = []
         output = []
-        for player, episodes in player_episodes.items():
-            is_mol = 1 if player.value.is_mol else 0
-            for selected_episodes in itertools.combinations(episodes, predict_episode):
-                input.append(self.__get_input_data(player, season, selected_episodes, parsed_videos))
-                output.append(is_mol)
+        for season in train_seasons:
+            parsed_videos = self.__get_parsed_videos(season)
+            player_episodes = self.__get_players_with_episodes(season, parsed_videos)
+            for player, episodes in player_episodes.items():
+                is_mol = 1.0 if player.value.is_mol else 0.0
+                for selected_episodes in itertools.combinations(episodes, predict_episode):
+                    input.append(self.__get_input_data(player, season, selected_episodes, parsed_videos))
+                    output.append(is_mol)
 
-        return (input, output)
+        return np.array(input), np.array(output)
 
     @classmethod
     def get_predict_data(self, season: int, predict_episode: int) -> Dict[Player, np.array]:
