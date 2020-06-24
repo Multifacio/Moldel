@@ -1,4 +1,5 @@
-from FaceVisibilityLayers.Configuration import FACE_IMAGE_LOCATIONS, EPISODE_VIDEO_LOCATION, FRAME_SKIP, IDENTIFIER_NAME
+from Layers.FaceVisibility.ParserConfiguration import FACE_IMAGE_LOCATIONS, EPISODE_VIDEO_LOCATION, FRAME_SKIP, \
+    SEASON_NUMBER, EPISODE_NUMBER
 import face_recognition as fr
 import cv2
 
@@ -12,7 +13,8 @@ class FaceTracker:
     TOLERANCE = 0.50
 
     def track_faces(self):
-        print(IDENTIFIER_NAME)
+        identifier_name = "S" + str(SEASON_NUMBER) + "E" + str(EPISODE_NUMBER)
+        print(identifier_name)
         all_candidates = list(FACE_IMAGE_LOCATIONS.keys())
         score = dict()
         for candidate in all_candidates:
@@ -51,7 +53,7 @@ class FaceTracker:
                             break
 
         # Print the score
-        print(IDENTIFIER_NAME)
+        print(identifier_name)
         print(score)
 
 ft = FaceTracker()
