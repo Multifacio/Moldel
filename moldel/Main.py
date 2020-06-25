@@ -1,4 +1,3 @@
-from Layers.FaceVisibility.VideoParser import ParsedVideo
 from Layers.Moldel import Moldel
 from Printers.PieChartPrinter import PieChartPrinter
 import sys

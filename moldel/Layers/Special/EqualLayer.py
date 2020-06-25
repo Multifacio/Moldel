@@ -1,5 +1,6 @@
 from Layers.Layer import Layer
 from Data.Player import Player
+from Data.PlayerData import get_season
 from typing import Dict, Set
 
 class EqualLayer(Layer):
@@ -8,6 +9,6 @@ class EqualLayer(Layer):
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         new_distribution = dict()
         for player in Player:
-            if player.value.season == predict_season:
+            if get_season(player) == predict_season:
                 new_distribution[player] = 1.0
         return new_distribution

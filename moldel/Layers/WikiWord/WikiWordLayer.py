@@ -1,8 +1,9 @@
 from Data.Player import Player
+from Data.PlayerData import get_is_mol, get_season
 from Data.WikiWord.Linker import LINKER
 from Layers.Layer import Layer
 from Layers.Special.EqualLayer import EqualLayer
-from Layers.Special.UppercutLayer import UppercutLayer
+from Layers.Special.CutLayer import CutLayer
 from Layers.WikiWord.WikiWordExtractor import WikiWordExtractor
 from Layers.WikiWord.WikiWordParser import WikiWordParser
 from sklearn.linear_model import LogisticRegression
@@ -27,7 +28,7 @@ class InnerWikiWordLayer(Layer):
         train_output = []
         for player, data in train_data.items():
             train_input.append(extractor.extract_input(data))
-            train_output.append(1 if player.value.is_mol else 0)
+            train_output.append(1 if get_is_mol(player) else 0)
 
         classifier = LogisticRegression(solver='lbfgs', max_iter=self.MAX_TRAINING_ITERATIONS, penalty='l2',
                                         C=self.REGULARIZATION_PARAMETER)
@@ -43,10 +44,10 @@ class InnerWikiWordLayer(Layer):
 
     @staticmethod
     def seasons_with_data() -> Set[int]:
-        return {player.value.season for player in LINKER}
+        return {get_season(player) for player in LINKER}
 
-class WikiWordLayer(UppercutLayer):
+class WikiWordLayer(CutLayer):
     """ The Wiki Word Layer predicts which candidate is the Mol based on their wikipedia pages. """
 
     def __init__(self):
-        super().__init__(InnerWikiWordLayer())
+        super().__init__(InnerWikiWordLayer(), 1.0)

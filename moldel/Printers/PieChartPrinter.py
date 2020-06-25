@@ -1,3 +1,4 @@
+from Data.PlayerData import get_name
 from Printers.Printer import Printer
 import matplotlib.pyplot as plt
 
@@ -23,7 +24,7 @@ class PieChartPrinter(Printer):
         for player, likelihood in distribution.items():
             likelihood = round(likelihood, self.precision)
             if likelihood >= self.include_threshold:
-                labels.append(player.value.name)
+                labels.append(get_name(player))
                 sizes.append(likelihood)
         sizes_sum = sum(sizes)
         sizes = [size / sizes_sum for size in sizes]

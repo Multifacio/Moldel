@@ -1,4 +1,5 @@
 from Data.Player import Player
+from Data.PlayerData import get_is_mol, get_players_in_season
 from Layers.FaceVisibility.VideoParser import ParsedVideo, VideoParser
 from typing import Dict, List, Tuple, Set, NamedTuple
 import itertools
@@ -51,7 +52,7 @@ class FaceVisibilityExtractor:
             for player, episodes in player_episodes.items():
                 for episode in episodes:
                     relative_occurrence = self.__get_relative_occurrence(player, parsed_videos[episode])
-                    train_data.append(TrainSample(season, relative_occurrence, player.value.is_mol))
+                    train_data.append(TrainSample(season, relative_occurrence, get_is_mol(player)))
 
         train_data = self.__resample(train_data)
         train_input = np.array([[ts.relative_occurrence] for ts in train_data])
@@ -141,8 +142,7 @@ class FaceVisibilityExtractor:
             participated.
         """
         player_episodes = dict()
-        season_players = [player for player in Player if player.value.season == season]
-        for player in season_players:
+        for player in get_players_in_season(season):
             episode_occurrences = {episode for episode, data in parsed_videos.items() if player in data.alive_players}
             player_episodes[player] = episode_occurrences
         return player_episodes

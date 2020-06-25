@@ -1,3 +1,4 @@
+from Data.PlayerData import get_name
 from Printers.Printer import Printer
 
 class TextSortedPrinter(Printer):
@@ -17,7 +18,7 @@ class TextSortedPrinter(Printer):
         sorted_distribution = list()
         for player, likelihood in distribution.items():
             likelihood = round(likelihood, self.precision)
-            sorted_distribution.append((player.value.name, likelihood))
+            sorted_distribution.append((get_name(player), likelihood))
         sorted_distribution.sort(key=lambda x: x[1], reverse=True)
         for row in sorted_distribution:
             player_name = row[0]

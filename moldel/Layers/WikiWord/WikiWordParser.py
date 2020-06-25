@@ -1,4 +1,5 @@
 from Data.Player import Player
+from Data.PlayerData import get_season
 from Data.WikiWord import Linker
 from Data.WikiWord.Job import Job
 from typing import Dict, Set, NamedTuple
@@ -25,7 +26,7 @@ class WikiWordParser:
         """
         data = dict()
         for player in Player:
-            if player.value.season in seasons:
+            if get_season(player) in seasons:
                 data[player] = WikiWordParser.__feature_player_parse(player)
         return data
 

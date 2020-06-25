@@ -67,7 +67,7 @@ class VideoParser:
         with open(file_path, 'rb') as file:
             video_parsing = pickle.load(file)
 
-        return video_parsing
+        return ParsedVideo(*video_parsing)
 
     @staticmethod
     def __load_faces_encodings(all_players: List[Player]) -> List:
@@ -154,7 +154,7 @@ class VideoParser:
         """
         file_path = VideoParser.__get_parsed_video_file_path(SEASON_NUMBER, EPISODE_NUMBER)
         with open(file_path, 'wb') as file:
-            pickle.dump(ParsedVideo(player_occurrences, ALIVE_PLAYERS, FRAME_SKIP), file)
+            pickle.dump((player_occurrences, ALIVE_PLAYERS, FRAME_SKIP), file)
 
     @staticmethod
     def __get_parsed_video_file_path(season: int, episode: int) -> str:

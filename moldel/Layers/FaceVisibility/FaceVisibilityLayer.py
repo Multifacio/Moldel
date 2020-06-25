@@ -1,4 +1,5 @@
 from Data.Player import Player
+from Data.PlayerData import get_players_in_season
 from Layers.FaceVisibility.FaceVisibilityExtractor import FaceVisibilityExtractor
 from Layers.FaceVisibility.VideoParser import VideoParser
 from Layers.Layer import Layer
@@ -74,8 +75,7 @@ class InnerFaceVisibilityLayer(Layer):
         """
         distribution = dict()
         predict_data = extractor.get_predict_data()
-        season_players = [player for player in Player if player.value.season == predict_season]
-        for player in season_players:
+        for player in get_players_in_season(predict_season):
             if player in predict_data:
                 likelihood = 1.0
                 for data in predict_data[player]:
