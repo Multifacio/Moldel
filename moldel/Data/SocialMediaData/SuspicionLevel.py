@@ -9,6 +9,6 @@ class SuspicionLevel(Enum):
     LIKELY = 2.00
     SLIGHTLY_LIKELY = 1.35
     NEUTRAL = 1.00
-    SLIGHTLY_UNLIKELY = 0.50
+    SLIGHTLY_UNLIKELY = 0.60
     UNLIKELY = 0.20
     VERY_UNLIKELY = 0.00
