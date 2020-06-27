@@ -1,53 +1,55 @@
 from Data.Player import Player
-from Data.PlayerData import get_is_mol, get_season
+from Data.PlayerData import get_season
+from Data.WikiWord.Job import Job
 from Data.WikiWord.Linker import LINKER
 from Layers.Layer import Layer
 from Layers.Special.EqualLayer import EqualLayer
 from Layers.Special.CutLayer import CutLayer
 from Layers.WikiWord.WikiWordExtractor import WikiWordExtractor
-from Layers.WikiWord.WikiWordParser import WikiWordParser
 from sklearn.linear_model import LogisticRegression
 from typing import Dict, Set
-import numpy as np
 
 class InnerWikiWordLayer(Layer):
     MAX_TRAINING_ITERATIONS = 1000 # For how many iterations the logistic regression has to be trained
 
-    # How strong the regularization will be. Lower values means a stronger regularization, higher values means a weaker
-    # regularization. A strong regularization prevents overfitting and will bring the computed distribution more to
-    # an uniform distribution.
-    REGULARIZATION_PARAMETER = 0.2
+    def __init__(self, pca_components: int, minimum_log: float, degree_total_count: int):
+        self.__pca_components = pca_components
+        self.__minimum_log = minimum_log
+        self.__degree_total_count = degree_total_count
 
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         if predict_season not in self.seasons_with_data():
             return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
 
-        train_data = WikiWordParser.parse(train_seasons)
-        extractor = WikiWordExtractor(train_data)
-        train_input = []
-        train_output = []
-        for player, data in train_data.items():
-            train_input.append(extractor.extract_input(data))
-            train_output.append(1 if get_is_mol(player) else 0)
-
-        classifier = LogisticRegression(solver='lbfgs', max_iter=self.MAX_TRAINING_ITERATIONS, penalty='l2',
-                                        C=self.REGULARIZATION_PARAMETER)
-        classifier.fit(np.array(train_input), np.array(train_output))
+        extractor = WikiWordExtractor(predict_season, train_seasons, self.__pca_components, self.__minimum_log,
+                                      self.__degree_total_count)
+        train_input, train_output = extractor.get_train_data()
+        classifier = LogisticRegression(solver = 'lbfgs', max_iter = self.MAX_TRAINING_ITERATIONS)
+        classifier.fit(train_input, train_output)
 
         distribution = dict()
-        predict_data = WikiWordParser.parse({predict_season})
+        predict_data = extractor.get_predict_data()
         for player, data in predict_data.items():
-            predict_input = extractor.extract_input(data)
-            distribution[player] = classifier.predict_proba(np.array([predict_input]))[0][1]
-
+            distribution[player] = classifier.predict_proba(data)[0][1]
         return distribution
 
     @staticmethod
     def seasons_with_data() -> Set[int]:
+        """ Get all seasons that have Wiki Word data. """
         return {get_season(player) for player in LINKER}
 
 class WikiWordLayer(CutLayer):
-    """ The Wiki Word Layer predicts which candidate is the Mol based on their wikipedia pages. """
+    """ The Wiki Word Layer predicts which player is the Mol based on their wikipedia pages. It tries to find the
+     correlation between the number of words on your Wikipage and the likelihood of being the Mol. Furthermore it tries
+     to find a correlation to which job a player belongs and the likelihood of being the Mol. """
 
-    def __init__(self):
-        super().__init__(InnerWikiWordLayer(), 1.0)
+    def __init__(self, pca_components: int, minimum_log: float, degree_total_count: int):
+        """ Constructor of the Wiki Word Layer.
+
+        Arguments:
+            pca_components (int): How many PCA components should be extracted from the job counts as features.
+            minimum_log (float): The lower bound on the job count and total count before applying a logarithm.
+            degree_total_count (int): Up to which degree a polynomial transformation should be applied on the log
+                of the total word count.
+        """
+        super().__init__(InnerWikiWordLayer(pca_components, minimum_log, degree_total_count), 1.0)

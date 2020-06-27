@@ -2,11 +2,11 @@ from Data.Player import Player
 from Data.PlayerData import get_season
 from Data.WikiWord import Linker
 from Data.WikiWord.Job import Job
-from typing import Dict, Set, NamedTuple
+from typing import Dict, Set, NamedTuple, List
 import rootpath
 import string
 
-WikiWordData = NamedTuple("WikiWordData", [("job_frequency", Dict[Job, int]), ("number_words", int)])
+WikiWordData = NamedTuple("WikiWordData", [("job_frequency", Dict[Job, float]), ("number_words", int)])
 class WikiWordParser:
     """ The Wiki Word Parser reads all wiki files of all players in the given seasons and converts it to interpretable
     and understandable features. """
@@ -25,18 +25,33 @@ class WikiWordParser:
             dictionary) and as second value the total number of words in the players wiki page.
         """
         data = dict()
+        word_to_job = WikiWordParser.__compute_word_to_job()
         for player in Player:
             if get_season(player) in seasons:
-                data[player] = WikiWordParser.__feature_player_parse(player)
+                data[player] = WikiWordParser.__feature_player_parse(player, word_to_job)
         return data
 
     @staticmethod
-    def __feature_player_parse(player: Player) -> WikiWordData:
+    def __compute_word_to_job() -> Dict[str, List[Job]]:
+        """ Compute the word to job mapping. Which links a word to all jobs that it belongs to.
+
+        Returns:
+            A dictionary with as key all words that belong to jobs and as value a list of jobs to which it belongs.
+        """
+        word_to_job = dict()
+        for job in Job:
+            for word in job.value:
+                word_to_job[word] = word_to_job.get(word, []) + [job]
+        return word_to_job
+
+    @staticmethod
+    def __feature_player_parse(player: Player, word_to_job: Dict[str, List[Job]]) -> WikiWordData:
         """ Computes the features for a given player which are the frequencies of every Job and a total number of words
         in the players wiki page.
 
         Parameters:
             player (Player): The player for which we want to compute the features.
+            word_to_job (Dict[str, List[Job]]): Mapping a word to all jobs that correspond to that word.
 
         Returns:
             WikiWordData: Which is a tuple with two values. The first value is a dictionary with Job as key and as value
@@ -46,14 +61,16 @@ class WikiWordParser:
         file_path = rootpath.detect() + "/" + Linker.WIKI_FILES_PATH + Linker.LINKER[player]
         word_frequency = WikiWordParser.__wiki_file_parse(file_path)
         job_frequency = dict()
-        for job in Job:
-            job_frequency[job] = sum([word_frequency.get(word, 0) for word in job.value])
+        for word, jobs in word_to_job.items():
+            increase = word_frequency.get(word, 0.0)
+            for job in jobs:
+                job_frequency[job] = job_frequency.get(job, 0.0) + increase
 
         number_words = sum(word_frequency.values())
         return WikiWordData(job_frequency, number_words)
 
     @staticmethod
-    def __wiki_file_parse(file_path: str) -> Dict[str, int]:
+    def __wiki_file_parse(file_path: str) -> Dict[str, float]:
         """ Will parse the word occurrences of a single wiki file.
 
         Parameters:

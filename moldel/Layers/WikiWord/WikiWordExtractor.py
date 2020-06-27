@@ -1,107 +1,149 @@
-import math
+from sklearn.decomposition import PCA
 
 from Data.Player import Player
+from Data.PlayerData import get_is_mol
 from Data.WikiWord.Job import Job
-from Layers.WikiWord.WikiWordParser import WikiWordData
-from typing import Dict, List
+from Layers.WikiWord.WikiWordParser import WikiWordParser
+from sklearn.mixture import GaussianMixture
+from typing import Dict, List, NamedTuple, Set, Tuple, Union
+import math
 import numpy as np
 
+TrainSample = NamedTuple("TrainSample", [("job_frequency", Union[Dict[Job, float], List[float]]),
+                                         ("number_words", List[float]), ("is_mol", Union[bool, None])])
 class WikiWordExtractor:
     """ The Wiki Word Extractor excludes and transforms features into a array of floats which can be used by the
     classification algorithm. """
 
-    # How many job features should be used. Only this number of the most frequent job features will be used.
-    NUMBER_JOB_FEATURES = 5
+    # How often a Gaussian Mixture model is tried to fit through the data (from which the best result is taken).
+    # Putting this value higher will make the results more stable, however it will decrease the running time.
+    GAUSSIAN_MIXTURE_ATTEMPTS = 8
 
-    # Which quantile in the list of occurrences of every job will be used to compare all the job features.
-    COMPARISON_QUANTILE = 0.8
+    def __init__(self, predict_season: int, train_seasons: Set[int], pca_components: int, minimum_log: float,
+                 degree_total_count: int):
+        """ Constructor of the Wiki Word Extractor.
 
-    # Job frequencies higher than this value will be set to this value in the input extraction to prevent overfitting
-    # on outlier data. (Note that after this still the logarithm will be applied)
-    JOB_FREQUENCY_CUT_OFF = 10
-
-    def __init__(self, train_data: Dict[Player, WikiWordData]):
-        """ Constructor of the Wiki Word Extractor (is used to determine which Job features need to be excluded).
-
-        Parameters:
-            train_data (Dict[Player, WikiWordData]): The parsed train data which is used to determine which Job features
-            needs to be excluded.
+        Arguments:
+            predict_season (int): The season for which we make the prediction.
+            train_seasons (Set[int]): The seasons which are used as train data.
+            pca_components (int): How many PCA components should be extracted from the job counts as features.
+            minimum_log (float): The lower bound on the job count and total count before applying a logarithm.
+            degree_total_count (int): Up to which degree a polynomial transformation should be applied on the log
+                of the total word count.
         """
-        self.__included_jobs = self.__get_included_jobs(train_data)
+        self.__predict_season = predict_season
+        self.__train_seasons = train_seasons
+        self.__pca_components = pca_components
+        self.__minimum_log = minimum_log
+        self.__degree_total_count = degree_total_count
 
-    def extract_input(self, player_data: WikiWordData) -> np.array:
-        """ Extract the input array for 1 player based on the wiki page data of that player.
-
-        Parameters:
-             player_data (WikiWordData): The parsed train data for 1 player which is converted to an array of
-             transformed features (floats) used by the classification algorithm.
+    def get_train_data(self) -> Tuple[np.array, np.array]:
+        """ Get the formatted train data useable for machine learning algorithms.
 
         Returns:
-            An array of transformed features (floats) for that player which is used by the classification algorithm.
+            A 2d array which represents the train input where each row represents a different train element. And this
+            function also returns a 1d array which represents the train output. The ith row of the train input
+            corresponds to the ith element of the train output.
         """
-        extracted_input = []
-        job_frequency, number_words = player_data
-        for job in self.__included_jobs:
-            log_score = math.log(1 + min(self.JOB_FREQUENCY_CUT_OFF, job_frequency[job]))
-            extracted_input.append(log_score)
+        raw_data = WikiWordParser.parse(self.__train_seasons)
+        train_data = [TrainSample(data.job_frequency, [data.number_words], get_is_mol(player)) for player, data in
+                      raw_data.items()]
+        train_data = [self.__transform_number_words(data) for data in train_data]
+        train_data = [self.__transform_job_frequency(data) for data in train_data]
+        self.__train_job_clusters(train_data)
+        train_data = [self.__discretize_jobs(data) for data in train_data]
+        self.__train_job_pca(train_data)
+        train_data = [self.__apply_job_pca(data) for data in train_data]
+        return np.array([data.job_frequency + data.number_words for data in train_data]), \
+               np.array([1.0 if data.is_mol else 0.0 for data in train_data])
 
-        log_number_words = math.log(1 + number_words)
-        extracted_input.append(log_number_words)
-        extracted_input.append(log_number_words ** 2)
-        return np.array(extracted_input)
-
-    @staticmethod
-    def get_job_occurrences(data: Dict[Player, WikiWordData]) -> Dict[Job, List[int]]:
-        """ Compute the number of words for each jobs per player in sorted order (in the number of words).
-
-        Parameters:
-            data: The parsed data of which the occurrences of every job get determined.
+    def get_predict_data(self) -> Dict[Player, List[np.array]]:
+        """ Get all formatted predict data useable for the machine learning algorithms to do a prediction.
 
         Returns:
-            Dict[Job, List[int]]: A dictionary with as key the Job and as value a sorted list of occurrences among every
-            player for that job.
+            A dictionary with as key the players that are still present in the predict episode and as value a list of
+            the predict input for every episode up to (and including) the predict episode.
         """
-        job_occurrences = dict()
+        raw_data = WikiWordParser.parse({self.__predict_season})
+        predict_data = {player: TrainSample(data.job_frequency, [data.number_words], None)
+                        for player, data in raw_data.items()}
+        predict_data = {player: self.__transform_number_words(data) for player, data in predict_data.items()}
+        predict_data = {player: self.__transform_job_frequency(data) for player, data in predict_data.items()}
+        predict_data = {player: self.__discretize_jobs(data) for player, data in predict_data.items()}
+        predict_data = {player: self.__apply_job_pca(data) for player, data in predict_data.items()}
+        return {player: np.array([data.job_frequency + data.number_words]) for player, data in predict_data.items()}
+
+    def __transform_number_words(self, data: TrainSample) -> TrainSample:
+        """ Transform the number of word feature of a TrainSample using logarithmic transformation and polynomial
+        transformation.
+
+        Arguments:
+            A TrainSample which will be transformed.
+
+        Returns:
+            The transformed TrainSample
+        """
+        total_count = math.log(max(data.number_words[0], self.__minimum_log))
+        poly_transform = [total_count ** i for i in range(1, self.__degree_total_count + 1)]
+        return TrainSample(data.job_frequency, poly_transform, data.is_mol)
+
+    def __transform_job_frequency(self, data: TrainSample) -> TrainSample:
+        """ Transform the job frequencies features of a TrainSample using logarithmic transformation.
+
+        Arguments:
+            A TrainSample which will be transformed.
+
+        Returns:
+            The transformed TrainSample
+        """
+        job_frequencies = {job: math.log(max(frequency, self.__minimum_log)) for job, frequency in
+                           data.job_frequency.items()}
+        return TrainSample(job_frequencies, data.number_words, data.is_mol)
+
+    def __train_job_clusters(self, train_data: List[TrainSample]):
+        """ Train the Gaussian Mixture clustering for classifying the jobs.
+
+        Arguments:
+            All TrainSamples used for training the Gaussian Mixture clustering.
+        """
+        self.__clusters = dict()
         for job in Job:
-            counts = [player_data.job_frequency[job] for player_data in data.values()]
-            counts.sort()
-            job_occurrences[job] = counts
+            job_frequencies = np.array([[data.job_frequency[job]] for data in train_data])
+            cluster = GaussianMixture(n_components = 2, covariance_type = "full", n_init = self.GAUSSIAN_MIXTURE_ATTEMPTS)
+            cluster.fit(job_frequencies)
+            self.__clusters[job] = cluster
 
-        return job_occurrences
+    def __discretize_jobs(self, data: TrainSample) -> TrainSample:
+        """ Discretize the jobs counts of a TrainSample into 0/1 features by checking to which cluster they belong.
 
-    @staticmethod
-    def __get_included_jobs(train_data: Dict[Player, WikiWordData]) -> List[Job]:
-        """ Determine all jobs that will be included as features.
-
-        Parameters:
-            train_data (Dict[Player, WikiWordData]): The parsed train data which will be used to check which jobs should
-            be used as features.
+        Arguments:
+            A TrainSample which will be transformed.
 
         Returns:
-            List[Job]: A list with all jobs that should be included.
+            The transformed TrainSample
         """
-        job_scores = []
-        job_occurrences = WikiWordExtractor.get_job_occurrences(train_data)
-        for job, occurrence in job_occurrences.items():
-            job_score = WikiWordExtractor.__compute_job_score(np.array(occurrence))
-            job_scores.append((job, job_score))
+        job_frequencies = {job: self.__clusters[job].predict(np.array([[frequency]]))[0] for job, frequency in
+                           data.job_frequency.items()}
+        return TrainSample(job_frequencies, data.number_words, data.is_mol)
 
-        job_scores.sort(key=lambda item: item[1], reverse=True)
-        return [job for job, _ in job_scores[:WikiWordExtractor.NUMBER_JOB_FEATURES]]
+    def __train_job_pca(self, train_data: List[TrainSample]):
+        """ Train the principal component analysis used to extract features from the job features.
 
-    @staticmethod
-    def __compute_job_score(occurrences: np.array) -> float:
-        """ Compute the score of every job, which is the comparison quantile slightly influenced by the mean of
-        occurrences of that jobs.
+        Arguments:
+            All TrainSamples used for training the principal component analysis.
+        """
+        all_data = np.array([[data.job_frequency[job] for job in Job] for data in train_data])
+        self.__pca = PCA(n_components = self.__pca_components)
+        self.__pca.fit(all_data)
 
-        Parameters:
-            occurrences (np.array): A sorted array of integers which indicates how frequent the job occurs in the wiki
-            pages of all players.
+    def __apply_job_pca(self, data: TrainSample) -> TrainSample:
+        """ Transform the jobs counts of a TrainSample by reducing the features using principal component analysis.
+
+        Arguments:
+            A TrainSample which will be transformed.
 
         Returns:
-            float: The score of that job. The higher the score of the job, the more likely it will be selected as
-            feature.
+            The transformed TrainSample
         """
-        quantile = np.quantile(occurrences, WikiWordExtractor.COMPARISON_QUANTILE)
-        mean = np.mean(occurrences)
-        return quantile + 1 / (1 + math.exp(-mean))
+        job_frequencies = self.__pca.transform(np.array([[data.job_frequency[job] for job in Job]]))[0]
+        return TrainSample(job_frequencies.tolist(), data.number_words, data.is_mol)
