@@ -20,7 +20,8 @@ class FaceVisibilityExtractor:
     # A small log addition constant used to prevent situations where the log is taken of zero.
     SMALL_LOG_ADDITION = 0.0001
 
-    def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], dec_season_weight: float):
+    def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], dec_season_weight: float,
+                 resampling_enabled: bool):
         """ Constructor of the Face Visibility Extractor.
 
         Arguments:
@@ -31,11 +32,13 @@ class FaceVisibilityExtractor:
                 season and predict season becomes larger. This value is used to give closer seasons a higher weight and
                 0.0 < dec_season_weight <= 1.0 should hold. If dec_season_weight is larger then seasons further away
                 will have more influence on the prediction.
+            resampling_enabled (bool): True when the train data should be resampled, false otherwise.
         """
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
         self.__dec_season_weight = dec_season_weight
+        self.__resampling_enabled = resampling_enabled
 
     def get_train_data(self) -> Tuple[np.array, np.array]:
         """ Get the formatted and sampled train data useable for machine learning algorithms.
@@ -54,7 +57,8 @@ class FaceVisibilityExtractor:
                     relative_occurrence = self.__get_relative_occurrence(player, parsed_videos[episode])
                     train_data.append(TrainSample(season, relative_occurrence, get_is_mol(player)))
 
-        train_data = self.__resample(train_data)
+        if self.__resampling_enabled:
+            train_data = self.__resample(train_data)
         train_input = np.array([[ts.relative_occurrence] for ts in train_data])
         train_output = np.array([1.0 if ts.is_mol else 0.0 for ts in train_data])
         return train_input, train_output

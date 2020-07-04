@@ -21,7 +21,7 @@ class InnerFaceVisibilityLayer(Layer):
         if max_episode == 0 or predict_season < self.__first_season:
             return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
 
-        extractor = FaceVisibilityExtractor(predict_season, max_episode, train_seasons, self.__dec_season_weight)
+        extractor = FaceVisibilityExtractor(predict_season, max_episode, train_seasons, self.__dec_season_weight, True)
         classifier, discretizer = self.__training(extractor)
         return self.__prediction(extractor, classifier, discretizer, predict_season)
 
