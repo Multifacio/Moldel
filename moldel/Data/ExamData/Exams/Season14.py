@@ -4,7 +4,7 @@ from ..Dataclasses.Episode import Episode
 from ..Dataclasses.Question import Question
 from ..Dataclasses.Result import Result
 from ..Dataclasses.Season import Season
-from ..Dataclasses.TestInput import TestInput
+from ..Dataclasses.TestInput import DelayedAnswer, TestInput
 
 # Aflevering 1 - First (Rood scherm, maar niet afgevallen: Daphne) (10 vragen test)
 # Vragen:
@@ -183,6 +183,8 @@ episode4 = Episode(players4, result4,
 # Vragen:
 # 1 - De Mol is een:
 # 1: Freek, Jan-Willem, Tygo; 2: Aaf, Jennifer, Sofie, Susan;
+# 2 (vraag nummer onbekend) - Raakt de Mol niet snel de weg kwijt:
+# 1: Freek, Sofie, Tygo; 2: Aaf, Jan-Willem, Jennifer, Susan;
 # 3 - Had de Mol oog voor detail tijdens de 10.000 Boedha's opdracht:
 # 1: Aaf, Sofie; 2: Jennifer, Freek, Jan-Willem, Susan, Tygo;
 # 6 - Bestuurde de Mol een speedboot in de haven van Hongkong:
@@ -193,8 +195,9 @@ episode4 = Episode(players4, result4,
 # 1: Jennifer, Tygo; 2: Aaf, Freek, Jan-Willem, Sofie, Susan;
 # 20 - Wie is de Mol:
 # 1: Aaf; 2: Freek; 3: Jan-Willem; 4: Jennifer; 5: Sofie; 6: Susan; 7: Tygo;
-# Antwoorden (Zwarte vrijstelling ingezet): Jan-Willem (20, 4), Jennifer (6, 2) (1 joker), Aaf (17, 2),
-# Freek (1, 1) (Vrijstelling), Sofie (3, 2), Susan (20, 5), Tygo (14, 1)
+# Antwoorden (Zwarte vrijstelling ingezet): Jan-Willem (20, 4) (2, 1 pas bekend vanaf aflevering 6),
+# Jennifer (6, 2) (1 joker), Aaf (17, 2), Freek (1, 1) (14, 1 pas bekend vanaf aflevering 6) (Vrijstelling),
+# Sofie (3, 2), Susan (20, 5) (3, 2 pas bekend vanaf aflevering 6), Tygo (14, 1) (1, 2 pas bekend vanaf aflevering 6)
 players5 = [Player.AAF_14, Player.FREEK_14, Player.JAN_WILLEM_14, Player.JENNIFER_14, Player.SOFIE_14, Player.SUSAN_14,
             Player.TYGO_14]
 question5_1 = Question({1: [Player.FREEK_14, Player.JAN_WILLEM_14, Player.TYGO_14],
@@ -212,10 +215,11 @@ question5_20 = Question({1: [Player.AAF_14], 2: [Player.FREEK_14], 3: [Player.JA
                          5: [Player.SOFIE_14], 6: [Player.SUSAN_14], 7: [Player.TYGO_14]})
 result5 = Result(DropType.EXECUTION_DROP, [Player.JENNIFER_14])
 episode5 = Episode(players5, result5,
-                   {Player.JAN_WILLEM_14: TestInput({20: 4}), Player.JENNIFER_14: TestInput({6: 2}),
-                    Player.AAF_14: TestInput({17: 2}), Player.FREEK_14: TestInput({1: 1}),
-                    Player.SOFIE_14: TestInput({3: 2}), Player.SUSAN_14: TestInput({20: 5}),
-                    Player.TYGO_14: TestInput({14: 1})},
+                   {Player.JAN_WILLEM_14: TestInput({2: DelayedAnswer(1, 6), 20: 4}),
+                    Player.JENNIFER_14: TestInput({6: 2}), Player.AAF_14: TestInput({17: 2}),
+                    Player.FREEK_14: TestInput({1: 1, 14: DelayedAnswer(1, 6)}), Player.SOFIE_14: TestInput({3: 2}),
+                    Player.SUSAN_14: TestInput({3: DelayedAnswer(2, 6), 20: 5}),
+                    Player.TYGO_14: TestInput({1: DelayedAnswer(2, 6), 14: 1})},
                    {1: question5_1, 3: question5_3, 6: question5_6, 14: question5_14, 17: question5_17,
                     20: question5_20})
 

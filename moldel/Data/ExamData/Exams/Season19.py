@@ -84,7 +84,7 @@ episode2 = Episode(players2, result2,
                     Player.JAMIE_19: TestInput({10: 1})},
                    {2: question2_2, 4: question2_4, 10: question2_10, 20: question2_20})
 
-# Aflevering 3 (afvaller: Nikkie)
+# Aflevering 3 (afvaller: Nikkie, wordt pas bekend aan het begin van aflevering 4)
 # Vragen:
 # 4 - Welk Spaanse woord kreeg de Mol bij aanvang van de opdracht 'Vlag Uithangen':
 # 1: Evelien, 2: Jamie, 3: Merel, 4: Sinan, 5: Niels, 6: Nikkie, 7: Rick, 8: Robert, 9: Sarah (Niet Accuraat)
@@ -275,5 +275,5 @@ episode8 = Episode(players8, result8,
                     Player.SARAH_19: TestInput({3: 1}), Player.NIELS_19: TestInput(immunity = True)},
                     {3: question8_3, 4: question8_4, 5: question8_5})
 
-season19 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
+season19 = Season(players1, {1: episode1, 2: episode2, 3.5: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
                              8: episode8})

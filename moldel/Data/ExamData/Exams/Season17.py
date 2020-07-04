@@ -233,7 +233,7 @@ episode7 = Episode(players7, result7,
                     Player.JOCHEM_17: TestInput({20: 1}, jokers = 1), Player.SANNE_17: TestInput({5: 5})},
                    {5: question7_5, 10: question7_10, 17: question7_17, 20: question7_20})
 
-# Aflevering 8 (afvaller: Diederik)
+# Aflevering 8 (afvaller: Diederik, wordt pas bekend aan het begin van aflevering 9)
 # 1 - De Mol is:
 # 1: Diederik, Jochem, Thomas; 2: Sanne;
 # 20 - Wie is de Mol?
@@ -250,4 +250,4 @@ episode8 = Episode(players8, result8,
                    {1: question8_1, 20: question8_20})
 
 season17 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                             8: episode8})
+                             9: episode8})
