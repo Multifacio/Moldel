@@ -2,26 +2,26 @@ from Data.Player import Player
 from Data.PlayerData import get_players_in_season
 from Layers.FaceVisibility.FaceVisibilityExtractor import FaceVisibilityExtractor
 from Layers.FaceVisibility.VideoParser import VideoParser
-from Layers.Layer import Layer
+from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
+from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
 from Layers.Special.CutLayer import CutLayer
-from Layers.Special.EqualLayer import EqualLayer
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import KBinsDiscretizer
 from typing import Dict, Set, Tuple
 import numpy as np
 
-class InnerFaceVisibilityLayer(Layer):
+class InnerFaceVisibilityLayer(MultiLayer):
     def __init__(self, dec_season_weight: float, first_season: int, num_bins: int):
         self.__dec_season_weight = dec_season_weight
         self.__first_season = first_season
         self.__num_bins = num_bins
 
-    def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
+    def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, np.array]:
         max_episode = self.__latest_available_episode(predict_season, latest_episode)
         if max_episode == 0 or predict_season < self.__first_season:
-            return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
+            return dict()
 
-        extractor = FaceVisibilityExtractor(predict_season, max_episode, train_seasons, self.__dec_season_weight, True)
+        extractor = FaceVisibilityExtractor(predict_season, max_episode, train_seasons, self.__dec_season_weight)
         classifier, discretizer = self.__training(extractor)
         return self.__prediction(extractor, classifier, discretizer, predict_season)
 
@@ -52,15 +52,15 @@ class InnerFaceVisibilityLayer(Layer):
         Returns:
             The classifier model and the discretizer model (discretize data into bins).
         """
-        train_input, train_output = extractor.get_train_data()
+        train_input, train_output, train_weights = extractor.get_train_data()
         discretizer = KBinsDiscretizer(self.__num_bins, encode="onehot-dense", strategy="quantile")
         train_input = discretizer.fit_transform(train_input)
         classifier = LogisticRegression(solver="lbfgs")
-        classifier.fit(train_input, train_output)
+        classifier.fit(train_input, train_output, sample_weight = train_weights)
         return classifier, discretizer
 
     def __prediction(self, extractor: FaceVisibilityExtractor, classifier: LogisticRegression,
-                     discretizer: KBinsDiscretizer, predict_season: int):
+                     discretizer: KBinsDiscretizer, predict_season: int) -> Dict[Player, MultiLayerResult]:
         """ Execute the prediction phase of the Face Visibility Layer.
 
         Arguments:
@@ -73,19 +73,22 @@ class InnerFaceVisibilityLayer(Layer):
             A dictionary with as key the players that participated in the prediction season and as value a float which
             represents how likely that player is the Mol according to the Face Visibility Layer.
         """
-        distribution = dict()
+        all_predictions = dict()
         predict_data = extractor.get_predict_data()
+        if not predict_data:
+            return dict()
+
         for player in get_players_in_season(predict_season):
             if player in predict_data:
-                likelihood = 1.0
+                predictions = []
                 for data in predict_data[player]:
                     data = discretizer.transform(np.array([data]))
-                    likelihood *= classifier.predict_proba(data)[0][1]
-                distribution[player] = likelihood
+                    predictions.append(classifier.predict_proba(data)[0][1])
+                all_predictions[player] = MultiLayerResult(np.array(predictions), False)
             else:
-                distribution[player] = 0.0
+                all_predictions[player] = MultiLayerResult(np.array([]), True)
 
-        return distribution
+        return all_predictions
 
 class FaceVisibilityLayer(CutLayer):
     """ The Face Visibility Layer predict which candidate is the Mol based on how often this candidate appears during
@@ -107,4 +110,5 @@ class FaceVisibilityLayer(CutLayer):
                 training data.
             num_bins (int): Into how much bins the relative occurrence data get discretized.
         """
-        super().__init__(InnerFaceVisibilityLayer(dec_season_weight, first_season, num_bins), 1.0, predict_lowerbound)
+        super().__init__(MultiplyAggregateLayer(InnerFaceVisibilityLayer(dec_season_weight, first_season, num_bins)),
+                         1.0, predict_lowerbound)

@@ -1,5 +1,5 @@
 from Data.Player import Player
-from Layers.MultiLayer.MultiLayer import MultiLayer
+from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from typing import Dict, Set
 import numpy as np
 
@@ -16,7 +16,7 @@ class NormalizeMultiLayer(MultiLayer):
         """
         self.__layer = layer
 
-    def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, np.array]:
+    def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, MultiLayerResult]:
         all_predictions = self.__layer.predict(predict_season, latest_episode, train_seasons)
         max_size = max([len(row) for row in all_predictions.values()])
         prediction_matrix = np.array([np.pad(row, (0, max_size - len(row)), 'constant') for row in all_predictions.values()])

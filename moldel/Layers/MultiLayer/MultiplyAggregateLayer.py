@@ -1,30 +1,29 @@
 from Data.Player import Player
-from Data.PlayerData import get_players_in_season
 from Layers.Layer import Layer
 from Layers.MultiLayer.MultiLayer import MultiLayer
 from Layers.Special.EqualLayer import EqualLayer
 from Layers.Special.NormalizeLayer import NormalizeLayer
 from typing import Dict, Set
+import numpy as np
 
 class InnerMultiplyAggregateLayer(Layer):
     def __init__(self, layer: MultiLayer):
         self.__layer = layer
 
-    def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
+    def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, np.array]:
         all_predictions = self.__layer.predict(predict_season, latest_episode, train_seasons)
         if not all_predictions:
             return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
 
         distribution = dict()
-        all_players = get_players_in_season(predict_season)
-        for player in all_players:
-            if player in all_predictions:
+        for player, predict in all_predictions.items():
+            if predict.exclusion:
+                distribution[player] = 0.0
+            else:
                 total_likelihood = 1.0
-                for likelihood in all_predictions[player]:
+                for likelihood in predict.predictions:
                     total_likelihood *= likelihood
                 distribution[player] = total_likelihood
-            else:
-                distribution[player] = 0.0
 
         return distribution
 
