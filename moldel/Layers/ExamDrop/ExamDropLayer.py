@@ -24,24 +24,28 @@ class InnerExamDropLayer(Layer):
 
         extractor = ExamDropExtractor(predict_season, latest_episode, train_seasons, self.__outlier_neighbors,
                                       self.__anova_f_significance, self.__pca_explain, self.__poly_degree)
-        train_input, train_output = extractor.get_train_data()
+        train_input, train_output, train_weights = extractor.get_train_data()
         classifier = LogisticRegression(solver="lbfgs")
-        classifier.fit(train_input, train_output)
+        classifier.fit(train_input, train_output, train_weights)
 
+        predict_input = extractor.get_predict_data()
+        if predict_input is None:
+            return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
         season_players = get_players_in_season(predict_season)
         alive_players = EXAM_DATA[predict_season].get_alive_players(latest_episode)
         distribution = dict()
         for player in season_players:
-            distribution[player] = 1.0 if player in alive_players else 0.0
+            if player in alive_players:
+                distribution[player] = 1.0
+            else:
+                distribution[player] = 0.0
 
-        predict_input = extractor.get_predict_data()
         for input in predict_input:
-            correct_probability = classifier.predict_proba(np.array([input.features]))[1]
-            single_correct_probability = correct_probability / len(input.correct_players)
-            single_wrong_probability = (1 - correct_probability) / len(input.wrong_players)
+            correct_probability = classifier.predict_proba(np.array([input.features]))[0][1]
             for player in alive_players:
-                distribution[player] *= single_correct_probability if player in input.correct_players else \
-                    single_wrong_probability
+                single_probability = correct_probability / len(input.correct_players) if player in \
+                            input.correct_players else (1 - correct_probability) / len(input.wrong_players)
+                distribution[player] *= single_probability
 
         return distribution
 
