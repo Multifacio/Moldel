@@ -1,9 +1,9 @@
-from sklearn.decomposition import PCA
-
 from Data.Player import Player
 from Data.PlayerData import get_is_mol
 from Data.WikiWord.Job import Job
 from Layers.WikiWord.WikiWordParser import WikiWordParser
+from numpy.random import RandomState
+from sklearn.decomposition import PCA
 from sklearn.mixture import GaussianMixture
 from typing import Dict, List, NamedTuple, Set, Tuple, Union
 import math
@@ -20,7 +20,7 @@ class WikiWordExtractor:
     GAUSSIAN_MIXTURE_ATTEMPTS = 8
 
     def __init__(self, predict_season: int, train_seasons: Set[int], pca_components: int, minimum_log: float,
-                 degree_total_count: int):
+                 degree_total_count: int, random_generator: RandomState):
         """ Constructor of the Wiki Word Extractor.
 
         Arguments:
@@ -30,12 +30,14 @@ class WikiWordExtractor:
             minimum_log (float): The lower bound on the job count and total count before applying a logarithm.
             degree_total_count (int): Up to which degree a polynomial transformation should be applied on the log
                 of the total word count.
+            random_generator (RandomState): The random generator used to generate random values.
         """
         self.__predict_season = predict_season
         self.__train_seasons = train_seasons
         self.__pca_components = pca_components
         self.__minimum_log = minimum_log
         self.__degree_total_count = degree_total_count
+        self.__random_generator = random_generator
 
     def get_train_data(self) -> Tuple[np.array, np.array]:
         """ Get the formatted train data useable for machine learning algorithms.
@@ -109,7 +111,8 @@ class WikiWordExtractor:
         self.__clusters = dict()
         for job in Job:
             job_frequencies = np.array([[data.job_frequency[job]] for data in train_data])
-            cluster = GaussianMixture(n_components = 2, covariance_type = "full", n_init = self.GAUSSIAN_MIXTURE_ATTEMPTS)
+            cluster = GaussianMixture(n_components = 2, covariance_type = "full", n_init = self.GAUSSIAN_MIXTURE_ATTEMPTS,
+                                      random_state = self.__random_generator)
             cluster.fit(job_frequencies)
             self.__clusters[job] = cluster
 
