@@ -37,7 +37,7 @@ class Season:
         Returns:
             All players that are still alive.
         """
-        drop_players = {}
+        drop_players = set()
         for id, episode in self.episodes.items():
             if id <= max_episode:
                 result = episode.result

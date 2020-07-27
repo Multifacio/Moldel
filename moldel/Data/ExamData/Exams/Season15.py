@@ -137,7 +137,7 @@ question4_17 = Question({1: [Player.MARTINE_15], 2: [Player.AJOUAD_15], 3: [Play
                          5: [Player.RIK_15], 6: [Player.MARGRIET_15], 7: [Player.MARLIJN_15], 8: [Player.CHRIS_15]})
 question4_20 = Question({1: [Player.AJOUAD_15], 2: [Player.CAROLINA_15], 3: [Player.CHRIS_15], 4: [Player.MARGRIET_15],
                          5: [Player.MARLIJN_15], 6: [Player.MARTINE_15], 7: [Player.RIK_15], 8: [Player.VIKTOR_15]})
-result4 = Result(DropType.POSSIBLE_DROP, [Player.AJOUAD_15])
+result4 = Result(DropType.EXECUTION_DROP, [Player.AJOUAD_15])
 episode4 = Episode(players4, result4,
                    {Player.CHRIS_15: TestInput({3: 3}), Player.MARLIJN_15: TestInput({20: 7}),
                     Player.RIK_15: TestInput({11: 2}), Player.MARTINE_15: TestInput({20: 4}),
@@ -182,7 +182,7 @@ question5_18 = Question({1: [Player.VIKTOR_15, Player.CAROLINA_15],
                          4: [Player.CHRIS_15]})
 question5_20 = Question({1: [Player.CAROLINA_15], 2: [Player.CHRIS_15], 3: [Player.MARGRIET_15], 4: [Player.MARLIJN_15],
                          5: [Player.MARTINE_15], 6: [Player.RIK_15], 7: [Player.VIKTOR_15]})
-result5 = Result(DropType.POSSIBLE_DROP, [Player.VIKTOR_15])
+result5 = Result(DropType.EXECUTION_DROP, [Player.VIKTOR_15])
 episode5 = Episode(players5, result5,
                    {Player.RIK_15: TestInput({18: 4}), Player.MARLIJN_15: TestInput({20: 2}),
                     Player.VIKTOR_15: TestInput({7: 2}), Player.MARGRIET_15: TestInput({15: 2}),

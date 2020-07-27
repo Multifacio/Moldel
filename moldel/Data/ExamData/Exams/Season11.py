@@ -166,7 +166,7 @@ episode6 = Episode(players6, result6,
 # 1: Anna, Art, Patrick, Pepijn; 2: Karin, Soundos;
 # 20 - Wie is de Mol:
 # 1: Anna; 2: Pepijn; 3: Soundos; 4: Art; 5: Karin; 6: Patrick;
-# Antwoorden: Karin (2 jokers), Soundos (11, 1) (3 jokers). Anna (1 joker), Art (20, 1) (2 jokers)
+# Antwoorden: Karin (2 jokers), Soundos (11, 1) (3 jokers), Anna (1 joker), Art (20, 1) (2 jokers)
 players7 = [Player.ANNA_11, Player.ART_11, Player.KARIN_11, Player.PATRICK_11, Player.PEPIJN_11, Player.SOUNDOS_11]
 question7_11 = Question({1: [Player.ANNA_11, Player.ART_11, Player.PATRICK_11, Player.PEPIJN_11],
                          2: [Player.KARIN_11, Player.SOUNDOS_11]})
@@ -191,7 +191,7 @@ question8_19 = Question({1: [Player.SOUNDOS_11],
                          4: [Player.PATRICK_11]})
 result8 = Result(DropType.EXECUTION_DROP, [Player.ANNA_11])
 episode8 = Episode(players8, result8,
-                   {Player.ART_19: TestInput({19: 2}, jokers = 1)},
+                   {Player.ART_11: TestInput({19: 2}, jokers = 1)},
                    {19: question8_19})
 
 # Aflevering 9 (afvaller: Karin) (leugens in testvragen door editing)

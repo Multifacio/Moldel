@@ -78,7 +78,7 @@ question2_16 = Question({1: [Player.TIM_16, Player.TAEKE_16],
 question2_20 = Question({1: [Player.AIREN_16], 2: [Player.ANNEMIEKE_16], 3: [Player.CECILE_16], 4: [Player.ELLIE_16],
                          5: [Player.KLAAS_16], 6: [Player.MARJOLEIN_16], 7: [Player.REMY_16], 8: [Player.ROP_16],
                          9: [Player.TAEKE_16], 10: [Player.TIM_16]})
-result2 = Result(DropType.POSSIBLE_DROP, [Player.AIREN_16])
+result2 = Result(DropType.EXECUTION_DROP, [Player.AIREN_16])
 episode2 = Episode(players2, result2,
                    {Player.TIM_16: TestInput({5: 2}, jokers = 1), Player.ANNEMIEKE_16: TestInput({20: 7}),
                     Player.REMY_16: TestInput({12: 1}, jokers = 1), Player.CECILE_16: TestInput({10: 1}),

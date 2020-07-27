@@ -36,7 +36,7 @@ result1f = Result(DropType.EXECUTION_DROP, [Player.DAPHNE_14])
 episode1f = Episode(players1, result1f,
                    {Player.SOFIE_14: TestInput({1: 1}), Player.JAN_WILLEM_14: TestInput({5: 1, 10: 6}),
                     Player.FREEK_14: TestInput({8: 3}), Player.SUSAN_14: TestInput({10: 10})},
-                   {1: question1f_1, 5: question1f_5, 8: question1f_8, 10: question1f_10}, 10, skip_regression = True)
+                   {1: question1f_1, 5: question1f_5, 8: question1f_8, 10: question1f_10}, 10)
 
 # Aflevering 1 - Second (afvaller: Maurice) (vervolg op vorige test)
 # Vragen:
@@ -202,6 +202,8 @@ players5 = [Player.AAF_14, Player.FREEK_14, Player.JAN_WILLEM_14, Player.JENNIFE
             Player.TYGO_14]
 question5_1 = Question({1: [Player.FREEK_14, Player.JAN_WILLEM_14, Player.TYGO_14],
                         2: [Player.AAF_14, Player.JENNIFER_14, Player.SOFIE_14, Player.SUSAN_14]})
+question5_2 = Question({1: [Player.FREEK_14, Player.SOFIE_14, Player.TYGO_14],
+                        2: [Player.AAF_14, Player.JAN_WILLEM_14, Player.JENNIFER_14, Player.SUSAN_14]})
 question5_3 = Question({1: [Player.AAF_14, Player.SOFIE_14],
                         2: [Player.JENNIFER_14, Player.FREEK_14, Player.JAN_WILLEM_14, Player.SUSAN_14,
                             Player.TYGO_14]})
@@ -220,7 +222,7 @@ episode5 = Episode(players5, result5,
                     Player.FREEK_14: TestInput({1: 1, 14: DelayedAnswer(1, 6)}), Player.SOFIE_14: TestInput({3: 2}),
                     Player.SUSAN_14: TestInput({3: DelayedAnswer(2, 6), 20: 5}),
                     Player.TYGO_14: TestInput({1: DelayedAnswer(2, 6), 14: 1})},
-                   {1: question5_1, 3: question5_3, 6: question5_6, 14: question5_14, 17: question5_17,
+                   {1: question5_1, 2: question5_2, 3: question5_3, 6: question5_6, 14: question5_14, 17: question5_17,
                     20: question5_20})
 
 # Aflevering 6 (afvaller: Aaf)

@@ -78,7 +78,7 @@ episode2 = Episode(players2, result2,
 players3f = [Player.CAROLIEN_13, Player.DANIEL_13, Player.JANINE_13, Player.KEES_13, Player.PAULIEN_13, Player.TANIA_13,
              Player.TIM_13, Player.ZARAYDA_13]
 result3f = Result(DropType.VOLUNTARY_DROP, [Player.JANINE_13])
-episode3f = Episode(players3f, result3f, dict(), dict(), skip_regression = True)
+episode3f = Episode(players3f, result3f, dict(), dict())
 
 # Aflevering 3 - Second (afvaller: Tim)
 # Vragen:
