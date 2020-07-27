@@ -18,8 +18,8 @@ class NormalizeMultiLayer(MultiLayer):
 
     def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, MultiLayerResult]:
         all_predictions = self.__layer.predict(predict_season, latest_episode, train_seasons)
-        max_size = max([len(row) for row in all_predictions.values()])
-        prediction_matrix = np.array([np.pad(row, (0, max_size - len(row)), 'constant') for row in all_predictions.values()])
+        max_size = max([len(row) for row, _ in all_predictions.values()])
+        prediction_matrix = np.array([np.pad(row, (0, max_size - len(row)), 'constant') for row, _ in all_predictions.values()])
         likelihood_sums = prediction_matrix.sum(axis = 0)
         for player, prediction in all_predictions.items():
             all_predictions[player] = prediction / likelihood_sums
