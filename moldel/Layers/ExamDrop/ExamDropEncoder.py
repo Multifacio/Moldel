@@ -4,14 +4,14 @@ from Data.ExamData.Dataclasses.Question import Question
 from Data.ExamData.Exams.All import EXAM_DATA
 from Data.Player import Player
 from statistics import mean
-from typing import NamedTuple, Set, Tuple
+from typing import NamedTuple, Set, Tuple, Union
 import numpy as np
 
 TrainSample = NamedTuple("TrainSample", [("player", Player), ("season", int), ("drop_episode", Episode),
-                                         ("exam_episode", Episode), ("question", Question), ("answer", Set[Player])])
+                                         ("exam_episode", Episode), ("question", Question), ("answer", Set[Player]),
+                                         ("selected_player", Union[bool, Player])])
 class ExamDropEncoder:
     """ The Exam Drop Encoder deals with the encoding of the features used for the Exam Drop Layer. """
-
     EXEMPTION_JOKER_VALUE = 1000 # The value of an exemption expressed in jokers.
 
     @classmethod
