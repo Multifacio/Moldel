@@ -97,7 +97,6 @@ class ExamDropExtractor:
     def __add_answered_on_feature(samples: List[TrainSample], all_features: np.array) -> np.array:
         new_features = []
         for sample, features in zip(samples, all_features):
-            answered_on = 0.0
             if isinstance(sample.selected_player, bool):
                 answered_on = 1.0 if sample.selected_player else 0.0
             else:

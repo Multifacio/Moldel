@@ -2,6 +2,7 @@ from Data.Player import Player
 from Data.PlayerData import get_players_in_season
 from Layers.FaceVisibility.FaceVisibilityExtractor import FaceVisibilityExtractor
 from Layers.FaceVisibility.VideoParser import VideoParser
+from Layers.MultiLayer.EmptyMultiLayer import EmptyMultiLayer
 from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
 from Layers.Special.CutLayer import CutLayer
@@ -19,7 +20,7 @@ class InnerFaceVisibilityLayer(MultiLayer):
     def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, np.array]:
         max_episode = self.__latest_available_episode(predict_season, latest_episode)
         if max_episode == 0 or predict_season < self.__first_season:
-            return dict()
+            return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
         extractor = FaceVisibilityExtractor(predict_season, max_episode, train_seasons, self.__dec_season_weight)
         classifier, discretizer = self.__training(extractor)
@@ -76,7 +77,7 @@ class InnerFaceVisibilityLayer(MultiLayer):
         all_predictions = dict()
         predict_data = extractor.get_predict_data()
         if not predict_data:
-            return dict()
+            return EmptyMultiLayer().predict(predict_season, 0, set())
 
         for player in get_players_in_season(predict_season):
             if player in predict_data:

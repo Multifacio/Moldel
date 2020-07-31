@@ -4,6 +4,7 @@ from Data.Player import Player
 from Data.PlayerData import get_players_in_season
 from Layers.ExamDrop.ExamDropEncoder import TrainSample
 from Layers.ExamDrop.ExamDropExtractor import ExamDropExtractor, PredictSample
+from Layers.MultiLayer.EmptyMultiLayer import EmptyMultiLayer
 from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
 from sklearn.linear_model import LogisticRegression
@@ -20,15 +21,16 @@ class InnerExamDropLayer(MultiLayer):
     def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, MultiLayerResult]:
         available_seasons = EXAM_DATA.keys()
         train_seasons = train_seasons.intersection(available_seasons)
-        if predict_season not in available_seasons or not train_seasons:
-            return dict()
+        if predict_season not in available_seasons:
+            return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
         extractor = ExamDropExtractor(predict_season, latest_episode, train_seasons, self.__anova_f_significance,
                                       self.__pca_explain, self.__poly_degree)
         classifier = self.__training(extractor)
         predict_data = extractor.get_predict_data()
         if predict_data is None:
-            return dict()
+            alive_players = EXAM_DATA[predict_season].get_alive_players(latest_episode)
+            return EmptyMultiLayer(alive_players).predict(predict_season, latest_episode, train_seasons)
 
         return self.__predict(predict_season, latest_episode, predict_data, classifier)
 
@@ -55,7 +57,6 @@ class InnerExamDropLayer(MultiLayer):
             for player in data.out_answer:
                 all_predictions[player] = all_predictions[player] + [out_likelihood]
 
-        print(all_predictions)
         alive_players = EXAM_DATA[predict_season].get_alive_players(latest_episode)
         return {player: MultiLayerResult(np.array(predictions), player not in alive_players) for player, predictions in \
                 all_predictions.items()}
