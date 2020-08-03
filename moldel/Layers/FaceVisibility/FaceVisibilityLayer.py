@@ -71,8 +71,8 @@ class InnerFaceVisibilityLayer(MultiLayer):
             predict_season (int): For which season we make the prediction.
 
         Returns:
-            A dictionary with as key the players that participated in the prediction season and as value a float which
-            represents how likely that player is the Mol according to the Face Visibility Layer.
+            A dictionary with as key the players that participated in the prediction season and as value a
+            MultiLayerResult which contains the predictions.
         """
         all_predictions = dict()
         predict_data = extractor.get_predict_data()

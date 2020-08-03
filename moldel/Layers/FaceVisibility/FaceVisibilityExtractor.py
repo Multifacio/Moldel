@@ -39,12 +39,12 @@ class FaceVisibilityExtractor:
         self.__dec_season_weight = dec_season_weight
 
     def get_train_data(self) -> Tuple[np.array, np.array, np.array]:
-        """ Get the formatted and sampled train data useable for machine learning algorithms.
+        """ Get the formatted and sampled train data with train weights useable for machine learning algorithms.
 
         Returns:
-            A 2d array which represents the train input where each row represents a different train element. And this
-            function also returns a 1d array which represents the train output. The ith row of the train input
-            corresponds to the ith element of the train output.
+            The train input, train output and train weights in this order. The train input is a 2d array where each row
+            represents a different train element. The train output is 1d array of labels, such that the ith row of the
+            train input corresponds to the ith element of the train output.
         """
         train_data = []
         for season in self.__train_seasons:

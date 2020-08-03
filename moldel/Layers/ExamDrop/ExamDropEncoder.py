@@ -7,6 +7,8 @@ from statistics import mean
 from typing import NamedTuple, Set, Tuple, Union
 import numpy as np
 
+# If the selected player is a bool value then the meaning is whether that player is included in the answer (True) or
+# not included in the answer (False).
 TrainSample = NamedTuple("TrainSample", [("player", Player), ("season", int), ("drop_episode", Episode),
                                          ("exam_episode", Episode), ("question", Question), ("answer", Set[Player]),
                                          ("selected_player", Union[bool, Player])])
