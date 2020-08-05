@@ -1,22 +1,33 @@
 # Introductie
-'Wie is de Mol?' is een programma op Nederland 1 dat elk jaar wordt uitgezonden. In dit programma moet kandidaten opdrachten doen waarmee je geld voor de pot kunt verdienen. Echter heb je ook een saboteur, die ook wel de 'Mol' wordt genoemd. De 'Mol' probeert te verhinderen dat er geld verdient wordt. De kandidaten moeten deze 'Mol' proberen te ontmaskeren. Bijna elke aflevering is er een test met vragen over de 'Mol' en de kandidaat die dan het minst weet over de 'Mol' valt af. Uiteindelijk blijven er op het einde 3 kandidaten over en degene die het meest weet over de 'Mol' is de winnaar van het spel en krijgt het bedrag dat in de pot zit. 
+'Wie is de Mol?' is een programma op Nederland 1 elk jaar wordt uitgezonden sind 1999. In dit programma moeten kandidaten opdrachten doen waarmee je geld voor de pot kunt verdienen. Echter heb je ook een saboteur, die ook wel de 'Mol' wordt genoemd. De 'Mol' probeert te verhinderen dat er geld verdient wordt. De kandidaten moeten deze 'Mol' proberen te ontmaskeren. Bijna elke aflevering is er een test met vragen over de 'Mol' en de kandidaat die dan het minst weet over de 'Mol' valt af. Uiteindelijk blijven er op het einde 3 kandidaten over en degene die het meest weet over de 'Mol' is de winnaar van het spel en krijgt het bedrag dat in de pot zit. 
 
-Deze serie wordt al sinds 1999 uitgezonden en er zijn daarom inmiddels al 19 seizoenen gepasseerd. Ook de kijkers thuis proberen te achter halen tijdens de serie wie de 'Mol' is. Echter heeft het meerendeel van de kijkers het vaak fout wie de 'Mol' is. Daarom zijn we dit project gestart en doen we diepe analyses, simulaties en berekeningen om op een objectieve manier te kunnen bepalen wie de mol is.
+Ook de kijkers thuis proberen te achterhalen tijdens de serie wie de 'Mol' is. Echter heeft het meerendeel van de kijkers het vaak fout wie de 'Mol' is. Meestal komt dit door tunnelvisie, wat inhoudt dat iemand er vanuit gaat dat een kandidaat de 'Mol' is en alleen maar bewijs zoekt wat dat bevestigt. Je kunt deze tunnelvisie het best voorkomen door op een objectieve manier te meten wie de 'Mol'. En daarom ben ik dit project gestart en probeer ik met onder anderen statistiek en machine learning op een objectieve manier te bepalen 'Wie de Mol?' is.
 
 # Moldel
-Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk deze speler de 'Mol' is. Deze score komt tot stand door de volgende layers:
-* Exam Layer: Deze bepaalt wie de mol is op basis hoe spelers de vragen invullen, hoeveel jokers/vrijstellingen spelers inzetten en wie er af valt of mogelijk had af moeten vallen.
-* Wiki Word Layer: Deze bepaalt wie de mol is op basis van de kandidaten wikipedia pagina's voordat het seizoen begon. De woorden die in hun pagina's staan worden gekoppeld aan bepaalde beroepen en zo wordt er gekeken in welke mate een kandidaat bij een bepaald beroep past. Vervolgens wordt gekeken hoeveel een kandidaat op kandidaten uit andere seizoenen lijkt op basis van deze beroepen. En als de kandidaten waarop deze kandidaat lijkt de mol waren, dan wordt deze kandidaat ook geclassificeerd als mol.
-* Early Activity Layer: Deze layer is gebasseerd op de social media analyse door Jaap van Zessen (http://www.jaapvanzessen.nl/tag/wie-is-de-mol/). Kandidaten die gedurende de periode van opnames actief waren (dus eerder afgevallen zijn) krijgen een lagere likelihood om de mol te zijn.
+Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk deze speler de 'Mol' is. Deze score komt tot stand door de voorspellingen van de volgende layers te combineren:
+* Exam Drop Layer: Deze bepaalt wie de 'Mol' is op basis van hoe afvallers hun vragen hebben ingevuld (kandidaten waarop afvallers zitten zijn vaak niet de 'Mol').
+* Wiki Word Layer: Deze bepaalt wie de 'Mol' is op basis van de kandidaten wikipedia pagina's voordat het seizoen begon. Via de wikipedia pagina's proberen ze kandidaten te linken aan bepaalde beroepen en op basis hiervan en hoeveel woorden in hun wikipedia pagina staan probeert deze layer te voorspellen wie de 'Mol' is.
+* Social Media Layer: Deze layer geeft kandidaten een lagere/hogere kans op basis van de social media analyse door Jaap van Zessen (http://www.jaapvanzessen.nl/tag/wie-is-de-mol/). Hierbij wordt onder andere gekeken naar foto's die gelekt zijn, hoe actief kandidaten op social media (Facebook, Twitter, Youtube, etc.) waren tijdens de opname periode en andere informatie die aantoont dat een kandidaat wel/niet aanwezig was tijdens een later stadium van de opname periode.
+* Face Visibility Layer: Het idee van deze layer komt van Mattijn van Hoek (https://github.com/mattijn/widm). Deze layer probeert te voorspellen wie de 'Mol' is op basis van hoe vaak de 'Mol' in beeld komt tijdens de eerste 4 afleveringen (de 'Mol' komt vaak minder in beeld). 
 
 # Oude Resultaten
-Oude resultaten van het Moldel kun je vinden in de map 'results'.
+Het Moldel is getest op de seizoenen 14 tot en met 20 en is getest op de seizoen 11 tot en met 13. Echter voor de seizoenen 11 tot en met 13 zijn alleen de Exam Drop Layer en de Wiki Word Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor deze seizoenen, e.g. in 9 van de 10 finales krijgt de echte 'Mol' de hoogste likelihood. Al deze voorspellingen voor deze seizoenen kun je vinden in de map 'results'.
+
+# Voorspelling
+Ook voor de nieuwste aflevering (seizoen 20, aflevering 10) is een voorspelling gedaan.
+<details>
+  <summary>Klik hier om de voorspelling voor de nieuwste aflevering te laten zien.</summary>
+  
+  Nog geen voorspelling.
+</details>
 
 # Credits
-Wij bedanken iedereen die ons meegeholpen heeft bij dit project, daaronder valt:
-* Jaap van Zessen (voor het gebruik van zijn sociale media analyse voor de Early Activity Layer)
-* Jesse van Elteren (voor zijn data analyses van Wie is de Mol)
+Ik bedank iedereen die mij meegeholpen heeft bij dit project, daaronder vallen:
+* Jesse van Elteren: Ik ben initieel aan dit project begonnen onder zijn repository (https://github.com/jvanelteren/wie_is_de_mol). Op 15 September 2019 heb ik echter besloten los te splitsen van zijn project, omdat mijn project meer over het voorspellen van de 'Mol' ging en zijn project meer over de algemene statistiek achter 'Wie is de Mol?' ging. Ik wil Jesse van Elteren wel bedanken voor enkele adviezen en tips die hij gegeven heeft om het Moldel mee te verbeteren.
+* Adam Geitgey: Ik bedank Adam Geitgey voor het gebruik van zijn project om gezichten in afbeeldingen mee te herkennen (https://github.com/ageitgey/face_recognition) dat wordt gebruikt voor de Face Visibility Layer.  
+* Mattijn van Hoek: Ik wil Mattijn van Hoek bedanken voor zijn toestemming voor het gebruik en verbeteren van zijn idee en code (https://github.com/mattijn/widm) voor de Face Visibility Layer. Alle credits van dit idee gaan naar Mattijn van Hoek, net als de video parse code die ik heb gebruikt van Mattijn van Hoek. Echter heb ik zelf wel het machine learning model voor deze layer gemaakt (dat het relatief in beeld komen transleert naar een likelihood), ben ik ook verantwoordelijk voor diepere analyse van deze resultaten voor meerdere seizoenen en heb ik er zelf voor gezorgd dat deze voorspellingen gecombineerd konden worden met de andere voorspellingen. 
+* Jaap van Zessen: Ik wil Jaap van Zessen bedanken voor de toestemming om zijn voorspellingen (http://www.jaapvanzessen.nl/tag/wie-is-de-mol/) te verwerken in mijn Moldel onder de Social Media Layer.
 
 # Contact
 Als je meer wilt weten over dit project kun je mij contacteren:
-* Multifacio: mfprojects@live.nl
+* Multifacio: Multifacio@gmail.com
