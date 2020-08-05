@@ -4,10 +4,10 @@ from Printers.PieChartPrinter import PieChartPrinter
 import sys
 
 RANDOM_SEED = 949019755
-TRAIN_SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19}
-PREDICT_SEASON = 19
+TRAIN_SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
+PREDICT_SEASON = 20
 LATEST_EPISODE = sys.maxsize
-TRAIN_SEASONS.remove(PREDICT_SEASON)
+TRAIN_SEASONS.discard(PREDICT_SEASON)
 
 random_generator = RandomState(RANDOM_SEED)
 moldel = Moldel(random_generator)

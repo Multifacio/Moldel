@@ -7,6 +7,7 @@ from .Season16 import season16
 from .Season17 import season17
 from .Season18 import season18
 from .Season19 import season19
+from .Season20 import season20
 
 EXAM_DATA = {11: season11, 12: season12, 13: season13, 14: season14, 15: season15, 16: season16, 17: season17,
-             18: season18, 19: season19}
+             18: season18, 19: season19, 20: season20}

@@ -76,7 +76,13 @@ __ALL_PLAYER_DATA = {
     Player.JAMIE_19: PlayerData("Jamie", 19, False), Player.MEREL_19: PlayerData("Merel", 19, True),
     Player.NIELS_19: PlayerData("Niels", 19, False), Player.NIKKIE_19: PlayerData("Nikkie", 19, False),
     Player.RICK_PAUL_19: PlayerData("Rick-Paul", 19, False), Player.ROBERT_19: PlayerData("Robert", 19, False),
-    Player.SARAH_19: PlayerData("Sarah", 19, False), Player.SINAN_19: PlayerData("Sinan", 19, False)
+    Player.SARAH_19: PlayerData("Sarah", 19, False), Player.SINAN_19: PlayerData("Sinan", 19, False),
+
+    Player.ANITA_20: PlayerData("Anita", 20, None), Player.BUDDY_20: PlayerData("Buddy", 20, None),
+    Player.CLAES_20: PlayerData("Claes", 20, None), Player.JAIKE_20: PlayerData("Jaike", 20, None),
+    Player.JOHAN_20: PlayerData("Johan", 20, None), Player.LEONIE_20: PlayerData("Leonie", 20, None),
+    Player.MILJUSCHKA_20: PlayerData("Miljuschka", 20, None), Player.NATHAN_20: PlayerData("Nathan", 20, None),
+    Player.ROB_20: PlayerData("Rob", 20, None), Player.TINA_20: PlayerData("Tina", 20, None)
 }
 
 def get_name(player: Player) -> str:

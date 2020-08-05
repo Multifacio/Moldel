@@ -9,7 +9,7 @@ from numpy.random import RandomState
 class InnerMoldel(CompositeLayer):
     def __init__(self, random_generator: RandomState):
         super().__init__([ExamDropLayer(1e-2, 0.99, 2), WikiWordLayer(5, 1.0, 2, random_generator), SocialMediaLayer(),
-                          FaceVisibilityLayer(1 / 3, 0.9, 14, 2)])
+                          FaceVisibilityLayer(1/3, 0.9, 14, 2)])
 
 class Moldel(ManualExclusionLayer):
     """ The Moldel is a combination of multiple layers used to do the total prediction of the Mol. """
