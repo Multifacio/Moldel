@@ -64,17 +64,17 @@ class InnerExamDropLayer(MultiLayer):
         for player in season_players:
             all_predictions[player] = []
 
+        alive_players = EXAM_DATA[predict_season].get_alive_players(latest_episode)
         for data in predict_data:
             in_likelihood = classifier.predict_proba(np.array([data.in_features]))[0][1]
             out_likelihood = classifier.predict_proba(np.array([data.out_features]))[0][1]
             if out_likelihood < in_likelihood:
-                continue
+                in_likelihood = out_likelihood = 1 / len(alive_players)
             for player in data.in_answer:
                 all_predictions[player] = all_predictions[player] + [in_likelihood]
             for player in data.out_answer:
                 all_predictions[player] = all_predictions[player] + [out_likelihood]
 
-        alive_players = EXAM_DATA[predict_season].get_alive_players(latest_episode)
         return {player: MultiLayerResult(np.array(predictions), player not in alive_players) for player, predictions in \
                 all_predictions.items()}
 
@@ -90,4 +90,4 @@ class ExamDropLayer(MultiplyAggregateLayer):
             poly_degree (int): Up to which degree a polynomial transformation should be applied on all features (except
                 the answered_on feature).
         """
-        super().__init__(InnerExamDropLayer(anova_f_significance, pca_explain, poly_degree))
+        super().__init__(InnerExamDropLayer(anova_f_significance, pca_explain, poly_degree), True)
