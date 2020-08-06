@@ -13,7 +13,7 @@ Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk d
 # Oude Resultaten
 Het Moldel is getest op de seizoenen 14 tot en met 20 en is getest op de seizoen 11 tot en met 13. Echter voor de seizoenen 11 tot en met 13 zijn alleen de Exam Drop Layer en de Wiki Word Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor deze seizoenen, e.g. in 9 van de 10 finales krijgt de echte 'Mol' de hoogste likelihood, zie de afbeelding hieronder: 
 <details>
-  <summary>Voorspellingen voor finales (seizoen 11 t/m 20)</summary>
+  <summary>Spoiler Alert! Voorspellingen voor finales (seizoen 11 t/m 20)</summary>
   
   ![Finale Voorspellingen](https://github.com/Multifacio/Moldel/blob/master/results/Final%20Results%20(11-20)%20(2020-08-06).jpeg)
 </details>
@@ -23,7 +23,7 @@ Meer voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https
 # Voorspelling
 Ook voor de nieuwste aflevering is een voorspelling gedaan.
 <details>
-  <summary>Voorspelling voor seizoen 20, aflevering 10</summary>
+  <summary>Spoiler Alert! Voorspelling voor seizoen 20, aflevering 10</summary>
   
   ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Full%20Moldel:%20Season%2014-20%20(2020-08-05)/Season%2020/After%20Episode%208.png)
 </details>
