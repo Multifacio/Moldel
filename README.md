@@ -11,14 +11,14 @@ Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk d
 * Face Visibility Layer: Het idee van deze layer komt van Mattijn van Hoek (https://github.com/mattijn/widm). Deze layer probeert te voorspellen wie de 'Mol' is op basis van hoe vaak de 'Mol' in beeld komt tijdens de eerste 4 afleveringen (de 'Mol' komt vaak minder in beeld). 
 
 # Oude Resultaten
-Het Moldel is getest op de seizoenen 14 tot en met 20 en is getest op de seizoen 11 tot en met 13. Echter voor de seizoenen 11 tot en met 13 zijn alleen de Exam Drop Layer en de Wiki Word Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor deze seizoenen, e.g. in 9 van de 10 finales krijgt de echte 'Mol' de hoogste likelihood. Al deze voorspellingen voor deze seizoenen kun je vinden in de map 'results'.
+Het Moldel is getest op de seizoenen 14 tot en met 20 en is getest op de seizoen 11 tot en met 13. Echter voor de seizoenen 11 tot en met 13 zijn alleen de Exam Drop Layer en de Wiki Word Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor deze seizoenen, e.g. in 9 van de 10 finales krijgt de echte 'Mol' de hoogste likelihood. Al deze voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https://github.com/Multifacio/Moldel/tree/master/results).
 
 # Voorspelling
-Ook voor de nieuwste aflevering (seizoen 20, aflevering 10) is een voorspelling gedaan.
+Ook voor de nieuwste aflevering is een voorspelling gedaan.
 <details>
-  <summary>Klik hier om de voorspelling voor de nieuwste aflevering te laten zien.</summary>
+  <summary>Voorspelling voor seizoen 20, aflevering 10</summary>
   
-  Nog geen voorspelling.
+  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Full%20Moldel:%20Season%2014-20%20(2020-08-05)/Season%2020/After%20Episode%208.png)
 </details>
 
 # Credits
@@ -30,4 +30,4 @@ Ik bedank iedereen die mij meegeholpen heeft bij dit project, daaronder vallen:
 
 # Contact
 Als je meer wilt weten over dit project kun je mij contacteren:
-* Multifacio: Multifacio@gmail.com
+* Haico: Multifacio@gmail.com (pseudoniem: Multifacio)
