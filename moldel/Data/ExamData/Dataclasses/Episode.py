@@ -63,6 +63,18 @@ class Episode:
         """
         return self.id <= other.id
 
+    def __lt__(self, other: Episode) -> bool:
+        """ Check if an Episode happens earlier than the other Episode, assuming that both Episodes take place in the
+        same Season.
+
+        Arguments:
+            other (Episode): The Episode to check against.
+
+        Returns:
+            True if this Episode happens earlier than the other Episode, false otherwise.
+        """
+        return self.id < other.id
+
     def __len__(self) -> int:
         """ Count the number of players still alive in this episode.
 
