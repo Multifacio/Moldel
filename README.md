@@ -15,7 +15,7 @@ Het Moldel is getest op de seizoenen 14 tot en met 20 en is getest op de seizoen
 <details>
   <summary>Spoiler Alert! Voorspellingen voor finales (seizoen 11 t/m 20)</summary>
   
-  ![Finale Voorspellingen](https://github.com/Multifacio/Moldel/blob/master/results/Final%20Results%20(11-20)%20(2020-08-06)%20-%202.jpeg)
+  ![Finale Voorspellingen](https://github.com/Multifacio/Moldel/blob/13082020Results/results/Final%20Results%20(9-20)%20(2020-08-13).jpeg)
 </details>
 
 Meer voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https://github.com/Multifacio/Moldel/tree/master/results).
