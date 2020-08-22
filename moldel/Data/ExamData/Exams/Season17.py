@@ -249,5 +249,38 @@ episode8 = Episode(players8, result8,
                     Player.DIEDERIK_17: TestInput({1: 2, 20: 2})},
                    {1: question8_1, 20: question8_20})
 
+# Aflevering 9 (afvaller: Jochem) (pas in de reunie bekend)
+# 2 - Voor hoeveel geld kocht de Mol een joker bij de Koehandel:
+# 1: Sanne; 2: Jochem; 3: Thomas;
+# 6 - Welke aanwijzingen stonden op de auto van de Mol tijdens de Rijdende Route:
+# 1: Sanne, Thomas; 2: Jochem;
+# 13 - Als hoeveelste ging de Mol de arena in tijdens de Lasso-opdracht:
+# 1: Jochem; 2: Sanne; 3: Thomas;
+# 21 - Pakte de Mol een half biljet van 1000 euro van een paal tijdens de geldestafette:
+# 1: Jochem; 2: Sanne, Thomas;
+# 29 - Bij welke letter begon de Mol bij aanvang van het ABC'tje:
+# 1: Sanne; 2: Jochem; 3: Thomas;
+# 34 - Welke tijd behaalde de Mol tijdens de proefronde van het Schieten te paard:
+# 1: Thomas; 2: Jochem; 3: Sanne;
+# 40 - Wie is de Mol:
+# 1: Jochem; 2: Sanne; 3: Thomas;
+# Antwoorden: Thomas (2, 2) (21, 1) (40, 1), Jochem (6, 1) (29, 1) (40, 2), Sanne (13, 3) (34, 1) (40, 3)
+players9 = [Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17]
+question9_2 = Question({1: [Player.SANNE_17], 2: [Player.JOCHEM_17], 3: [Player.THOMAS_17]})
+question9_6 = Question({1: [Player.SANNE_17, Player.THOMAS_17],
+                        2: [Player.JOCHEM_17]})
+question9_13 = Question({1: [Player.JOCHEM_17], 2: [Player.SANNE_17], 3: [Player.THOMAS_17]})
+question9_21 = Question({1: [Player.JOCHEM_17],
+                         2: [Player.SANNE_17, Player.THOMAS_17]})
+question9_29 = Question({1: [Player.SANNE_17], 2: [Player.JOCHEM_17], 3: [Player.THOMAS_17]})
+question9_34 = Question({1: [Player.THOMAS_17], 2: [Player.JOCHEM_17], 3: [Player.SANNE_17]})
+question9_40 = Question({1: [Player.JOCHEM_17], 2: [Player.SANNE_17], 3: [Player.THOMAS_17]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.JOCHEM_17])
+episode9 = Episode(players9, result9,
+                   {Player.THOMAS_17: TestInput({2: 2, 21: 1, 40: 1}), Player.JOCHEM_17: TestInput({6: 1, 29: 1, 40: 2}),
+                    Player.SANNE_17: TestInput({13: 3, 34: 1, 40: 3})},
+                   {2: question9_2, 6: question9_6, 13: question9_13, 21: question9_21, 29: question9_29,
+                    34: question9_34, 40: question9_40}, num_questions = 40)
+
 season17 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                             9: episode8})
+                             9: episode8, 10: episode9})

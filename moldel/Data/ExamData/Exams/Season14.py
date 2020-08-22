@@ -329,7 +329,7 @@ episode9f = Episode(players9f, result9f,
                     Player.SOFIE_14: TestInput({5: 2}), Player.SUSAN_14: TestInput({12: 1})},
                    {5: question9f_5, 12: question9f_12, 20: question9f_20})
 
-# Aflevering 9 - Second (verliezer: Freek of Susan) (20 vragen finale)
+# Aflevering 9 - Second (verliezer: Freek) (pas in de reunie bekend) (20 vragen finale)
 # Vragen:
 # 6 - Staat de Mol graag in de schijnwerpers (niet bruikbaar)
 # 9 - Wanneer stuurde de Mol een envelop naar Ellis Island:
@@ -345,11 +345,11 @@ question9s_9 = Question({1: [Player.FREEK_14, Player.SOFIE_14],
 question9s_17 = Question({1: [Player.SOFIE_14, Player.SUSAN_14],
                           2: [Player.FREEK_14]})
 question9s_20 = Question({1: [Player.FREEK_14], 2: [Player.SOFIE_14], 3: [Player.SUSAN_14]})
-result9s = Result(DropType.POSSIBLE_DROP, [Player.FREEK_14, Player.SUSAN_14])
+result9s = Result(DropType.EXECUTION_DROP, [Player.FREEK_14])
 episode9s = Episode(players9s, result9s,
                     {Player.SOFIE_14: TestInput({17: 1, 20: 3}), Player.FREEK_14: TestInput({9: 1}),
                      Player.SUSAN_14: TestInput({20: 2})},
                     {9: question9s_9, 17: question9s_17, 20: question9s_20})
 
 season14 = Season(players1, {0.5: episode1f, 1: episode1s, 2: episode2, 3: episode3, 4: episode4, 5: episode5,
-                             6: episode6, 7: episode7, 8: episode8, 8.5: episode9f, 9: episode9s})
+                             6: episode6, 7: episode7, 8: episode8, 9: episode9f, 10: episode9s})

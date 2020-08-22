@@ -302,5 +302,33 @@ episode8 = Episode(players8, result8,
                     Player.TAEKE_16: TestInput(jokers = 1), Player.ANNEMIEKE_16: TestInput(immunity = True)},
                    {13: question8_13, 18: question8_18})
 
+# Aflevering 9 (afvaller: Annemieke) (pas in de reunie bekend)
+# 2 - De Mol heeft bij de Zoutmijnen-opdracht:
+# 1: Tim; 2: Annemieke; 3: Klaas;
+# 7 - Bij de Laser-opdracht:
+# 1: Annemieke; 2: Tim; 3: Klaas;
+# 19 - Tijdens de Verlaten resort-opdracht heeft de Mol:
+# 1: Klaas; 2: Tim; 3: Annemieke;
+# 28 - Tijdens de Verhalen-estafette-opdracht heeft de Mol:
+# 1: Annemieke; 2: Tim; 3: Klaas;
+# 35 - Tijdens de Geldklokken-opdracht heeft de Mol:
+# 1: Tim; 2: Klaas; 3: Annemieke;
+# 40 - Wie is de Mol:
+# 1: Annemieke; 2: Klaas; 3: Tim;
+# Antwoorden: Tim (2, 3) (28, 3) (40, 2), Klaas (7, 2) (35, 1) (40, 3), Annemieke (19, 1) (40, 2)
+players9 = [Player.ANNEMIEKE_16, Player.KLAAS_16, Player.TIM_16]
+question9_2 = Question({1: [Player.TIM_16], 2: [Player.ANNEMIEKE_16], 3: [Player.KLAAS_16]})
+question9_7 = Question({1: [Player.ANNEMIEKE_16], 2: [Player.TIM_16], 3: [Player.KLAAS_16]})
+question9_19 = Question({1: [Player.KLAAS_16], 2: [Player.TIM_16], 3: [Player.ANNEMIEKE_16]})
+question9_28 = Question({1: [Player.ANNEMIEKE_16], 2: [Player.TIM_16], 3: [Player.KLAAS_16]})
+question9_35 = Question({1: [Player.TIM_16], 2: [Player.KLAAS_16], 3: [Player.ANNEMIEKE_16]})
+question9_40 = Question({1: [Player.ANNEMIEKE_16], 2: [Player.KLAAS_16], 3: [Player.TIM_16]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.ANNEMIEKE_16])
+episode9 = Episode(players9, result9,
+                   {Player.TIM_16: TestInput({2: 3, 28: 3, 40: 2}), Player.KLAAS_16: TestInput({7: 2, 35: 1, 40: 3}),
+                    Player.ANNEMIEKE_16: TestInput({19: 1, 40: 2})},
+                   {2: question9_2, 7: question9_7, 19: question9_19, 28: question9_28, 35: question9_35,
+                    40: question9_40}, num_questions = 40)
+
 season16 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                             8: episode8})
+                             8: episode8, 10: episode9})

@@ -167,14 +167,14 @@ episode5 = Episode(players5, result5,
 # Aflevering 6 (geen afvaller, alleen Simone kreeg haar scherm te zien)
 # Vragen:
 # 4 - In welke kamer bevond de Mol zich bij aanvang van de opdracht 'Sleutelpositie'? (Niet accuraat)
-# 1: Jan; 2: Olcay; 3: Simone; 4: Stine; 5: Ruben;
-# 13 - Welke kleur auto had de Mol bij de opdracht 'Ladas met Lading'?
-# 1: Jan ; 2: Simone, Stine; 3: Ruben, Olcay;
-# 20 - Wie is de Mol?
-# 1: Jan; 2: Olcay; 3: Ruben; 4: Simone; 5: Stine
+# 1: Stine; 2: Olcay; 3: Simone; 4: Jan; 5: Ruben;
+# 13 - Welke kleur auto had de Mol bij de opdracht 'Ladas met Lading':
+# 1: Jan ; 2: Simone, Stine; 3: Olcay, Ruben;
+# 20 - Wie is de Mol:
+# 1: Jan; 2: Olcay; 3: Ruben; 4: Simone; 5: Stine;
 # Antwoorden: Jan (4, 5), Ruben (13, 2), Simone (20, 3)
 players6 = [Player.JAN_18, Player.OLCAY_18, Player.RUBEN_18, Player.SIMONE_18, Player.STINE_18]
-question6_4 = Question({1: [Player.JAN_18], 2: [Player.OLCAY_18], 3: [Player.SIMONE_18], 4: [Player.STINE_18],
+question6_4 = Question({1: [Player.STINE_18], 2: [Player.OLCAY_18], 3: [Player.SIMONE_18], 4: [Player.JAN_18],
                         5: [Player.RUBEN_18]})
 question6_13 = Question({1: [Player.JAN_18],
                          2: [Player.SIMONE_18, Player.STINE_18],
@@ -190,11 +190,11 @@ episode6 = Episode(players6, result6,
 # Aflevering 7 (afvaller: Stine)
 # Vragen:
 # 1 - De Mol is een:
-# 1: Jan, Ruben; 2: Olcay, Simone, Stine
-# 13 - Was de Mol de eerste die begon te schilderen bij de opdracht 'Praten als Brugman'?
+# 1: Jan, Ruben; 2: Olcay, Simone, Stine;
+# 13 - Was de Mol de eerste die begon te schilderen bij de opdracht 'Praten als Brugman':
 # 1: Ruben, Simone, Stine; 2: Jan, Olcay;
-# 18 - Welke kleur dozen moest de Mol verzamelen bij 'Perongeluk'?
-# 1: Jan; 2: Simone; 3: Olcay; 4: Ruben, Stine
+# 18 - Welke kleur dozen moest de Mol verzamelen bij 'Perongeluk':
+# 1: Jan; 2: Simone; 3: Olcay; 4: Ruben, Stine;
 # Antwoorden: Ruben (1, 2), Jan (13, 1), Olcay (18, 2)
 players7 = [Player.JAN_18, Player.OLCAY_18, Player.RUBEN_18, Player.SIMONE_18, Player.STINE_18]
 question7_1 = Question({1: [Player.JAN_18, Player.RUBEN_18],
@@ -225,5 +225,35 @@ episode8 = Episode(players8, result8,
                     Player.OLCAY_18: TestInput({20: 3}), Player.SIMONE_18: TestInput({20: 3})},
                    {7: question8_7, 20: question8_20})
 
+# Aflevering 9 (afvaller: Olcay) (pas in de reunie bekend)
+# 3 - Heeft het duo waarin de Mol zat geld binnengebracht tijdens aflevering 1:
+# 1: Olcay, Ruben; 2: Jan;
+# 22 - Welke kleur auto had de Mol bij de opdracht 'Ladas met Lading':
+# 1: Jan; 2: Olcay, Ruben;
+# 24 - Waar begon de Mol bij aanvang van de opdracht 'Sleutelpositie':
+# 1: Olcay; 2: Jan; 3: Ruben;
+# 29 - Waaraan werkte de Mol als eerste tijdens de opdracht 'Oplichten':
+# 1: Ruben; 2: Jan; 3: Olcay;
+# 31 - Welke kleur dozen moest de Mol verzamelen bij de opdracht 'Perongeluk':
+# 1: Jan; 2: Olcay; 3: Ruben;
+# 40 - Wie is de Mol:
+# 1: Jan; 2: Olcay; 3: Ruben;
+# Antwoorden: Jan (24, 3) (29, 1) (40, 3), Olcay (22, 2) (31, 3) (40, 3), Ruben (3, 2) (40, 1)
+players9 = [Player.JAN_18, Player.OLCAY_18, Player.RUBEN_18]
+question9_3 = Question({1: [Player.OLCAY_18, Player.RUBEN_18],
+                        2: [Player.JAN_18]})
+question9_22 = Question({1: [Player.JAN_18],
+                         2: [Player.OLCAY_18, Player.RUBEN_18]})
+question9_24 = Question({1: [Player.OLCAY_18], 2: [Player.JAN_18], 3: [Player.RUBEN_18]})
+question9_29 = Question({1: [Player.RUBEN_18], 2: [Player.JAN_18], 3: [Player.OLCAY_18]})
+question9_31 = Question({1: [Player.JAN_18], 2: [Player.OLCAY_18], 3: [Player.RUBEN_18]})
+question9_40 = Question({1: [Player.JAN_18], 2: [Player.OLCAY_18], 3: [Player.RUBEN_18]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.OLCAY_18])
+episode9 = Episode(players9, result9,
+                   {Player.JAN_18: TestInput({24: 3, 29: 1, 40: 3}), Player.OLCAY_18: TestInput({22: 2, 31: 3, 40: 3}),
+                    Player.RUBEN_18: TestInput({3: 2, 40: 1})},
+                   {3: question9_3, 22: question9_22, 24: question9_24, 29: question9_29, 31: question9_31,
+                    40: question9_40}, num_questions = 40)
+
 season18 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                             8: episode8})
+                             8: episode8, 10: episode9})

@@ -200,5 +200,22 @@ episode8 = Episode(players8, result8,
                     Player.KIM_10: TestInput(jokers = 2)},
                    {10: question8_10})
 
+# Aflevering 9 (afvaller: Sanne) (pas in de reunie bekend)
+# 15 - Heeft de Mol ooit een joker gekregen (alle spelers in 1 antwoord, daarom niet gebruikt)
+# 28 - Loog de Mol ooit over het bezit van jokers:
+# 1: Kim, Sanne; 2: Frits;
+# 36 - Heeft de Mol ooit een vrijstelling gewonnen:
+# 1: Frits, Sanne; 2: Kim;
+# Antwoorden: Frits (28, 1), Kim (36, 1)
+players9 = [Player.FRITS_10, Player.KIM_10, Player.SANNE_10]
+question9_28 = Question({1: [Player.KIM_10, Player.SANNE_10],
+                         2: [Player.FRITS_10]})
+question9_36 = Question({1: [Player.FRITS_10, Player.SANNE_10],
+                         2: [Player.KIM_10]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.SANNE_10])
+episode9 = Episode(players9, result9,
+                   {Player.FRITS_10: TestInput({28: 1}), Player.KIM_10: TestInput({36: 1})},
+                   {28: question9_28, 36: question9_36}, num_questions = 40)
+
 season10 = Season(players1, {1: episode1, 2: episode2, 2.5: episode3f, 3: episode3s, 4: episode4, 5: episode5,
-                             6: episode6, 7: episode7, 8: episode8})
+                             6: episode6, 7: episode7, 8: episode8, 10: episode9})

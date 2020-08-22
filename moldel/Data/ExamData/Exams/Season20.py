@@ -291,5 +291,44 @@ episode8 = Episode(players8, result8,
                     Player.NATHAN_20: TestInput({5: 2, 20: 2})},
                    {3: question8_3, 5: question8_5, 13: question8_13, 14: question8_14, 20: question8_20})
 
+# Aflevering 9 (afvaller: Miljuschka, Nathan) (pas in de reunie bekend)
+# 6 - Was de Mol binnen de tijd terug aan het einde van de opdracht 'Kettingreactie':
+# 1: Nathan; 2: Buddy; 3: Miljuschka, Rob;
+# 11 - Waar was de Mol bij aanvang van de opdracht 'Lijn(ver)diensten':
+# 1: Buddy, Miljuschka; 2: Nathan, Rob;
+# 15 - Welke waarde had de stok van de Mol tijdens de opdracht 'Porseleinen Kamer' (Foutieve vraag, want Nathan wordt
+# door geen enkel antwoord gecovered)
+# 18 - Welk teken had de vrachtwagen van de Mol tijdens de opdracht 'Parkeertarief':
+# 1: Miljuschka, Nathan; 2: Rob; 3: Buddy;
+# 27 - Als hoeveelste ging de Mol het doolhofje binnen tijdens de opdracht 'Alles kenners':
+# 1: Rob; 2: Buddy; 3: Miljuschka; 4: Nathan;
+# 35 - Bij welk kistje begon de Mol tijdens de opdracht 'Doorzichtig':
+# 1: Buddy; 2: Nathan; 3: Rob; 4: Miljuschka;
+# 38 - Met wie was de Mol een duo tijdens de opdracht 'Cijferkunst':
+# 1: Miljuschka; 2: Rob; 3: Nathan; 4: Buddy;
+# 40 - Wie is de Mol:
+# 1: Buddy; 2: Miljuschka; 3: Nathan; 4: Rob;
+# Antwoorden: Buddy (18, 3) (27, 1) (40, 4), Rob (6, 2) (11, 1) (40, 1), Nathan (35, 3) (40, 4),
+# Miljuschka (38, 2) (40, 4)
+players9 = [Player.BUDDY_20, Player.MILJUSCHKA_20, Player.NATHAN_20, Player.ROB_20]
+question9_6 = Question({1: [Player.NATHAN_20],
+                        2: [Player.BUDDY_20],
+                        3: [Player.MILJUSCHKA_20, Player.ROB_20]})
+question9_11 = Question({1: [Player.BUDDY_20, Player.MILJUSCHKA_20],
+                         2: [Player.NATHAN_20, Player.ROB_20]})
+question9_18 = Question({1: [Player.MILJUSCHKA_20, Player.NATHAN_20],
+                         2: [Player.ROB_20],
+                         3: [Player.BUDDY_20]})
+question9_27 = Question({1: [Player.ROB_20], 2: [Player.BUDDY_20], 3: [Player.MILJUSCHKA_20], 4: [Player.NATHAN_20]})
+question9_35 = Question({1: [Player.BUDDY_20], 2: [Player.NATHAN_20], 3: [Player.ROB_20], 4: [Player.MILJUSCHKA_20]})
+question9_38 = Question({1: [Player.MILJUSCHKA_20], 2: [Player.ROB_20], 3: [Player.NATHAN_20], 4: [Player.BUDDY_20]})
+question9_40 = Question({1: [Player.BUDDY_20], 2: [Player.MILJUSCHKA_20], 3: [Player.NATHAN_20], 4: [Player.ROB_20]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.MILJUSCHKA_20, Player.NATHAN_20])
+episode9 = Episode(players9, result9,
+                   {Player.BUDDY_20: TestInput({18: 3, 27: 1, 40: 4}), Player.ROB_20: TestInput({6: 2, 11: 1, 40: 1}),
+                    Player.NATHAN_20: TestInput({35: 3, 40: 4}), Player.MILJUSCHKA_20: TestInput({38: 2, 40: 4})},
+                   {6: question9_6, 11: question9_11, 18: question9_18, 27: question9_27, 35: question9_35,
+                    38: question9_38, 40: question9_40}, num_questions = 40)
+
 season20 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                             8: episode8})
+                             8: episode8, 10: episode9})

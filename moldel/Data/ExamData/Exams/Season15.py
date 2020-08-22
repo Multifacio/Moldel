@@ -281,7 +281,7 @@ episode8 = Episode(players8, result8,
                     Player.MARTINE_15: TestInput({1: 2})},
                    {1: question8_1, 6: question8_6, 12: question8_12, 16: question8_16, 18: question8_18})
 
-# Aflevering 9 (afvaller: Chris)
+# Aflevering 9 - First (afvaller: Chris)
 # Vragen:
 # 1 - De Mol is een:
 # 1: Chris, Rik; 2: Margriet, Marlijn;
@@ -290,19 +290,45 @@ episode8 = Episode(players8, result8,
 # 20 - Wie is de Mol:
 # 1: Chris; 2: Margriet; 3: Marlijn; 4: Rik;
 # Antwoorden: Marlijn (1 joker), Rik (1, 2) (1 joker), Margriet (16, 3) (2 jokers), Chris (20, 2)
-players9 = [Player.CHRIS_15, Player.MARGRIET_15, Player.MARLIJN_15, Player.RIK_15]
-question9_1 = Question({1: [Player.CHRIS_15, Player.RIK_15],
+players9f = [Player.CHRIS_15, Player.MARGRIET_15, Player.MARLIJN_15, Player.RIK_15]
+question9f_1 = Question({1: [Player.CHRIS_15, Player.RIK_15],
                         2: [Player.MARGRIET_15, Player.MARLIJN_15]})
-question9_16 = Question({1: [Player.CHRIS_15, Player.MARGRIET_15],
+question9f_16 = Question({1: [Player.CHRIS_15, Player.MARGRIET_15],
                          2: [Player.MARLIJN_15],
                          3: [Player.RIK_15]})
-question9_20 = Question({1: [Player.CHRIS_15], 2: [Player.MARGRIET_15], 3: [Player.MARLIJN_15], 4: [Player.RIK_15]})
-result9 = Result(DropType.EXECUTION_DROP, [Player.CHRIS_15])
-episode9 = Episode(players9, result9,
+question9f_20 = Question({1: [Player.CHRIS_15], 2: [Player.MARGRIET_15], 3: [Player.MARLIJN_15], 4: [Player.RIK_15]})
+result9f = Result(DropType.EXECUTION_DROP, [Player.CHRIS_15])
+episode9f = Episode(players9f, result9f,
                    {Player.MARLIJN_15: TestInput(jokers = 1), Player.RIK_15: TestInput({1: 2}, jokers = 1),
                     Player.MARGRIET_15: TestInput({16: 3}, jokers = 2), Player.CHRIS_15: TestInput({20: 2})},
-                   {1: question9_1, 16: question9_16, 20: question9_20})
+                   {1: question9f_1, 16: question9f_16, 20: question9f_20})
 
-
+# Aflevering 9 - Second (afvaller: Marlijn) (pas in de reunie bekend)
+# 4 - Bemande de Mol bij aanvang van de Schermen-opdracht de controlroom:
+# 1: Margiet; 2: Marlijn, Rik;
+# 8 - Wanneer arriveerde het team van de Mol bij de vrachtauto van de Laden/lossen-opdracht:
+# 1: Marlijn; 2: Margriet, Rik;
+# 14 - Met wie vormde de mol een duo tijdens de Koeriersopdracht:
+# 1: Rik; 2: Marlijn; 3: Margriet;
+# 18 - Wat was de Molactie tijdens de Watervliegtuig-opdracht:
+# 1: Margriet, Marlijn; 2: Rik;
+# 40 - Wie is de Mol:
+# 1: Margriet; 2: Marlijn; 3: Rik;
+# Antwoorden: Marlijn (4, 1) (40, 1), Margriet (14, 1) (18, 2) (40, 3), Rik (8, 2) (40, 1)
+players9s = [Player.MARGRIET_15, Player.MARLIJN_15, Player.RIK_15]
+question9s_4 = Question({1: [Player.MARGRIET_15],
+                         2: [Player.MARLIJN_15, Player.RIK_15]})
+question9s_8 = Question({1: [Player.MARLIJN_15],
+                         2: [Player.MARGRIET_15, Player.RIK_15]})
+question9s_14 = Question({1: [Player.RIK_15], 2: [Player.MARLIJN_15], 3: [Player.MARGRIET_15]})
+question9s_18 = Question({1: [Player.MARGRIET_15, Player.MARLIJN_15],
+                          2: [Player.RIK_15]})
+question9s_40 = Question({1: [Player.MARGRIET_15], 2: [Player.MARLIJN_15], 3: [Player.RIK_15]})
+result9s = Result(DropType.EXECUTION_DROP, [Player.MARLIJN_15])
+episode9s = Episode(players9s, result9s,
+                   {Player.MARLIJN_15: TestInput({4: 1, 40: 1}), Player.MARGRIET_15: TestInput({14: 1, 18: 2, 40: 3}),
+                    Player.RIK_15: TestInput({8: 2, 40: 1})},
+                   {4: question9s_4, 8: question9s_8, 14: question9s_14, 18: question9s_18, 40: question9s_40},
+                    num_questions = 40)
 season15 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                             8: episode8, 9: episode9})
+                             8: episode8, 9: episode9f, 10: episode9s})

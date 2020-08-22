@@ -221,5 +221,63 @@ episode8 = Episode(players8, result8,
                     Player.HADEWYCH_12: TestInput({6: 1}), Player.LIESBETH_12: TestInput({18: 4})},
                    {6: question8_6, 11: question8_11, 18: question8_18})
 
+# Aflevering 9 (afvaller: Liesbeth) (pas in de reunie bekend)
+# Vragen:
+# 1 - Aan welk bord heeft de Mol meegewerkt (Vraagnummer onbekend):
+# 1: Anne-Marie; 2: Hadewych (Geen bord); 3: Liesbeth;
+# 2 - Met wie heeft de Mol onderhandeld in het Hofdihuis (Vraagnummer onbekend):
+# 1: Anne-Marie (spreekt Hadewych & Tim); 2: Hadewych (spreekt Anne-Marie & Liesbeth); 3: Liesbeth (spreekt Frits & Hadewych);
+# 3 - Waar stond de boot (Vraagnummer onbekend):
+# 1: Anne-Marie, Hadewych; 2: Liesbeth;
+# 4 - In welk team zat de Mol (Vraagnummer onbekend):
+# 1: Anne-Marie; 2: Hadewych, Liesbeth;
+# 5 - Welke route reed de Mol (Vraagnummer onbekend):
+# 1: Anne-Marie; 2: Hadewych, Liesbeth;
+# 6 - Stond de Mol boven of beneden 200 tredens (Vraagnummer onbekend):
+# 1: Anne-Marie; 2: Hadewych, Liesbeth;
+# 7 - Als hoeveelste ging de Mol het veld in (Vraagnummer onbekend):
+# 1: Liesbeth (eerste); 2: Anne-Marie (vijfde); 3: Hadewych (zesde);
+# 8 - Waarmee eindigde de Mol (Vraagnummer onbekend) (Foutief antwoord dus niet bruikbaar)
+# 9 - Welke ouders moest de Mol aanwijzen (Vraagnummer onbekend):
+# 1: Anne-Marie, Hadewych; 2: Liesbeth;
+# 10 - Waar was de Mol bij de begin situatie (Vraagnummer onbekend):
+# 1: Anne-Marie (I Am); 2: Hadewych (3-1=2); 3: Liesbeth (Start);
+# 21 - Welke kwartetten heeft de Mol op de tafel gelegd (Foutieve vraag, want Liesbeth wordt door geen enkel antwoord
+# gecovered)
+# 28 - Welk bedrag zat er in de enveloppe van de Mol:
+# 1: Hadewych; 2: Liesbeth; 3: Anne-Marie;
+# 33 - Heeft de Mol haar standpunt gewijzigd in het Hofdihuis:
+# 1: Liesbeth; 2: Anne-Marie, Hadewych;
+# 40 - Wie is de Mol:
+# 1: Anne-Marie; 2: Hadewych; 3: Liesbeth;
+# Antwoorden: Liesbeth (1, 1) (2, 1) (3, 1) (4, 1) (40, 1), Anne-Marie (5, 2) (6, 2) (7, 1) (28, 2) (33, 1) (40, 3),
+# Hadewych (9, 1) (10, 1) (7, 2) (4, 1) (40, 1)
+players9 = [Player.ANNE_MARIE_12, Player.HADEWYCH_12, Player.LIESBETH_12]
+question9_1 = Question({1: [Player.ANNE_MARIE_12], 2: [Player.HADEWYCH_12], 3: [Player.LIESBETH_12]})
+question9_2 = Question({1: [Player.ANNE_MARIE_12], 2: [Player.HADEWYCH_12], 3: [Player.LIESBETH_12]})
+question9_3 = Question({1: [Player.ANNE_MARIE_12, Player.HADEWYCH_12],
+                        2: [Player.LIESBETH_12]})
+question9_4 = Question({1: [Player.ANNE_MARIE_12],
+                        2: [Player.HADEWYCH_12, Player.LIESBETH_12]})
+question9_5 = Question({1: [Player.ANNE_MARIE_12],
+                        2: [Player.HADEWYCH_12, Player.LIESBETH_12]})
+question9_6 = Question({1: [Player.ANNE_MARIE_12],
+                        2: [Player.HADEWYCH_12, Player.LIESBETH_12]})
+question9_7 = Question({1: [Player.LIESBETH_12], 2: [Player.ANNE_MARIE_12], 3: [Player.HADEWYCH_12]})
+question9_9 = Question({1: [Player.ANNE_MARIE_12, Player.HADEWYCH_12],
+                        2: [Player.LIESBETH_12]})
+question9_10 = Question({1: [Player.ANNE_MARIE_12], 2: [Player.HADEWYCH_12], 3: [Player.LIESBETH_12]})
+question9_28 = Question({1: [Player.HADEWYCH_12], 2: [Player.LIESBETH_12], 3: [Player.ANNE_MARIE_12]})
+question9_33 = Question({1: [Player.LIESBETH_12],
+                         2: [Player.ANNE_MARIE_12, Player.HADEWYCH_12]})
+question9_40 = Question({1: [Player.ANNE_MARIE_12], 2: [Player.HADEWYCH_12], 3: [Player.LIESBETH_12]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.LIESBETH_12])
+episode9 = Episode(players9, result9,
+                   {Player.LIESBETH_12: TestInput({1: 1, 2: 1, 3: 1, 4: 1, 40: 1}),
+                    Player.ANNE_MARIE_12: TestInput({5: 2, 6: 2, 7: 1, 28: 2, 33: 1, 40: 3}),
+                    Player.HADEWYCH_12: TestInput({9: 1, 10: 1, 7: 2, 4: 1, 40: 1})},
+                   {1: question9_1, 2: question9_2, 3: question9_3, 4: question9_4, 5: question9_5, 6: question9_6,
+                    7: question9_7, 9: question9_9, 10: question9_10, 28: question9_28, 33: question9_33,
+                    40: question9_40}, num_questions = 40)
 season12 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                             8: episode8})
+                             8: episode8, 10: episode9})

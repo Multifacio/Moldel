@@ -226,5 +226,27 @@ episode8 = Episode(players8, result8,
                     Player.DENNIS_9: TestInput({10: 2}), Player.JON_9: TestInput({7: 1})},
                    {4: question8_4, 7: question8_7, 10: question8_10})
 
+# Aflevering 9 (afvaller: Anniek)
+# 23 - Heeft de Mol een vlag omver gereden:
+# 1: Vivienne; 2: Anniek, Jon;
+# 31 - Stond de Mol op het podium in het theater:
+# 1: Jon; 2: Anniek, Vivienne;
+# 40 - Wie is de Mol:
+# 1: Anniek; 2: Jon; 3: Vivienne;
+# Antwoorden: Vivienne (23, 2), Anniek (31, 1), Jon (40, 1)
+players9 = [Player.ANNIEK_9, Player.JON_9, Player.VIVIENNE_9]
+question9_23 = Question({1: [Player.VIVIENNE_9],
+                         2: [Player.ANNIEK_9, Player.JON_9]})
+question9_31 = Question({1: [Player.JON_9],
+                         2: [Player.ANNIEK_9, Player.VIVIENNE_9]})
+question9_40 = Question({1: [Player.ANNIEK_9],
+                         2: [Player.JON_9],
+                         3: [Player.VIVIENNE_9]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.ANNIEK_9])
+episode9 = Episode(players9, result9,
+                   {Player.VIVIENNE_9: TestInput({23: 2}), Player.ANNIEK_9: TestInput({31: 1}),
+                    Player.JON_9: TestInput({40: 1})},
+                   {23: question9_23, 31: question9_31, 40: question9_40})
+
 season9 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                            8: episode8})
+                            8: episode8, 10: episode9})
