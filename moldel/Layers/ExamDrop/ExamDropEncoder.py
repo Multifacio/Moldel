@@ -4,7 +4,7 @@ from Data.ExamData.Dataclasses.Question import Question
 from Data.ExamData.Exams.All import EXAM_DATA
 from Data.Player import Player
 from statistics import mean
-from typing import NamedTuple, Set, Tuple, Union
+from typing import NamedTuple, Set, Tuple, Union, List
 import numpy as np
 
 # If the selected player is a bool value then the meaning is whether that player is included in the answer (True) or
@@ -15,6 +15,10 @@ TrainSample = NamedTuple("TrainSample", [("player", Player), ("season", int), ("
 class ExamDropEncoder:
     """ The Exam Drop Encoder deals with the encoding of the features used for the Exam Drop Layer. """
     EXEMPTION_JOKER_VALUE = 1000 # The value of an exemption expressed in jokers.
+
+    # The parameters used to discretize episode values (the first one is the minimum value, the second is the maximum
+    # value and the third is the group size)
+    EPISODE_DISCRETIZE_PARAMS = (1, 9, 2)
 
     @classmethod
     def extract_features(self, sample: TrainSample, max_episode: int) -> np.array:
@@ -28,6 +32,8 @@ class ExamDropEncoder:
             An array of features.
         """
         drop_episode, exam_episode, fail_test, execution_episode = self.__episode_features(sample)
+        drop_episode_discrete = self.__discretize(drop_episode, *self.EPISODE_DISCRETIZE_PARAMS)
+        exam_episode_discrete = self.__discretize(exam_episode, *self.EPISODE_DISCRETIZE_PARAMS)
         num_players_drop, num_players_drop_reciprocal, num_players_exam, num_players_exam_reciprocal = \
             self.__num_players_features(sample)
         entropy, num_answer_players, num_answer_players_reciprocal, answer_probability = self.__answer_features(sample)
@@ -42,7 +48,25 @@ class ExamDropEncoder:
             num_answer_players_reciprocal, answer_probability, num_same_pickers, num_same_pickers_reciprocal,
             prob_same_picker, drop_jokers2_more, drop_jokers1_more, drop_jokers1_less, exam_jokers2_more,
             exam_jokers1_more, exam_jokers1_less, weighted_jokers2_more, weighted_jokers1_more, weighted_jokers1_less,
-            drop_player_jokers_more, drop_player_jokers_less])
+            drop_player_jokers_more, drop_player_jokers_less] + drop_episode_discrete + exam_episode_discrete)
+
+    @staticmethod
+    def __discretize(value: float, min_value: int, max_value: int, group_size: int) -> List[float]:
+        """ Discretize a feature value into multiple binary feature values.
+
+        Arguments:
+            value (float): The value that will be discretized.
+            min_value (int): The smallest value that is taken into account.
+            max_value (int): The largest value that is taken into account.
+            group_size (int): How many succeeding values are grouped together.
+
+        Returns:
+            The binary discretization of this value.
+        """
+        value = max(min(value, max_value), min_value)
+        group = (value - min_value) // group_size
+        feature_size = (max_value - min_value) // group_size + 1
+        return [1.0 if i == group else 0.0 for i in range(feature_size)]
 
     @staticmethod
     def __episode_features(sample: TrainSample) -> Tuple[float, ...]:

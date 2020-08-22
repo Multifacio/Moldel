@@ -155,7 +155,7 @@ class ExamDropExtractor:
     @staticmethod
     def __get_train_weights(train_data: List[TrainSample]) -> np.array:
         """ Get the weight for the training data, which is 1 / num_answers where num_answers is the number of answers
-        given by players in that episode.
+        given by that player in that episode.
 
         Arguments:
             train_data (List[TrainSample]): All raw train data from which it is extracted to which episode an answer
@@ -167,6 +167,6 @@ class ExamDropExtractor:
         """
         train_weights = []
         for sample in train_data:
-            num_answers = sample.exam_episode.get_all_answers(set(sample.exam_episode.players), sys.maxsize)
+            num_answers = sample.exam_episode.get_all_answers({sample.player}, sys.maxsize)
             train_weights.append(1 / len(num_answers))
         return np.array(train_weights)
