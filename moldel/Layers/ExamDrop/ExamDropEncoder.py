@@ -16,10 +16,6 @@ class ExamDropEncoder:
     """ The Exam Drop Encoder deals with the encoding of the features used for the Exam Drop Layer. """
     EXEMPTION_JOKER_VALUE = 1000 # The value of an exemption expressed in jokers.
 
-    # The parameters used to discretize episode values (the first one is the minimum value, the second is the maximum
-    # value and the third is the group size)
-    EPISODE_DISCRETIZE_PARAMS = (1, 9, 2)
-
     @classmethod
     def extract_features(self, sample: TrainSample, max_episode: int) -> np.array:
         """ Convert a Train Sample into an array of features.
@@ -32,41 +28,19 @@ class ExamDropEncoder:
             An array of features.
         """
         drop_episode, exam_episode, fail_test, execution_episode = self.__episode_features(sample)
-        drop_episode_discrete = self.__discretize(drop_episode, *self.EPISODE_DISCRETIZE_PARAMS)
-        exam_episode_discrete = self.__discretize(exam_episode, *self.EPISODE_DISCRETIZE_PARAMS)
-        num_players_drop, num_players_drop_reciprocal, num_players_exam, num_players_exam_reciprocal = \
-            self.__num_players_features(sample)
-        entropy, num_answer_players, num_answer_players_reciprocal, answer_probability = self.__answer_features(sample)
-        num_same_pickers, num_same_pickers_reciprocal, prob_same_picker = self.__same_pick_features(sample, max_episode)
+        num_players_drop, num_players_exam = self.__num_players_features(sample)
+        entropy, num_answer_players, answer_probability = self.__answer_features(sample)
+        num_same_pickers, prob_same_picker = self.__same_pick_features(sample, max_episode)
         drop_jokers2_more, drop_jokers1_more, drop_jokers1_less = self.__joker_discretization(sample.player, sample.drop_episode)
         exam_jokers2_more, exam_jokers1_more, exam_jokers1_less = self.__joker_discretization(sample.player, sample.exam_episode)
         weighted_jokers2_more, weighted_jokers1_more, weighted_jokers1_less = self.__weighted_past_jokers(sample)
         drop_player_jokers_more, drop_player_jokers_less = self.__exam_joker_features(sample.player, sample.exam_episode)
 
-        return np.array([drop_episode, exam_episode, fail_test, execution_episode, num_players_drop,
-            num_players_drop_reciprocal, num_players_exam, num_players_exam_reciprocal, entropy, num_answer_players,
-            num_answer_players_reciprocal, answer_probability, num_same_pickers, num_same_pickers_reciprocal,
-            prob_same_picker, drop_jokers2_more, drop_jokers1_more, drop_jokers1_less, exam_jokers2_more,
-            exam_jokers1_more, exam_jokers1_less, weighted_jokers2_more, weighted_jokers1_more, weighted_jokers1_less,
-            drop_player_jokers_more, drop_player_jokers_less] + drop_episode_discrete + exam_episode_discrete)
-
-    @staticmethod
-    def __discretize(value: float, min_value: int, max_value: int, group_size: int) -> List[float]:
-        """ Discretize a feature value into multiple binary feature values.
-
-        Arguments:
-            value (float): The value that will be discretized.
-            min_value (int): The smallest value that is taken into account.
-            max_value (int): The largest value that is taken into account.
-            group_size (int): How many succeeding values are grouped together.
-
-        Returns:
-            The binary discretization of this value.
-        """
-        value = max(min(value, max_value), min_value)
-        group = (value - min_value) // group_size
-        feature_size = (max_value - min_value) // group_size + 1
-        return [1.0 if i == group else 0.0 for i in range(feature_size)]
+        return np.array([drop_episode, exam_episode, fail_test, execution_episode, num_players_drop, num_players_exam,
+            entropy, num_answer_players, answer_probability, num_same_pickers, prob_same_picker, drop_jokers2_more,
+            drop_jokers1_more, drop_jokers1_less, exam_jokers2_more, exam_jokers1_more, exam_jokers1_less,
+            weighted_jokers2_more, weighted_jokers1_more, weighted_jokers1_less, drop_player_jokers_more,
+            drop_player_jokers_less])
 
     @staticmethod
     def __episode_features(sample: TrainSample) -> Tuple[float, ...]:
@@ -91,9 +65,7 @@ class ExamDropEncoder:
         Returns:
             The feature values.
         """
-        num_players_drop = len(sample.drop_episode) - 1
-        num_players_exam = len(sample.exam_episode) - 1
-        return num_players_drop, 1 / num_players_drop, num_players_exam, 1 / num_players_exam
+        return len(sample.drop_episode) - 1, len(sample.exam_episode) - 1
 
     @staticmethod
     def __answer_features(sample: TrainSample) -> Tuple[float, ...]:
@@ -106,7 +78,7 @@ class ExamDropEncoder:
             The feature values.
         """
         self_excluding_answer = sample.answer.difference({sample.player})
-        return sample.question.entropy(), len(self_excluding_answer), 1 / max(len(self_excluding_answer), 1), \
+        return sample.question.entropy(), len(self_excluding_answer), \
                len(self_excluding_answer) / (len(sample.exam_episode.players) - 1)
 
     @staticmethod
@@ -123,7 +95,7 @@ class ExamDropEncoder:
         probabilities = sample.exam_episode.same_pick_probabilities(picked_answer, max_episode)
         num_same_pickers = sum([prob > 0.0 for prob in probabilities.values()])
         prob_same_picker = mean([prob for player, prob in probabilities.items() if player != sample.player])
-        return num_same_pickers / len(sample.exam_episode.players), 1 / max(num_same_pickers, 1), prob_same_picker
+        return num_same_pickers / len(sample.exam_episode.players), prob_same_picker
 
     @classmethod
     def __weighted_past_jokers(self, sample: TrainSample) -> Tuple[float, ...]:
@@ -181,9 +153,6 @@ class ExamDropEncoder:
             The feature values.
         """
         joker_usage = episode.total_joker_usage(self.EXEMPTION_JOKER_VALUE)
-        if episode.result.drop == DropType.EXECUTION_DROP:
-            drop_more_jokers = any([joker_usage[p] > joker_usage[player] for p in episode.result.players])
-            drop_less_jokers = any([joker_usage[p] < joker_usage[player] for p in episode.result.players])
-            return drop_more_jokers, drop_less_jokers
-        else:
-            return 0.5, 0.5
+        drop_more_jokers = any([joker_usage[p] > joker_usage[player] for p in episode.result.players])
+        drop_less_jokers = any([joker_usage[p] < joker_usage[player] for p in episode.result.players])
+        return drop_more_jokers, drop_less_jokers

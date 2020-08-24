@@ -10,10 +10,10 @@ from typing import Dict, List, Set
 import numpy as np
 
 class InnerExamDropLayer(MultiLayer):
-    def __init__(self, anova_f_significance: float, pca_explain: float, poly_degree: int):
+    def __init__(self, anova_f_significance: float, pca_explain: float, num_bins: int):
         self.__anova_f_significance = anova_f_significance
         self.__pca_explain = pca_explain
-        self.__poly_degree = poly_degree
+        self.__num_bins = num_bins
 
     def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, MultiLayerResult]:
         available_seasons = EXAM_DATA.keys()
@@ -22,7 +22,7 @@ class InnerExamDropLayer(MultiLayer):
             return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
         extractor = ExamDropExtractor(predict_season, latest_episode, train_seasons, self.__anova_f_significance,
-                                      self.__pca_explain, self.__poly_degree)
+                                      self.__pca_explain, self.__num_bins)
         classifier = self.__training(extractor)
         predict_data = extractor.get_predict_data()
         if not predict_data:
@@ -79,7 +79,7 @@ class InnerExamDropLayer(MultiLayer):
                 all_predictions.items()}
 
 class ExamDropLayer(MultiplyAggregateLayer):
-    def __init__(self, anova_f_significance: float, pca_explain: float, poly_degree: int):
+    def __init__(self, anova_f_significance: float, pca_explain: float, num_bins: int):
         """ Constructor of the Exam Drop Layer
 
         Arguments:
@@ -87,7 +87,6 @@ class ExamDropLayer(MultiplyAggregateLayer):
                 ANOVA F filter.
             pca_explain (float): PCA will select the least number of components that at least explain this amount
                 of variance in the features.
-            poly_degree (int): Up to which degree a polynomial transformation should be applied on all features (except
-                the answered_on feature).
+            num_bins (int): In how many bins the features get discretized.
         """
-        super().__init__(InnerExamDropLayer(anova_f_significance, pca_explain, poly_degree), True)
+        super().__init__(InnerExamDropLayer(anova_f_significance, pca_explain, num_bins), True)

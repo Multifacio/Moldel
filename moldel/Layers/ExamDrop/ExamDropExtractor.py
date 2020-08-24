@@ -5,7 +5,7 @@ from Data.PlayerData import get_is_mol
 from Layers.ExamDrop.ExamDropEncoder import ExamDropEncoder, TrainSample
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold, SelectFpr, f_classif
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import KBinsDiscretizer
 from typing import List, NamedTuple, Set, Tuple
 import numpy as np
 import sys
@@ -19,7 +19,7 @@ class ExamDropExtractor:
     and PCA. Furthermore we resample the data such that every episode has the same likelihood of being picked. """
 
     def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], anova_f_significance: float,
-                 pca_explain: float, poly_degree: int):
+                 pca_explain: float, num_bins: int):
         """ Constructor of the Exam Drop Extractor
 
         Arguments:
@@ -30,15 +30,14 @@ class ExamDropExtractor:
                 ANOVA F filter.
             pca_explain (float): PCA will select the least number of components that at least explain this amount
                 of variance in the features.
-            poly_degree (int): Up to which degree a polynomial transformation should be applied on all features (except
-                the answered_on feature).
+            num_bins (int): In how many bins the features get discretized.
         """
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
         self.__anova_f_significance = anova_f_significance
         self.__pca_explain = pca_explain
-        self.__poly_degree = poly_degree
+        self.__num_bins = num_bins
 
     def get_train_data(self) -> Tuple[np.array, np.array, np.array]:
         """ Get the formatted and sampled train data with train weights useable for machine learning algorithms.
@@ -54,8 +53,9 @@ class ExamDropExtractor:
         train_input = np.array([ExamDropEncoder.extract_features(sample, sys.maxsize) for sample in train_data])
         train_output = np.array([1.0 if get_is_mol(sample.selected_player) else 0.0 for sample in train_data])
 
-        self.__poly_transform = PolynomialFeatures(degree = self.__poly_degree, include_bias = False)
-        train_input = self.__poly_transform.fit_transform(train_input)
+        num_bins = self.__get_num_bins(train_input)
+        self.__discretizer = KBinsDiscretizer(n_bins = num_bins, encode = "onehot-dense", strategy = "kmeans")
+        train_input = self.__discretizer.fit_transform(train_input)
         train_input = self.__add_answered_on_feature(train_data, train_input)
         self.__zero_variance_remover = VarianceThreshold()
         train_input = self.__zero_variance_remover.fit_transform(train_input)
@@ -78,7 +78,7 @@ class ExamDropExtractor:
             return []
 
         predict_input = np.array([ExamDropEncoder.extract_features(sample, self.__predict_episode) for sample in predict_data])
-        predict_input = self.__poly_transform.transform(predict_input)
+        predict_input = self.__discretizer.transform(predict_input)
         predict_input = self.__add_answered_on_feature(predict_data, predict_input)
         predict_input = self.__zero_variance_remover.transform(predict_input)
         predict_input = self.__anova_f_filter.transform(predict_input)
@@ -126,6 +126,18 @@ class ExamDropExtractor:
                         season_data.append(TrainSample(answer.player, season_num, min(drop_episodes), answer.episode,
                                                        answer.question, answer.answer, answer_on))
         return season_data
+
+    def __get_num_bins(self, train_input: np.array) -> List[int]:
+        """ Get the number of bins for all features (in case a feature takes on less values then the number of bins is
+        decreased to that number for that feature).
+
+        Arguments:
+            train_input (np.array): All non-transformed train input.
+
+        Returns:
+            A list of integers, which represent the number of bins for each feature.
+        """
+        return [min(len(set(column)), self.__num_bins) for column in train_input.T]
 
     @staticmethod
     def __add_answered_on_feature(samples: List[TrainSample], all_features: np.array) -> np.array:
