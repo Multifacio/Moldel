@@ -25,7 +25,7 @@ Ook voor de nieuwste aflevering is een voorspelling gedaan.
 <details>
   <summary>Spoiler Alert! Voorspelling voor seizoen 20, aflevering 10</summary>
   
-  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Full%20Moldel:%20Season%2014-20%20(2020-08-05)/Season%2020/After%20Episode%208.png)
+  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Full%20Moldel:%20Season%2014-20%20(2020-08-05)/Season%2020/08%20-%20After%20Episode%208.png)
 </details>
 
 # Credits
