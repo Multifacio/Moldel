@@ -100,3 +100,10 @@ def get_is_mol(player: Player) -> bool:
 def get_players_in_season(season: int) -> Set[Player]:
     """ Get all players that participated in a certain season. """
     return {player for player in Player if __ALL_PLAYER_DATA[player].season == season}
+
+def get_mol_in_season(season: int) -> Player:
+    """ Get the mol in a certain season. """
+    for player in get_players_in_season(season):
+        if get_is_mol(player):
+            return player
+    return None

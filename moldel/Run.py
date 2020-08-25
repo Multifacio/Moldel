@@ -1,6 +1,7 @@
 from Layers.Moldel import Moldel
 from numpy.random import RandomState
 from Printers.PieChartPrinter import PieChartPrinter
+from Printers.TextSortedPrinter import TextSortedPrinter
 import sys
 
 RANDOM_SEED = 949019755
@@ -12,5 +13,5 @@ TRAIN_SEASONS.discard(PREDICT_SEASON)
 random_generator = RandomState(RANDOM_SEED)
 moldel = Moldel(random_generator)
 distribution = moldel.compute_distribution(PREDICT_SEASON, LATEST_EPISODE, TRAIN_SEASONS)
-printer = PieChartPrinter(3, 0.015)
+printer = PieChartPrinter(2, 0.015)
 printer.print(distribution)
