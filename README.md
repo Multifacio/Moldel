@@ -1,7 +1,7 @@
 # Introductie
 'Wie is de Mol?' is een programma op Nederland 1 elk jaar wordt uitgezonden sind 1999. In dit programma moeten kandidaten opdrachten doen waarmee je geld voor de pot kunt verdienen. Echter heb je ook een saboteur, die ook wel de 'Mol' wordt genoemd. De 'Mol' probeert te verhinderen dat er geld verdient wordt. De kandidaten moeten deze 'Mol' proberen te ontmaskeren. Bijna elke aflevering is er een test met vragen over de 'Mol' en de kandidaat die dan het minst weet over de 'Mol' valt af. Uiteindelijk blijven er op het einde 3 kandidaten over en degene die het meest weet over de 'Mol' is de winnaar van het spel en krijgt het bedrag dat in de pot zit. 
 
-Ook de kijkers thuis proberen te achterhalen tijdens de serie wie de 'Mol' is. Echter heeft het meerendeel van de kijkers het vaak fout wie de 'Mol' is. Meestal komt dit door tunnelvisie, wat inhoudt dat iemand er vanuit gaat dat een kandidaat de 'Mol' is en alleen maar bewijs zoekt wat dat bevestigt. Je kunt deze tunnelvisie het best voorkomen door op een objectieve manier te meten wie de 'Mol'. En daarom ben ik dit project gestart en probeer ik met onder anderen statistiek en machine learning op een objectieve manier te bepalen 'Wie de Mol?' is.
+Ook de kijkers thuis proberen te achterhalen tijdens de serie wie de 'Mol' is. Echter heeft het meerendeel van de kijkers het vaak fout wie de 'Mol' is. Meestal komt dit door tunnelvisie, wat inhoudt dat iemand er vanuit gaat dat een kandidaat de 'Mol' is en alleen maar bewijs zoekt wat dat bevestigt. Je kunt deze tunnelvisie het best voorkomen door op een objectieve manier te meten wie de 'Mol'. En daarom ben ik dit project gestart en probeer ik met onder anderen statistiek en machine learning op een objectieve manier te bepalen wie de 'Mol' is.
 
 # Moldel
 Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk deze speler de 'Mol' is. Deze score komt tot stand door de voorspellingen van de volgende layers te combineren:
@@ -11,11 +11,11 @@ Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk d
 * Face Visibility Layer: Het idee van deze layer komt van Mattijn van Hoek (https://github.com/mattijn/widm). Deze layer probeert te voorspellen wie de 'Mol' is op basis van hoe vaak de 'Mol' in beeld komt tijdens de eerste 4 afleveringen (de 'Mol' komt vaak minder in beeld). 
 
 # Oude Resultaten
-Het Moldel is getest op de seizoenen 14 tot en met 20 en is getest op de seizoen 9 tot en met 13. Echter voor de seizoenen 9 tot en met 13 zijn alleen de Exam Drop Layer en de Wiki Word Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor deze seizoenen, e.g. in 11 van de 12 finales krijgt de echte 'Mol' de hoogste likelihood, zie de afbeelding hieronder: 
+Het Moldel is getest op de seizoenen 14 tot en met 20 en is getest op de seizoen 9 tot en met 13. Echter voor de seizoenen 9 tot en met 13 zijn alleen de Exam Drop Layer en de Wiki Word Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor de seizoenen 9 t/m 20, e.g. in 11 van de 12 finales krijgt de echte 'Mol' de hoogste likelihood, zie de afbeelding hieronder: 
 <details>
   <summary>Spoiler Alert! Voorspellingen voor finales (seizoen 9 t/m 20)</summary>
   
-  ![Finale Voorspellingen](https://github.com/Multifacio/Moldel/blob/13082020Results/results/Final%20Results%20(9-20)%20(2020-08-13).jpeg)
+  ![Finale Voorspellingen](https://github.com/Multifacio/Moldel/blob/master/results/Final%20Results%20(9-20)%20(2020-08-25).jpeg)
 </details>
 
 Meer voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https://github.com/Multifacio/Moldel/tree/master/results).
@@ -25,7 +25,7 @@ Ook voor de nieuwste aflevering is een voorspelling gedaan.
 <details>
   <summary>Spoiler Alert! Voorspelling voor seizoen 20, aflevering 10</summary>
   
-  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Full%20Moldel:%20Season%2014-20%20(2020-08-05)/Season%2020/08%20-%20After%20Episode%208.png)
+  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Full%20Moldel:%20Season%2014-20%20(2020-08-25)/Season%2020/09%20-%20After%20Episode%209.png)
 </details>
 
 # Credits
