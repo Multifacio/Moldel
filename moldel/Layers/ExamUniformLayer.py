@@ -10,7 +10,7 @@ class InnerExamUniformLayer(Layer):
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         available_seasons = EXAM_DATA.keys()
         if predict_season not in available_seasons:
-            return EqualLayer().predict(predict_season, latest_episode, train_seasons)
+            return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
 
         season_players = get_players_in_season(predict_season)
         alive_players = EXAM_DATA[predict_season].get_alive_players(latest_episode)
