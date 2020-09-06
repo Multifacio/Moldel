@@ -3,10 +3,13 @@ from Data.Player import Player
 # The path where the wiki files are stored in plaintext
 WIKI_FILES_PATH = "moldel/Data/WikiWord/WikiFiles/"
 
-LINKER = {Player.ANITA_20: "Anita_20.txt", Player.BUDDY_20: "Buddy_20.txt", Player.CLAES_20: "Claes_20.txt",
-          Player.JAIKE_20: "Jaike_20.txt", Player.JOHAN_20: "Johan_20.txt", Player.LEONIE_20: "Leonie_20.txt",
-          Player.MILJUSCHKA_20: "Miljuschka_20.txt", Player.NATHAN_20: "Nathan_20.txt", Player.ROB_20: "Rob_20.txt",
-          Player.TINA_20: "Tina_20.txt",
+LINKER = {Player.ELLIE_21: "Ellie_21.txt", Player.HORACE_21: "Horace_21.txt", Player.JEROEN_21: "Jeroen_21.txt",
+          Player.NADJA_21: "Nadja_21.txt", Player.NIKKIE_21: "Nikkie_21.txt", Player.PATRICK_21: "Patrick_21.txt",
+          Player.PEGGY_21: "Peggy_21.txt", Player.RON_21: "Ron_21.txt", Player.TINA_21: "Tina_21.txt",
+          Player.TYGO_21: "Tygo_21.txt", Player.ANITA_20: "Anita_20.txt", Player.BUDDY_20: "Buddy_20.txt",
+          Player.CLAES_20: "Claes_20.txt", Player.JAIKE_20: "Jaike_20.txt", Player.JOHAN_20: "Johan_20.txt",
+          Player.LEONIE_20: "Leonie_20.txt", Player.MILJUSCHKA_20: "Miljuschka_20.txt", Player.NATHAN_20: "Nathan_20.txt",
+          Player.ROB_20: "Rob_20.txt", Player.TINA_20: "Tina_20.txt",
           Player.EVELIEN_19: "Evelien_19.txt", Player.EVI_19: "Evi_19.txt", Player.JAMIE_19: "Jamie_19.txt",
           Player.MEREL_19: "Merel_19.txt", Player.NIELS_19: "Niels_19.txt", Player.NIKKIE_19: "Nikkie_19.txt",
           Player.RICK_PAUL_19: "Rick_Paul_19.txt", Player.ROBERT_19: "Robert_19.txt", Player.SARAH_19: "Sarah_19.txt",
