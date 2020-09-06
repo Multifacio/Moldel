@@ -34,6 +34,12 @@ from .SuspicionLevel import *
 # suspicion levels. If there is no other form of activity or indications that the player appears in later episodes
 # then the player has to be classified as NEUTRAL.
 
+SEASON21 = {Player.ELLIE_21: SuspicionLevel.UNLIKELY, Player.HORACE_21: SuspicionLevel.NEUTRAL,
+            Player.JEROEN_21: SuspicionLevel.NEUTRAL, Player.NADJA_21: SuspicionLevel.NEUTRAL,
+            Player.NIKKIE_21: SuspicionLevel.SLIGHTLY_UNLIKELY, Player.PATRICK_21: SuspicionLevel.SLIGHTLY_UNLIKELY,
+            Player.PEGGY_21: SuspicionLevel.NEUTRAL, Player.RON_21: SuspicionLevel.UNLIKELY,
+            Player.TINA_21: SuspicionLevel.SLIGHTLY_UNLIKELY, Player.TYGO_21: SuspicionLevel.SLIGHTLY_UNLIKELY}
+
 # Only based on https://www.ad.nl/show/wie-is-de-mol-deelnemers-doen-er-alles-aan-om-geheim-te-blijven-maar-helaas~adef878e/
 SEASON20 = {Player.ANITA_20: SuspicionLevel.NEUTRAL, Player.BUDDY_20: SuspicionLevel.LIKELY,
             Player.CLAES_20: SuspicionLevel.SLIGHTLY_LIKELY, Player.JAIKE_20: SuspicionLevel.LIKELY,
@@ -83,4 +89,4 @@ SEASON14 = {Player.MAURICE_14: SuspicionLevel.UNLIKELY, Player.FREEK_14: Suspici
             Player.JENNIFER_14: SuspicionLevel.NEUTRAL, Player.OWEN_14: SuspicionLevel.NEUTRAL,
             Player.SOFIE_14: SuspicionLevel.NEUTRAL, Player.SUSAN_14: SuspicionLevel.NEUTRAL}
 
-SUSPICION_DATA = {20: SEASON20, 19: SEASON19, 18: SEASON18, 17: SEASON17, 16: SEASON16, 15: SEASON15, 14: SEASON14}
+SUSPICION_DATA = {21: SEASON21, 20: SEASON20, 19: SEASON19, 18: SEASON18, 17: SEASON17, 16: SEASON16, 15: SEASON15, 14: SEASON14}
