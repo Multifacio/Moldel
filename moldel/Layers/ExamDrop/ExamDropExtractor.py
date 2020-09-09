@@ -53,7 +53,7 @@ class ExamDropExtractor:
         train_input = np.array([ExamDropEncoder.extract_features(sample, sys.maxsize) for sample in train_data])
         train_output = np.array([1.0 if get_is_mol(sample.selected_player) else 0.0 for sample in train_data])
 
-        num_bins = self.__get_num_bins(train_input)
+        num_bins = self.get_num_bins(train_input, self.__num_bins)
         self.__discretizer = KBinsDiscretizer(n_bins = num_bins, encode = "onehot-dense", strategy = "kmeans")
         train_input = self.__discretizer.fit_transform(train_input)
         train_input = self.__add_answered_on_feature(train_data, train_input)
@@ -127,7 +127,8 @@ class ExamDropExtractor:
                                                        answer.question, answer.answer, answer_on))
         return season_data
 
-    def __get_num_bins(self, train_input: np.array) -> List[int]:
+    @staticmethod
+    def get_num_bins(train_input: np.array, max_bins: int) -> List[int]:
         """ Get the number of bins for all features (in case a feature takes on less values then the number of bins is
         decreased to that number for that feature).
 
@@ -137,7 +138,7 @@ class ExamDropExtractor:
         Returns:
             A list of integers, which represent the number of bins for each feature.
         """
-        return [min(len(set(column)), self.__num_bins) for column in train_input.T]
+        return [min(len(set(column)), max_bins) for column in train_input.T]
 
     @staticmethod
     def __add_answered_on_feature(samples: List[TrainSample], all_features: np.array) -> np.array:
