@@ -4,7 +4,7 @@ from Data.ExamData.Dataclasses.Question import Question
 from Data.ExamData.Exams.All import EXAM_DATA
 from Data.Player import Player
 from statistics import mean
-from typing import NamedTuple, Set, Tuple, Union, List
+from typing import NamedTuple, Set, Tuple, Union
 import numpy as np
 
 # If the selected player is a bool value then the meaning is whether that player is included in the answer (True) or
@@ -133,7 +133,7 @@ class ExamDropEncoder:
             The feature values.
         """
         joker_usage = episode.total_joker_usage(self.EXEMPTION_JOKER_VALUE)
-        num_players = len(episode) - 1
+        num_players = len(episode)
         jokers2_more = sum([usage >= joker_usage[player] + 2 for usage in joker_usage.values()]) / num_players
         jokers1_more = sum([usage == joker_usage[player] + 1 for usage in joker_usage.values()]) / num_players
         jokers1_less = sum([usage <= joker_usage[player] - 1 for usage in joker_usage.values()]) / num_players
