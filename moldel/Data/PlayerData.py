@@ -10,8 +10,8 @@ __ALL_PLAYER_DATA = {
     Player.DENNIS_8: PlayerData("Dennis", 8, True), Player.DUNYA_8: PlayerData("Dunya", 8, False),
     Player.EDO_8: PlayerData("Edo", 8, False), Player.GEORGINA_8: PlayerData("Georgina", 8, False),
     Player.JORIS_8: PlayerData("Joris", 8, False), Player.NICOLETTE_8: PlayerData("Nicolette", 8, False),
-
     Player.PATRICK_8: PlayerData("Patrick", 8, False), Player.REGINA_8: PlayerData("Regina", 8, False),
+
     Player.ANNIEK_9: PlayerData("Anniek", 9, False), Player.DENNIS_9: PlayerData("Dennis", 9, False),
     Player.FROUKJE_9: PlayerData("Froukje", 9, False), Player.HANS_9: PlayerData("Hans", 9, False),
     Player.JON_9: PlayerData("Jon", 9, True), Player.PAULA_9: PlayerData("Paula", 9, False),
