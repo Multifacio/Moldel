@@ -52,7 +52,7 @@ class FaceVisibilityExtractor:
             player_episodes = self.__get_players_with_episodes(season, parsed_videos)
             for player, episodes in player_episodes.items():
                 for episode in episodes:
-                    relative_occurrence = self.__get_relative_occurrence(player, parsed_videos[episode])
+                    relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode])
                     train_data.append(TrainSample(season, relative_occurrence, get_is_mol(player)))
 
         train_input = np.array([[ts.relative_occurrence] for ts in train_data])
@@ -72,12 +72,12 @@ class FaceVisibilityExtractor:
         alive_players = parsed_videos[self.__predict_episode].alive_players
         for player in alive_players:
             for episode in range(1, self.__predict_episode + 1):
-                relative_occurrence = self.__get_relative_occurrence(player, parsed_videos[episode])
+                relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode])
                 predict_data[player] = predict_data.get(player, []) + [np.array([relative_occurrence])]
         return predict_data
 
-    @classmethod
-    def __get_relative_occurrence(self, player: Player, parsed_video: ParsedVideo) -> float:
+    @staticmethod
+    def get_relative_occurrence(player: Player, parsed_video: ParsedVideo) -> float:
         """ Get the relative occurrence of a player in a given episode compared to the total occurrence of all players.
         This relative occurrence is already log transformed and we also normalized this value by the number of players
         that participated in that episode.
@@ -93,7 +93,7 @@ class FaceVisibilityExtractor:
         for p in parsed_video.alive_players:
             total_occurrence += len(parsed_video.player_occurrences[p])
         own_occurrence = len(parsed_video.player_occurrences[player]) * len(parsed_video.alive_players)
-        return math.log(self.SMALL_LOG_ADDITION + own_occurrence / total_occurrence)
+        return math.log(FaceVisibilityExtractor.SMALL_LOG_ADDITION + own_occurrence / total_occurrence)
 
     @classmethod
     def __get_parsed_videos(self, season: int) -> Dict[int, ParsedVideo]:

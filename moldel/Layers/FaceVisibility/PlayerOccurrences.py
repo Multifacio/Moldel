@@ -3,17 +3,23 @@ from Data.PlayerData import get_name
 from Layers.FaceVisibility.VideoParser import VideoParser, ParsedVideo
 
 SEASON = 20
-EPISODE = 4
+EPISODE = 5
 
-player_occurrences = VideoParser.load_parsed_video(SEASON, EPISODE).player_occurrences
+parsed_video = VideoParser.load_parsed_video(SEASON, EPISODE)
+player_occurrences = parsed_video.player_occurrences
+alive_players = parsed_video.alive_players
+
 for player, occurrences in player_occurrences.items():
-    print(get_name(player))
-    print(sorted(list(occurrences)))
+    if player in alive_players:
+        print(get_name(player))
+        print(sorted(list(occurrences)))
 
 total_face_frames = 0
-for occurrences in player_occurrences.values():
-    total_face_frames += len(occurrences)
+for player, occurrences in player_occurrences.items():
+    if player in alive_players:
+        total_face_frames += len(occurrences)
 
 for player, occurrences in player_occurrences.items():
-    print(get_name(player))
-    print(len(occurrences) / total_face_frames)
+    if player in alive_players:
+        print(get_name(player))
+        print(len(occurrences) / total_face_frames)
