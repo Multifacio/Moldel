@@ -89,4 +89,4 @@ class ExamDropLayer(MultiplyAggregateLayer):
                 of variance in the features.
             num_bins (int): In how many bins the features get discretized.
         """
-        super().__init__(InnerExamDropLayer(anova_f_significance, pca_explain, num_bins), False)
+        super().__init__(InnerExamDropLayer(anova_f_significance, pca_explain, num_bins), True)
