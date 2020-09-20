@@ -2,17 +2,9 @@ from enum import Enum, auto
 
 class Player(Enum):
     """ This enum contains all players that participated in 'Wie is de mol?' (if a player participated in multiple
-    seasons then you need an enum value for every season in which this player participated). """
-    ALEX_7 = auto()
-    DICK_7 = auto()
-    EVA_7 = auto()
-    INGE_7 = auto()
-    LIESBETH_7 = auto()
-    MENNO_7 = auto()
-    NADJA_7 = auto()
-    PAUL_7 = auto()
-    RENATE_7 = auto()
-    SANDER_7 = auto()
+    seasons then you need an enum value for every season in which this player participated). Furthermore ensure that
+    newly added players are always added at the end of the list (even if they are from older seasons), this is related
+    to the encoding of pickle. """
     ANNETTE_8 = auto()
     COEN_8 = auto()
     DENNIS_8 = auto()
@@ -153,3 +145,13 @@ class Player(Enum):
     RON_21 = auto()
     TINA_21 = auto()
     TYGO_21 = auto()
+    ALEX_7 = auto()
+    DICK_7 = auto()
+    EVA_7 = auto()
+    INGE_7 = auto()
+    LIESBETH_7 = auto()
+    MENNO_7 = auto()
+    NADJA_7 = auto()
+    PAUL_7 = auto()
+    RENATE_7 = auto()
+    SANDER_7 = auto()
