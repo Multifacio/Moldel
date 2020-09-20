@@ -84,4 +84,45 @@ episode2 = Episode(players2, result2,
                     Player.TYGO_21: TestInput({20: 2}), Player.PATRICK_21: TestInput({20: 4}, jokers = 1)},
                    {1: question2_1, 5: question2_5, 9: question2_9, 16: question2_16, 20: question2_20})
 
-season21 = Season(players1, {1: episode1, 2: episode2})
+# Aflevering 3 (afvaller: Horace)
+# Vragen:
+# 4 - Waar stond de Mol op de groepsfoto van aflevering 3:
+# 1: Ellie, Horace, Peggy, Ron; 2: Jeroen, Nikkie, Patrick, Tygo;
+# 6 - Was de Mol betrokken bij de eerste geldwissel tijdens de opdracht: 'Sleutelbos':
+# 1: Peggy, Tygo; 2: Ellie, Horace, Jeroen, Nikkie, Patrick, Ron;
+# 10 - Wat was de rol van de Mol tijdens de opdracht 'Meer of Min':
+# 1: Ellie, Horace, Ron, Tygo; 2: Jeroen, Nikkie, Patrick, Peggy;
+# 12 - Met wie stond de Mol op een uitkijkpunt tijdens de opdracht 'Meer of Min':
+# 1: Horace; 2: Ellie; 3: Tygo; 4: Ron; 5: Jeroen, Nikkie, Patrick, Peggy;
+# 16 - Aan welke opdrachten heeft de Mol deelgenomen tijdens de opdracht 'Fortuin':
+# 1: Jeroen, Nikkie, Ron, Tygo; 2: Ellie, Horace, Patrick, Peggy;
+# 18 - Heeft de Mol een schild geraakt tijdens de opdracht 'Fortuin':
+# 1: Horace, Jeroen, Nikkie, Patrick, Peggy; 2: Ellie, Ron, Tygo;
+# Antwoorden: Tygo (6, 1), Ron (10, 2), Jeroen (12, 5), Patrick (4, 1), Peggy (16, 2), Ellie (18, 1)
+players3 = [Player.ELLIE_21, Player.HORACE_21, Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21, Player.PEGGY_21,
+            Player.RON_21, Player.TYGO_21]
+question3_4 = Question({1: [Player.ELLIE_21, Player.HORACE_21, Player.PEGGY_21, Player.RON_21],
+                        2: [Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21, Player.TYGO_21]})
+question3_6 = Question({1: [Player.PEGGY_21, Player.TYGO_21],
+                        2: [Player.ELLIE_21, Player.HORACE_21, Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21,
+                            Player.RON_21]})
+question3_10 = Question({1: [Player.ELLIE_21, Player.HORACE_21, Player.RON_21, Player.TYGO_21],
+                         2: [Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21, Player.PEGGY_21]})
+question3_12 = Question({1: [Player.HORACE_21],
+                         2: [Player.ELLIE_21],
+                         3: [Player.TYGO_21],
+                         4: [Player.RON_21],
+                         5: [Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21, Player.PEGGY_21]})
+question3_16 = Question({1: [Player.JEROEN_21, Player.NIKKIE_21, Player.RON_21, Player.TYGO_21],
+                         2: [Player.ELLIE_21, Player.HORACE_21, Player.PATRICK_21, Player.PEGGY_21]})
+question3_18 = Question({1: [Player.HORACE_21, Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21, Player.PEGGY_21],
+                         2: [Player.ELLIE_21, Player.RON_21, Player.TYGO_21]})
+result3 = Result(DropType.EXECUTION_DROP, [Player.HORACE_21])
+episode3 = Episode(players3, result3,
+                   {Player.TYGO_21: TestInput({6: 1}), Player.RON_21: TestInput({10: 2}),
+                    Player.JEROEN_21: TestInput({12: 5}), Player.PATRICK_21: TestInput({4: 1}),
+                    Player.PEGGY_21: TestInput({16: 2}), Player.ELLIE_21: TestInput({18: 1})},
+                   {4: question3_4, 6: question3_6, 10: question3_10, 12: question3_12, 16: question3_16,
+                    18: question3_18})
+
+season21 = Season(players1, {1: episode1, 2: episode2, 3: episode3})
