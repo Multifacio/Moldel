@@ -23,5 +23,6 @@ for season in VALIDATE_SEASONS:
         progress_bar.next()
 progress_bar.finish()
 
-validator = PieChartCreator("Full Moldel: Season 14-20 (2020-08-25)", 2, 0.015)
+# validator = PieChartCreator("Full Moldel: Season 14-20 (2020-08-25)", 2, 0.015)
+validator = TotalLogLikelihood()
 validator.validate(distributions)
