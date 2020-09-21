@@ -1,20 +1,22 @@
 from Data.Player import Player
 from Layers.Layer import Layer
 from Layers.Special.NormalizeLayer import NormalizeLayer
-from typing import Dict, Set
+from typing import Callable, Dict, List, Set
 import math
 
 class InnerCutLayer(Layer):
-    def __init__(self, layer: Layer, upperbound: float, lowerbound: float):
+    def __init__(self, layer: Layer, aggregate: Callable[[List[float]], float], upperbound: float, lowerbound: float):
         self.__layer = layer
+        self.__aggregate = aggregate
         self.__upperbound = upperbound
         self.__lowerbound = lowerbound
 
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         layer_distribution = self.__layer.compute_distribution(predict_season, latest_episode, train_seasons)
-        uniform_likelihood = 1.0 / sum(likelihood > 0.0 for likelihood in layer_distribution.values())
-        min_likelihood = self.__lowerbound * uniform_likelihood
-        max_likelihood = self.__upperbound * uniform_likelihood
+        likelihoods = [likelihood for likelihood in layer_distribution.values() if likelihood > 0.0]
+        aggregation = self.__aggregate(likelihoods)
+        min_likelihood = self.__lowerbound * aggregation
+        max_likelihood = self.__upperbound * aggregation
         new_distribution = dict()
         for player, likelihood in layer_distribution.items():
             if likelihood > 0.0:
@@ -28,7 +30,8 @@ class CutLayer(NormalizeLayer):
     likelihood if all participants with a non-zero likelihood get an equal likelihood). After this transformation the
     likelihoods get normalized. """
 
-    def __init__(self, layer: Layer, upperbound: float = math.inf,  lowerbound: float = 0.0):
+    def __init__(self, layer: Layer, aggregate: Callable[[List[float]], float], upperbound: float = math.inf,
+                 lowerbound: float = 0.0):
         """ Constructor of the Uppercut Layer.
 
         Parameters:
@@ -36,4 +39,4 @@ class CutLayer(NormalizeLayer):
             upperbound (float): The relative upperbound with respect to the uniform likelihood.
             lowerbound (float): The relative lowerbound with respect to the uniform likelihood.
         """
-        super().__init__(InnerCutLayer(NormalizeLayer(layer), upperbound, lowerbound))
+        super().__init__(InnerCutLayer(NormalizeLayer(layer), aggregate, upperbound, lowerbound))

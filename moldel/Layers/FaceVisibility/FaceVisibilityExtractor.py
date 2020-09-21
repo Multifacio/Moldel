@@ -3,6 +3,7 @@ from Data.PlayerData import get_is_mol, get_players_in_season
 from Layers.FaceVisibility.VideoParser import ParsedVideo, VideoParser
 from numpy.random.mtrand import RandomState
 from typing import Dict, List, Tuple, Set, NamedTuple
+import bisect
 import itertools
 import math
 import numpy as np
@@ -52,8 +53,10 @@ class FaceVisibilityExtractor:
             player_episodes = self.__get_players_with_episodes(season, parsed_videos)
             for player, episodes in player_episodes.items():
                 for episode in episodes:
-                    relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode])
-                    train_data.append(TrainSample(season, relative_occurrence, get_is_mol(player)))
+                    for selection in itertools.product([False, True], repeat = 4):
+                        if sum(selection) >= 2:
+                            relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode], selection)
+                            train_data.append(TrainSample(season, relative_occurrence, get_is_mol(player)))
 
         train_input = np.array([[ts.relative_occurrence] for ts in train_data])
         train_output = np.array([1.0 if ts.is_mol else 0.0 for ts in train_data])
@@ -72,12 +75,12 @@ class FaceVisibilityExtractor:
         alive_players = parsed_videos[self.__predict_episode].alive_players
         for player in alive_players:
             for episode in range(1, self.__predict_episode + 1):
-                relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode])
+                relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode], (True,))
                 predict_data[player] = predict_data.get(player, []) + [np.array([relative_occurrence])]
         return predict_data
 
     @staticmethod
-    def get_relative_occurrence(player: Player, parsed_video: ParsedVideo) -> float:
+    def get_relative_occurrence(player: Player, parsed_video: ParsedVideo, selection: Tuple[bool, ...]) -> float:
         """ Get the relative occurrence of a player in a given episode compared to the total occurrence of all players.
         This relative occurrence is already log transformed and we also normalized this value by the number of players
         that participated in that episode.
@@ -89,10 +92,20 @@ class FaceVisibilityExtractor:
         Returns:
             The relative occurrence of the player in the given episode.
         """
-        total_occurrence = 0
-        for p in parsed_video.alive_players:
-            total_occurrence += len(parsed_video.player_occurrences[p])
-        own_occurrence = len(parsed_video.player_occurrences[player]) * len(parsed_video.alive_players)
+        all_occurrences = list(itertools.chain(*parsed_video.player_occurrences.values()))
+        quantiles = [q for q in np.linspace(0.0, 1.0, len(selection) + 1)]
+        quantiles = np.quantile(all_occurrences, quantiles)
+
+        frame_count = dict()
+        for select, q1, q2 in zip(selection, quantiles, quantiles[1:]):
+            if select:
+                for p in parsed_video.alive_players:
+                    occurrences = parsed_video.player_occurrences[p]
+                    frame_count[p] = bisect.bisect_right(occurrences, q2) - bisect.bisect_left(occurrences, q1) + \
+                        frame_count.get(p, 0)
+
+        total_occurrence = sum(frame_count.values())
+        own_occurrence = frame_count.get(player, 0) * len(parsed_video.alive_players)
         return math.log(FaceVisibilityExtractor.SMALL_LOG_ADDITION + own_occurrence / total_occurrence)
 
     @classmethod
@@ -111,7 +124,8 @@ class FaceVisibilityExtractor:
             if parsed_video is None:
                 break
             else:
-                parsed_videos[episode] = parsed_video
+                player_occurrences = {player: sorted(occurrences) for player, occurrences in parsed_video.player_occurrences.items()}
+                parsed_videos[episode] = ParsedVideo(player_occurrences, parsed_video.alive_players, parsed_video.frame_skip)
         return parsed_videos
 
     @classmethod
