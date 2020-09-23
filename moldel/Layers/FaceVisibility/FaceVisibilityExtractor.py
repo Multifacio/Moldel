@@ -22,7 +22,8 @@ class FaceVisibilityExtractor:
     # A small log addition constant used to prevent situations where the log is taken of zero.
     SMALL_LOG_ADDITION = 0.0001
 
-    def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], dec_season_weight: float):
+    def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], dec_season_weight: float,
+                 aug_num_cuts: int, aug_min_cuts_on: int, outlier_cutoff: float):
         """ Constructor of the Face Visibility Extractor.
 
         Arguments:
@@ -33,11 +34,18 @@ class FaceVisibilityExtractor:
                 season and predict season becomes larger. This value is used to give closer seasons a higher weight and
                 0.0 < dec_season_weight <= 1.0 should hold. If dec_season_weight is larger then seasons further away
                 will have more influence on the prediction.
+            aug_num_cuts (int): In how many cuts the episodes get divided. All cuts are turned on/off, where the
+                appearance value is computed over only the cuts that are turned on. This is done to create more data.
+            aug_min_cuts_on (int): How many cuts should be turned on at least.
+            outlier_cutoff (float): This is the relative amount of highest and lowest appearance values that get removed.
         """
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
         self.__dec_season_weight = dec_season_weight
+        self.__aug_num_cuts = aug_num_cuts
+        self.__aug_min_cuts_on = aug_min_cuts_on
+        self.__outlier_cutoff = outlier_cutoff
 
     def get_train_data(self) -> Tuple[np.array, np.array, np.array]:
         """ Get the formatted and sampled train data with train weights useable for machine learning algorithms.
@@ -53,11 +61,13 @@ class FaceVisibilityExtractor:
             player_episodes = self.__get_players_with_episodes(season, parsed_videos)
             for player, episodes in player_episodes.items():
                 for episode in episodes:
-                    for selection in itertools.product([False, True], repeat = 4):
-                        if sum(selection) >= 2:
+                    # Do the Data Augmentation by turning cuts on/off.
+                    for selection in itertools.product([False, True], repeat = self.__aug_num_cuts):
+                        if sum(selection) >= self.__aug_min_cuts_on:
                             relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode], selection)
                             train_data.append(TrainSample(season, relative_occurrence, get_is_mol(player)))
 
+        train_data = self.__filter_outliers(train_data)
         train_input = np.array([[ts.relative_occurrence] for ts in train_data])
         train_output = np.array([1.0 if ts.is_mol else 0.0 for ts in train_data])
         train_weights = np.array([self.__dec_season_weight ** abs(ts.season - self.__predict_season) for ts in train_data])
@@ -79,18 +89,33 @@ class FaceVisibilityExtractor:
                 predict_data[player] = predict_data.get(player, []) + [np.array([relative_occurrence])]
         return predict_data
 
+    def __filter_outliers(self, train_data: List[TrainSample]) -> List[TrainSample]:
+        """ Remove the outliers from a list of train data.
+
+        Arguments:
+            train_data (List[TrainSample]): The train data from which the outliers are removed.
+
+        Returns:
+            The train data without outliers.
+        """
+        appearances = [td.relative_occurrence for td in train_data]
+        quantiles = np.quantile(appearances, [self.__outlier_cutoff / 2, 1 - self.__outlier_cutoff / 2])
+        return [td for td in train_data if quantiles[0] <= td.relative_occurrence <= quantiles[1]]
+
     @staticmethod
     def get_relative_occurrence(player: Player, parsed_video: ParsedVideo, selection: Tuple[bool, ...]) -> float:
-        """ Get the relative occurrence of a player in a given episode compared to the total occurrence of all players.
-        This relative occurrence is already log transformed and we also normalized this value by the number of players
-        that participated in that episode.
+        """ Get the relative occurrence of a player in a given episode for the enabled cuts compared to the total
+        occurrence of all players. This relative occurrence is already log transformed and we also normalized this value
+        by the number of players that participated in that episode.
 
         Parameters:
             player (Player): The player of which we determine the relative occurrence.
             parsed_video (ParsedVideo): The parsed video data about the episode.
+            selection (Tuple[bool, ...]): The length of this list is the number of cuts and the boolean values indicate
+                which cuts are turned on (True) and which are turned off (False).
 
         Returns:
-            The relative occurrence of the player in the given episode.
+            The relative occurrence of the player in the given episode for the enabled cuts.
         """
         all_occurrences = list(itertools.chain(*parsed_video.player_occurrences.values()))
         quantiles = [q for q in np.linspace(0.0, 1.0, len(selection) + 1)]
