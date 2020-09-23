@@ -8,7 +8,7 @@ from numpy.random import RandomState
 
 class InnerMoldel(CompositeLayer):
     def __init__(self, random_generator: RandomState):
-        super().__init__([ExamDropLayer(1e-2, 0.95, 4), WikiWordLayer(6, 1.0, 2, random_generator), SocialMediaLayer(),
+        super().__init__([ExamDropLayer(1e-2, 0.95, 35), WikiWordLayer(6, 1.0, 2, random_generator), SocialMediaLayer(),
                           FaceVisibilityLayer(1/3, 0.9, 14, 2)])
 
 class Moldel(ManualExclusionLayer):
