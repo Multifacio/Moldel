@@ -8,10 +8,9 @@ from Layers.WikiWord.WikiWordLayer import WikiWordLayer
 from numpy.random import RandomState
 
 class InnerMoldel(CompositeLayer):
-    #  1.175
     def __init__(self, random_generator: RandomState):
         super().__init__([ExamDropLayer(1e-2, 0.95, 4), WikiWordLayer(6, 1.0, 2, random_generator), SocialMediaLayer(),
-                          FaceVisibilityLayer(1/5, 0.95, 14, 5.0)])
+                          FaceVisibilityLayer(1/5, 13, 4, 2, 0.01, 0.01)])
 
 class Moldel(ManualExclusionLayer):
     """ The Moldel is a combination of multiple layers used to do the total prediction of the Mol. """

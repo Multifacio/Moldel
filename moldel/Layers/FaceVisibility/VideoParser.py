@@ -67,7 +67,9 @@ class VideoParser:
         with open(file_path, 'rb') as file:
             video_parsing = pickle.load(file)
 
-        return ParsedVideo(*video_parsing)
+        parsed_video = ParsedVideo(*video_parsing)
+        player_occurrences = {player: sorted(occurrences) for player, occurrences in parsed_video.player_occurrences.items()}
+        return ParsedVideo(player_occurrences, parsed_video.alive_players, parsed_video.frame_skip)
 
     @staticmethod
     def __load_faces_encodings(all_players: List[Player]) -> List:

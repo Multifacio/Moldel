@@ -143,8 +143,7 @@ class FaceVisibilityExtractor:
             if parsed_video is None:
                 break
             else:
-                player_occurrences = {player: sorted(occurrences) for player, occurrences in parsed_video.player_occurrences.items()}
-                parsed_videos[episode] = ParsedVideo(player_occurrences, parsed_video.alive_players, parsed_video.frame_skip)
+                parsed_videos[episode] = parsed_video
         return parsed_videos
 
     @classmethod
