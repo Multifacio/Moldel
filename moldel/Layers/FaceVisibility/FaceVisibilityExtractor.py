@@ -22,18 +22,14 @@ class FaceVisibilityExtractor:
     # A small log addition constant used to prevent situations where the log is taken of zero.
     SMALL_LOG_ADDITION = 0.0001
 
-    def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], dec_season_weight: float,
-                 aug_num_cuts: int, aug_min_cuts_on: int, outlier_cutoff: float):
+    def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], aug_num_cuts: int,
+                 aug_min_cuts_on: int, outlier_cutoff: float):
         """ Constructor of the Face Visibility Extractor.
 
         Arguments:
             predict_season (int): The season for which we make the prediction.
             predict_episode (int): The latest episode in the predict season that could be used.
             train_seasons (Set[int]): The seasons which are used as train data.
-            dec_season_weight (float): The exponential decrease in weight when the absolute difference between the train
-                season and predict season becomes larger. This value is used to give closer seasons a higher weight and
-                0.0 < dec_season_weight <= 1.0 should hold. If dec_season_weight is larger then seasons further away
-                will have more influence on the prediction.
             aug_num_cuts (int): In how many cuts the episodes get divided. All cuts are turned on/off, where the
                 appearance value is computed over only the cuts that are turned on. This is done to create more data.
             aug_min_cuts_on (int): How many cuts should be turned on at least.
@@ -42,18 +38,17 @@ class FaceVisibilityExtractor:
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
-        self.__dec_season_weight = dec_season_weight
         self.__aug_num_cuts = aug_num_cuts
         self.__aug_min_cuts_on = aug_min_cuts_on
         self.__outlier_cutoff = outlier_cutoff
 
-    def get_train_data(self) -> Tuple[np.array, np.array, np.array]:
+    def get_train_data(self) -> Tuple[np.array, np.array]:
         """ Get the formatted and sampled train data with train weights useable for machine learning algorithms.
 
         Returns:
-            The train input, train output and train weights in this order. The train input is a 2d array where each row
-            represents a different train element. The train output is 1d array of labels, such that the ith row of the
-            train input corresponds to the ith element of the train output.
+            The train input and train output. The train input is a 2d array where each row
+            represents a different train element. The train output is 1d array of labels, where a 1 means that this
+            player was the 'Mol' and a 0 means that this player was not the 'Mol'.
         """
         train_data = []
         for season in self.__train_seasons:
@@ -70,8 +65,7 @@ class FaceVisibilityExtractor:
         train_data = self.__filter_outliers(train_data)
         train_input = np.array([[ts.relative_occurrence] for ts in train_data])
         train_output = np.array([1.0 if ts.is_mol else 0.0 for ts in train_data])
-        train_weights = np.array([self.__dec_season_weight ** abs(ts.season - self.__predict_season) for ts in train_data])
-        return train_input, train_output, train_weights
+        return train_input, train_output
 
     def get_predict_data(self) -> Dict[Player, List[np.array]]:
         """ Get all formatted predict data useable for the machine learning algorithms to do a prediction.

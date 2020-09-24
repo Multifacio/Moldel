@@ -9,8 +9,8 @@ from Layers.Special.CutLayer import CutLayer
 from scipy.stats import gaussian_kde
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import KBinsDiscretizer
+from statistics import mean
 from typing import Dict, Set, Tuple
-import math
 import numpy as np
 import scipy as sc
 
@@ -20,9 +20,8 @@ class InnerFaceVisibilityLayer(MultiLayer):
     MAX_VALUE = 6.0 # The highest value used when searching for the boundaries.
     SEARCH_STEPS = 12 # In how many steps the boundary is found. The precision of the boundary is (MAX_VALUE - MIN_VALUE) / 2^(SEARCH_STEPS)
 
-    def __init__(self, dec_season_weight: float, first_season: int, aug_num_cuts: int, aug_min_cuts_on: int,
+    def __init__(self, first_season: int, aug_num_cuts: int, aug_min_cuts_on: int,
                  cdf_cutoff: float, outlier_cutoff: float):
-        self.__dec_season_weight = dec_season_weight
         self.__first_season = first_season
         self.__aug_num_cuts = aug_num_cuts
         self.__aug_min_cuts_on = aug_min_cuts_on
@@ -30,12 +29,13 @@ class InnerFaceVisibilityLayer(MultiLayer):
         self.__outlier_cutoff = outlier_cutoff
 
     def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, np.array]:
+        train_seasons = {season for season in train_seasons if season >= self.__first_season}
         max_episode = self.__latest_available_episode(predict_season, latest_episode)
         if max_episode == 0 or predict_season < self.__first_season:
             return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
-        extractor = FaceVisibilityExtractor(predict_season, max_episode, train_seasons, self.__dec_season_weight,
-                        self.__aug_num_cuts, self.__aug_min_cuts_on, self.__outlier_cutoff)
+        extractor = FaceVisibilityExtractor(predict_season, max_episode, train_seasons, self.__aug_num_cuts,
+                                            self.__aug_min_cuts_on, self.__outlier_cutoff)
         non_mol_kde, mol_kde = self.__training(extractor)
         return self.__prediction(extractor, non_mol_kde, mol_kde, predict_season)
 
@@ -66,13 +66,11 @@ class InnerFaceVisibilityLayer(MultiLayer):
         Returns:
             The classifier model and the discretizer model (discretize data into bins).
         """
-        train_input, train_output, train_weights = extractor.get_train_data()
+        train_input, train_output = extractor.get_train_data()
         non_mol_input = np.array([ti[0] for ti, to in zip(train_input, train_output) if to == 0.0])
-        non_mol_weights = np.array([w for w, to in zip(train_weights, train_output) if to == 0.0])
         mol_input = np.array([ti[0] for ti, to in zip(train_input, train_output) if to == 1.0])
-        mol_weights = np.array([w for w, to in zip(train_weights, train_output) if to == 1.0])
-        non_mol_kde = self.kernel_density_estimation(non_mol_input, non_mol_weights)
-        mol_kde = self.kernel_density_estimation(mol_input, mol_weights)
+        non_mol_kde = self.kernel_density_estimation(non_mol_input)
+        mol_kde = self.kernel_density_estimation(mol_input)
         return non_mol_kde, mol_kde
 
     def __prediction(self, extractor: FaceVisibilityExtractor, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde,
@@ -112,18 +110,17 @@ class InnerFaceVisibilityLayer(MultiLayer):
         return all_predictions
 
     @staticmethod
-    def kernel_density_estimation(train_input: np.array, train_weights: np.array) -> gaussian_kde:
+    def kernel_density_estimation(train_input: np.array) -> gaussian_kde:
         """ Do a Kernel Density Estimation for the data.
 
         Arguments:
             train_input (np.array): The data on which Kernel Density Estimation is applied.
-            train_weights (np.array): The weights for all train input, which corresponds elementwise to the train_input.
 
         Returns:
             The bandwidth used for the Kernel Density Estimation.
         """
         bandwidth = InnerFaceVisibilityLayer.__get_bandwidth(train_input)
-        return gaussian_kde(train_input, bandwidth, train_weights)
+        return gaussian_kde(train_input, bandwidth)
 
     @staticmethod
     def __get_bandwidth(data: np.array) -> float:
@@ -164,18 +161,14 @@ class FaceVisibilityLayer(CutLayer):
     """ The Face Visibility Layer predict which player is the Mol based on how often this player appears during
     the episode. This code is based on the project of mattijn: https://github.com/mattijn/widm """
 
-    def __init__(self, predict_lowerbound: float, dec_season_weight: float, first_season: int, aug_num_cuts: int,
-                 aug_min_cuts_on: int, cdf_cutoff: float, outlier_cutoff: float):
+    def __init__(self, predict_lowerbound: float, first_season: int, aug_num_cuts: int, aug_min_cuts_on: int,
+                 cdf_cutoff: float, outlier_cutoff: float):
         """ Constructor of the Face Visibility Layer.
 
         Arguments:
             predict_lowerbound (float): The relative lowerbound with respect to the highest likelihood. All predictions
                 with a lower likelihood than this lowerbound will be set equal to the lowerbound (after that the
                 likelihoods will be normalized).
-            dec_season_weight (float): The exponential decrease in weight when the absolute difference between the train
-                season and predict season becomes larger. This value is used to give closer seasons a higher weight and
-                0.0 < dec_season_weight <= 1.0 should hold. If dec_season_weight is larger then seasons further away
-                will have more influence on the prediction.
             first_season (int): The first season for which the Face Visibility Layer can do predictions. So on earlier
                 seasons it will give an uniform prediction back. Note however that earlier seasons are still used as
                 training data.
@@ -188,5 +181,5 @@ class FaceVisibilityLayer(CutLayer):
                 distributions.
             outlier_cutoff (float): This is the relative amount of highest and lowest appearance values that get removed.
         """
-        super().__init__(MultiplyAggregateLayer(InnerFaceVisibilityLayer(dec_season_weight, first_season, aug_num_cuts,
-                        aug_min_cuts_on, cdf_cutoff, outlier_cutoff)), max, 1.0, predict_lowerbound)
+        super().__init__(MultiplyAggregateLayer(InnerFaceVisibilityLayer(first_season, aug_num_cuts, aug_min_cuts_on,
+                                                cdf_cutoff, outlier_cutoff)), mean, 1.0, predict_lowerbound)
