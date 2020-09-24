@@ -5,10 +5,10 @@ from Validators.PieChartCreator import PieChartCreator
 from Validators.TotalLogLikelihood import TotalLogLikelihood
 
 RANDOM_SEED = 949019755
-VALIDATE_SEASONS = {14, 15, 16, 17, 18, 19, 20}
+VALIDATE_SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 MAX_EPISODE = 9
 SEASON_EXCEPTION = {11: 10}
-TRAIN_SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
+TRAIN_SEASONS = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 
 distributions = dict()
 random_generator = RandomState(RANDOM_SEED)
