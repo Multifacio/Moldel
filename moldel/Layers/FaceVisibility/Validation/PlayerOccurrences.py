@@ -2,7 +2,7 @@
 from Data.PlayerData import get_name
 from Layers.FaceVisibility.VideoParser import VideoParser, ParsedVideo
 
-SEASON = 20
+SEASON = 17
 EPISODE = 5
 
 parsed_video = VideoParser.load_parsed_video(SEASON, EPISODE)

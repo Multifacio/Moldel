@@ -16,7 +16,7 @@ for season in TEST_SEASONS:
 
         for player in parsed_video.alive_players:
             if not get_is_mol(player):
-                appearance = FaceVisibilityExtractor.get_relative_occurrence(player, parsed_video)
+                appearance = FaceVisibilityExtractor.get_relative_occurrence(player, parsed_video, [True])
                 appearances[player] = appearances.get(player, []) + [appearance]
 
 input = []
