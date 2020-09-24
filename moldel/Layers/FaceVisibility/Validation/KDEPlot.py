@@ -17,14 +17,14 @@ mol = [data[0] for data, label in zip(train_input, train_output) if label == 1.0
 plt.figure(figsize=(12, 3))
 plt.xlabel("Relative Appearance")
 plt.ylabel("Is 'mol'")
-plt.yticks([0.0, 1.0])
+plt.yticks(np.linspace(0.0, 1.0, 11))
 plt.gcf().subplots_adjust(bottom = 0.15)
 
 non_mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(non_mol)
 mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(mol)
-x = min(InnerFaceVisibilityLayer.get_boundary(non_mol_kde, 0.005), InnerFaceVisibilityLayer.get_boundary(mol_kde, 0.005))
+x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.005)
 plt.axvline(x = x, c = 'black')
-x = max(InnerFaceVisibilityLayer.get_boundary(non_mol_kde, 0.995), InnerFaceVisibilityLayer.get_boundary(mol_kde, 0.995))
+x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.995)
 plt.axvline(x = x, c = 'black')
 X = np.linspace(-3.0, 2.0, 500)
 non_mol_Y = [non_mol_kde.pdf([x]) for x in X]

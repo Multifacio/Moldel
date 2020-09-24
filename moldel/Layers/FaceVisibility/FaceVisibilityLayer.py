@@ -92,8 +92,8 @@ class InnerFaceVisibilityLayer(MultiLayer):
         if not predict_data:
             return EmptyMultiLayer().predict(predict_season, 0, set())
 
-        min_value = min(self.get_boundary(non_mol_kde, self.__cdf_cutoff / 2), self.get_boundary(mol_kde, self.__cdf_cutoff / 2))
-        max_value = max(self.get_boundary(non_mol_kde, 1 - self.__cdf_cutoff / 2), self.get_boundary(mol_kde, 1 - self.__cdf_cutoff / 2))
+        min_value = self.get_boundary(non_mol_kde, mol_kde, len(predict_data), self.__cdf_cutoff / 2)
+        max_value = self.get_boundary(non_mol_kde, mol_kde, len(predict_data), 1 - self.__cdf_cutoff / 2)
         for player in get_players_in_season(predict_season):
             if player in predict_data:
                 predictions = []
@@ -135,11 +135,13 @@ class InnerFaceVisibilityLayer(MultiLayer):
         return 1.06 * min(np.std(data), sc.stats.iqr(data) / 1.34) * len(data) ** (-1 / 5)
 
     @classmethod
-    def get_boundary(self, kde: gaussian_kde, cdf: float) -> Tuple[float, float]:
+    def get_boundary(self, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde, num_players: int, cdf: float) -> float:
         """ Get the approximated boundary value x such that the cumulative distribution function of x is equal to cdf.
 
         Arguments:
-            kde (gaussian_kde): The Kernel Density Estimation of the data
+            non_mol_kde (gaussian_kde): The Kernel Density Estimation of the non-mol data.
+            mol_kde (gaussian_kde): The Kernel Density Estimation of the mol data.
+            num_players (int): The number of players still in the game.
             cdf (float): The cumulative distribution value of this x.
 
         Returns:
@@ -149,7 +151,8 @@ class InnerFaceVisibilityLayer(MultiLayer):
         upperbound = self.MAX_VALUE
         middle = (lowerbound + upperbound) / 2
         for _ in range(self.SEARCH_STEPS):
-            cur_cdf = kde.integrate_box_1d(self.MIN_VALUE, middle)
+            cur_cdf = non_mol_kde.integrate_box_1d(self.MIN_VALUE, middle) * (num_players - 1) / num_players + \
+                      mol_kde.integrate_box_1d(self.MIN_VALUE, middle) / num_players
             if cur_cdf < cdf:
                 lowerbound = middle
             else:
