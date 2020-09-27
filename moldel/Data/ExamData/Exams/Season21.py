@@ -125,4 +125,36 @@ episode3 = Episode(players3, result3,
                    {4: question3_4, 6: question3_6, 10: question3_10, 12: question3_12, 16: question3_16,
                     18: question3_18})
 
-season21 = Season(players1, {1: episode1, 2: episode2, 3: episode3})
+# Aflevering 4 (afvaller: Ellie)
+# Vragen:
+# 5 - Welk schilderij heeft de Mol nageschilderd tijdens de opdracht 'Meesterwerken':
+# 1: Jeroen; 2: Peggy; 3: Nikkie; 4: Tygo; 5: Ellie, Patrick, Ron;
+# 10 - Met wie vormde de Mol een team tijdens de opdracht 'Follow the Money':
+# 1: Peggy; 2: Ron; 3: Tygo; 4: Ellie; 5: Jeroen; 6: Nikkie; 7: Patrick;
+# 14 - Waar stond het kaartenrek van de Mol bij aanvang van de opdracht 'Groeten uit Florence':
+# 1: Nikkie, Ron; 2: Ellie, Peggy, Tygo; 3: Jeroen, Patrick;
+# 20 - Wie is de Mol:
+# 1: Ellie; 2: Jeroen; 3: Nikkie; 4: Patrick; 5: Peggy; 6: Ron; 7: Tygo;
+# Antwoorden: Peggy (5, 5), Ron (20, 1), Tygo (14, 2), Nikkie (10, 5), Jeroen (20, 1)
+players4 = [Player.ELLIE_21, Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21, Player.PEGGY_21, Player.RON_21,
+            Player.TYGO_21]
+question4_5 = Question({1: [Player.JEROEN_21],
+                        2: [Player.PEGGY_21],
+                        3: [Player.NIKKIE_21],
+                        4: [Player.TYGO_21],
+                        5: [Player.ELLIE_21, Player.PATRICK_21, Player.RON_21]})
+question4_10 = Question({1: [Player.PEGGY_21], 2: [Player.RON_21], 3: [Player.TYGO_21], 4: [Player.ELLIE_21],
+                         5: [Player.JEROEN_21], 6: [Player.NIKKIE_21], 7: [Player.PATRICK_21]})
+question4_14 = Question({1: [Player.NIKKIE_21, Player.RON_21],
+                         2: [Player.ELLIE_21, Player.PEGGY_21, Player.TYGO_21],
+                         3: [Player.JEROEN_21, Player.PATRICK_21]})
+question4_20 = Question({1: [Player.ELLIE_21], 2: [Player.JEROEN_21], 3: [Player.NIKKIE_21], 4: [Player.PATRICK_21],
+                         5: [Player.PEGGY_21], 6: [Player.RON_21], 7: [Player.TYGO_21]})
+result4 = Result(DropType.EXECUTION_DROP, [Player.ELLIE_21])
+episode4 = Episode(players4, result4,
+                   {Player.PEGGY_21: TestInput({5: 5}), Player.RON_21: TestInput({20: 1}),
+                    Player.TYGO_21: TestInput({14: 2}), Player.NIKKIE_21: TestInput({10: 5}),
+                    Player.JEROEN_21: TestInput({20: 1})},
+                   {5: question4_5, 10: question4_10, 14: question4_14, 20: question4_20})
+
+season21 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4})
