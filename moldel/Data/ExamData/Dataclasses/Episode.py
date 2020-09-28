@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from typing import Dict, List, TYPE_CHECKING, Set
 import math
 
-from .TestInput import TestInput
+from .TestInput import DelayedAnswer, TestInput
+
 if TYPE_CHECKING:
     from .Answer import Answer
     from .Question import Question
@@ -140,3 +141,26 @@ class Episode:
             if player in players:
                 all_answers.extend(test_input.get_all_answers(player, self, max_episode))
         return all_answers
+
+    def get_covered(self, player: Player, max_episode: int) -> Set[Player]:
+        """ Get all players covered by any of the answers of a player, excluding the player that gave the answers.
+
+        Arguments:
+            player (Player): The player that gave the answers.
+            max_episode (int): Only answers which are known before/at this episode might be used.
+
+        Returns:
+            A set of all players which are covered by any answer of that player.
+        """
+        covered = set()
+        if player in self.input:
+            for qid, answer in self.input[player].answers.items():
+                if isinstance(answer, DelayedAnswer):
+                    if answer.known_from > max_episode:
+                        continue
+                    answer = answer.answer
+
+                question = self.questions[qid]
+                covered.update(set(question.answers[answer]))
+
+        return covered.difference({player})

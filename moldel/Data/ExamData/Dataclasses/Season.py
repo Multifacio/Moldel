@@ -78,3 +78,18 @@ class Season:
             if id <= max_episode:
                 all_answers.extend(episode.get_all_answers(players, max_episode))
         return all_answers
+
+    def get_latest_episode(self, max_episode: int) -> Union[Episode, None]:
+        """ Get the latest episode.
+
+        Arguments:
+            max_episode (int): Only episodes with a number smaller or equal than this number will be considered.
+
+        Returns:
+            The latest episode if there exist one, otherwise return None.
+        """
+        episodes = [episode for num, episode in self.episodes.items() if num <= max_episode]
+        if episodes:
+            return max(episodes)
+        else:
+            return None
