@@ -134,7 +134,7 @@ class InnerExamPassLayer(Layer):
         return [less_1_joker, same_jokers, more_1_joker]
 
 class ExamPassLayer(NormalizeLayer):
-    """ The Exam Pass Layer predicts whether you are the Mol based on how many jokers and exemptions players used during
-    the test. """
+    """ The Exam Pass Layer predicts whether a player is the Mol based on how many jokers and exemptions players used
+    during the test. """
     def __init__(self):
         super().__init__(InnerExamPassLayer())

@@ -79,6 +79,8 @@ class InnerExamDropLayer(MultiLayer):
                 all_predictions.items()}
 
 class ExamDropLayer(MultiplyAggregateLayer):
+    """ The Exam Drop Layer predicts whether you are the Mol based on what dropouts have answered during the test. """
+
     def __init__(self, anova_f_significance: float, pca_explain: float, max_splits: int):
         """ Constructor of the Exam Drop Layer
 
