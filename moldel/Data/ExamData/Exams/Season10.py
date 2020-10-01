@@ -165,7 +165,7 @@ episode5 = Episode(players5, result5,
 # Aflevering 6 (geen afvaller, alleen Arjen kreeg zijn scherm te zien)
 # Antwoorden: Frits (1 joker), Sanne (5 jokers)
 players6 = [Player.ARJEN_10, Player.ERIK_10, Player.FRITS_10, Player.KIM_10, Player.SANNE_10]
-result6 = Result(DropType.POSSIBLE_DROP, [Player.ERIK_10, Player.FRITS_10, Player.HIND_10, Player.KIM_10, Player.SANNE_10])
+result6 = Result(DropType.POSSIBLE_DROP, [Player.ERIK_10, Player.FRITS_10, Player.KIM_10, Player.SANNE_10])
 episode6 = Episode(players6, result6,
                     {Player.FRITS_10: TestInput(jokers = 1), Player.SANNE_10: TestInput(jokers = 5)}, dict())
 
