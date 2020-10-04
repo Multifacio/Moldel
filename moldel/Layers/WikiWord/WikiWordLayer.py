@@ -7,6 +7,7 @@ from Layers.Special.CutLayer import CutLayer
 from Layers.WikiWord.WikiWordExtractor import WikiWordExtractor
 from numpy.random import RandomState
 from sklearn.linear_model import LogisticRegression
+from statistics import mean
 from typing import Dict, Set
 
 class InnerWikiWordLayer(Layer):
@@ -54,4 +55,4 @@ class WikiWordLayer(CutLayer):
                 of the total word count.
             random_generator (RandomState): The random generator used to generate random values.
         """
-        super().__init__(InnerWikiWordLayer(pca_components, minimum_log, degree_total_count, random_generator), 1.0)
+        super().__init__(InnerWikiWordLayer(pca_components, minimum_log, degree_total_count, random_generator), mean, 1.0)

@@ -246,7 +246,7 @@ question8_20 = Question({1: [Player.DIEDERIK_17], 2: [Player.JOCHEM_17], 3: [Pla
 result8 = Result(DropType.EXECUTION_DROP, [Player.DIEDERIK_17])
 episode8 = Episode(players8, result8,
                    {Player.THOMAS_17: TestInput({20: 2}), Player.SANNE_17: TestInput({20: 2}),
-                    Player.DIEDERIK_17: TestInput({1: 2, 20: 2})},
+                    Player.DIEDERIK_17: TestInput({1: 2, 20: 2}), Player.JOCHEM_17: TestInput(immunity = True)},
                    {1: question8_1, 20: question8_20})
 
 # Aflevering 9 (afvaller: Jochem) (pas in de reunie bekend)

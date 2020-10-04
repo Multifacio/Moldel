@@ -8,8 +8,8 @@ import os
 import pickle
 import rootpath
 
-ParsedVideo = NamedTuple("ParsedVideo", [("player_occurrences", Dict[Player, Set[int]]), ("alive_players", Set[Player]),
-                                         ("frame_skip", int)])
+ParsedVideo = NamedTuple("ParsedVideo", [("player_occurrences", Dict[Player, Union[List[int], Set[int]]]),
+                                         ("alive_players", Set[Player]), ("frame_skip", int)])
 class VideoParser:
     """ The Video Parser parses when the face of a candidate is visible during an episode based on the given video
     by the Parser Configuration file. This code is based on the project of mattijn: https://github.com/mattijn/widm
@@ -67,7 +67,9 @@ class VideoParser:
         with open(file_path, 'rb') as file:
             video_parsing = pickle.load(file)
 
-        return ParsedVideo(*video_parsing)
+        parsed_video = ParsedVideo(*video_parsing)
+        player_occurrences = {player: sorted(occurrences) for player, occurrences in parsed_video.player_occurrences.items()}
+        return ParsedVideo(player_occurrences, parsed_video.alive_players, parsed_video.frame_skip)
 
     @staticmethod
     def __load_faces_encodings(all_players: List[Player]) -> List:

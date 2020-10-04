@@ -6,12 +6,18 @@ PlayerData = NamedTuple("PlayerData", [("name", str), ("season", int), ("is_mol"
 # This variable contains the first name of every player, the season in which every player participated and which player
 # is the Mol. If the is_mol value of a player is set to None then it is unknown whether that player is the Mol.
 __ALL_PLAYER_DATA = {
+    Player.ALEX_7: PlayerData("Alex", 7, False), Player.DICK_7: PlayerData("Dick", 7, False),
+    Player.EVA_7: PlayerData("Eva", 7, False), Player.INGE_7: PlayerData("Inge", 7, True),
+    Player.LIESBETH_7: PlayerData("Liesbeth", 7, False), Player.MENNO_7: PlayerData("Menno", 7, False),
+    Player.NADJA_7: PlayerData("Nadja", 7, False), Player.PAUL_7: PlayerData("Paul", 7, False),
+    Player.RENATE_7: PlayerData("Renate", 7, False), Player.SANDER_7: PlayerData("Sander", 7, False),
+
     Player.ANNETTE_8: PlayerData("Annette", 8, False), Player.COEN_8: PlayerData("Coen", 8, False),
     Player.DENNIS_8: PlayerData("Dennis", 8, True), Player.DUNYA_8: PlayerData("Dunya", 8, False),
     Player.EDO_8: PlayerData("Edo", 8, False), Player.GEORGINA_8: PlayerData("Georgina", 8, False),
     Player.JORIS_8: PlayerData("Joris", 8, False), Player.NICOLETTE_8: PlayerData("Nicolette", 8, False),
-
     Player.PATRICK_8: PlayerData("Patrick", 8, False), Player.REGINA_8: PlayerData("Regina", 8, False),
+
     Player.ANNIEK_9: PlayerData("Anniek", 9, False), Player.DENNIS_9: PlayerData("Dennis", 9, False),
     Player.FROUKJE_9: PlayerData("Froukje", 9, False), Player.HANS_9: PlayerData("Hans", 9, False),
     Player.JON_9: PlayerData("Jon", 9, True), Player.PAULA_9: PlayerData("Paula", 9, False),

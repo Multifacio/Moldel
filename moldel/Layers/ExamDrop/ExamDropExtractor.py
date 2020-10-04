@@ -3,11 +3,14 @@ from Data.ExamData.Exams.All import EXAM_DATA
 from Data.Player import Player
 from Data.PlayerData import get_is_mol
 from Layers.ExamDrop.ExamDropEncoder import ExamDropEncoder, TrainSample
+from queue import PriorityQueue
+from scipy import stats
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold, SelectFpr, f_classif
 from sklearn.preprocessing import KBinsDiscretizer
 from typing import List, NamedTuple, Set, Tuple
 import numpy as np
+import scipy as sc
 import sys
 
 FeatureSample = NamedTuple("FeatureSample", [("features", np.array), ("is_mol", bool)])
@@ -18,8 +21,10 @@ class ExamDropExtractor:
     the following techniques: polynomial transformations, local outlier removal, zero variance removal, ANOVA F filter
     and PCA. Furthermore we resample the data such that every episode has the same likelihood of being picked. """
 
+    BIN_STRATEGY = 'kmeans' # The method used to select the splits between the bins.
+
     def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], anova_f_significance: float,
-                 pca_explain: float, num_bins: int):
+                 pca_explain: float, max_splits: int):
         """ Constructor of the Exam Drop Extractor
 
         Arguments:
@@ -30,14 +35,14 @@ class ExamDropExtractor:
                 ANOVA F filter.
             pca_explain (float): PCA will select the least number of components that at least explain this amount
                 of variance in the features.
-            num_bins (int): In how many bins the features get discretized.
+            max_splits (int): How many additional bins should be used to discretize the features.
         """
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
         self.__anova_f_significance = anova_f_significance
         self.__pca_explain = pca_explain
-        self.__num_bins = num_bins
+        self.__max_splits = max_splits
 
     def get_train_data(self) -> Tuple[np.array, np.array, np.array]:
         """ Get the formatted and sampled train data with train weights useable for machine learning algorithms.
@@ -53,8 +58,9 @@ class ExamDropExtractor:
         train_input = np.array([ExamDropEncoder.extract_features(sample, sys.maxsize) for sample in train_data])
         train_output = np.array([1.0 if get_is_mol(sample.selected_player) else 0.0 for sample in train_data])
 
-        num_bins = self.__get_num_bins(train_input)
-        self.__discretizer = KBinsDiscretizer(n_bins = num_bins, encode = "onehot-dense", strategy = "kmeans")
+        num_bins = self.get_num_bins(train_input, self.__max_splits)
+        self.__discretizer = KBinsDiscretizer(n_bins = num_bins, encode = "onehot-dense",
+                                              strategy = ExamDropExtractor.BIN_STRATEGY)
         train_input = self.__discretizer.fit_transform(train_input)
         train_input = self.__add_answered_on_feature(train_data, train_input)
         self.__zero_variance_remover = VarianceThreshold()
@@ -127,17 +133,58 @@ class ExamDropExtractor:
                                                        answer.question, answer.answer, answer_on))
         return season_data
 
-    def __get_num_bins(self, train_input: np.array) -> List[int]:
-        """ Get the number of bins for all features (in case a feature takes on less values then the number of bins is
-        decreased to that number for that feature).
+    @staticmethod
+    def get_num_bins(train_input: np.array, max_splits: int) -> List[int]:
+        """ Get the number of bins for all features. To determine this we use a forward stepwise information gain
+        algorithm, which gives the feature with the highest entropy increase an additional bin.
 
         Arguments:
             train_input (np.array): All non-transformed train input.
+            max_splits (int): How many times an additional bin should be added.
 
         Returns:
             A list of integers, which represent the number of bins for each feature.
         """
-        return [min(len(set(column)), self.__num_bins) for column in train_input.T]
+        num_bins = [2 for _ in train_input[0]]
+        max_bins = [len(set(column)) for column in train_input.T]
+        entropies = [ExamDropExtractor.__entropy(np.expand_dims(column, axis = 1), 2) for column in train_input.T]
+        options = PriorityQueue()
+
+        for i, data in enumerate(train_input.T):
+            if max_bins[i] > 2:
+                data = np.expand_dims(data, axis = 1)
+                new_entropy = ExamDropExtractor.__entropy(data, 3)
+                options.put((-(new_entropy - entropies[i]), i))
+
+        for _ in range(max_splits):
+            if options.empty():
+                break
+
+            entropy, i = options.get()
+            num_bins[i] = num_bins[i] + 1
+            entropies[i] = entropies[i] - entropy
+            if num_bins[i] != max_bins[i]:
+                data = np.expand_dims(train_input[:, i], axis = 1)
+                new_entropy = ExamDropExtractor.__entropy(data, num_bins[i] + 1)
+                options.put((-(new_entropy - entropies[i]), i))
+
+        return num_bins
+
+    @staticmethod
+    def __entropy(data: np.array, bins: int) -> float:
+        """ Compute the entropy of a KBinsDiscretizer split using a certain number of bins.
+
+        Arguments:
+            data (np.array): A list of all values for a particular feature.
+            bins (int): In how many bins the values should be split.
+
+        Returns:
+            The entropy of this split.
+        """
+        discretizer = KBinsDiscretizer(n_bins = bins, encode = "onehot-dense", strategy = ExamDropExtractor.BIN_STRATEGY)
+        data = discretizer.fit_transform(data)
+        new_entropy = np.sum(data, axis = 0)
+        return sc.stats.entropy(new_entropy / np.sum(new_entropy))
 
     @staticmethod
     def __add_answered_on_feature(samples: List[TrainSample], all_features: np.array) -> np.array:

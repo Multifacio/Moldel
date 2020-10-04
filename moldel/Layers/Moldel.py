@@ -1,4 +1,6 @@
 from Layers.ExamDrop.ExamDropLayer import ExamDropLayer
+from Layers.ExamPass.ExamPassLayer import ExamPassLayer
+from Layers.ExamUniformLayer import ExamUniformLayer
 from Layers.FaceVisibility.FaceVisibilityLayer import FaceVisibilityLayer
 from Layers.SocialMediaLayer import SocialMediaLayer
 from Layers.Special.CompositeLayer import CompositeLayer
@@ -8,8 +10,8 @@ from numpy.random import RandomState
 
 class InnerMoldel(CompositeLayer):
     def __init__(self, random_generator: RandomState):
-        super().__init__([ExamDropLayer(1e-2, 0.95, 4), WikiWordLayer(6, 1.0, 2, random_generator), SocialMediaLayer(),
-                          FaceVisibilityLayer(1/3, 0.9, 14, 2)])
+        super().__init__([ExamDropLayer(1e-2, 0.95, 35), WikiWordLayer(6, 1.0, 2, random_generator), SocialMediaLayer(),
+                          FaceVisibilityLayer(1/5, 13, 4, 2, 0.01, 0.01), ExamPassLayer()])
 
 class Moldel(ManualExclusionLayer):
     """ The Moldel is a combination of multiple layers used to do the total prediction of the Mol. """

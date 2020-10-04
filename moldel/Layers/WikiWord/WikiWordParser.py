@@ -27,7 +27,7 @@ class WikiWordParser:
         data = dict()
         word_to_job = WikiWordParser.__compute_word_to_job()
         for player in Player:
-            if get_season(player) in seasons:
+            if get_season(player) in seasons and player in Linker.LINKER:
                 data[player] = WikiWordParser.__feature_player_parse(player, word_to_job)
         return data
 

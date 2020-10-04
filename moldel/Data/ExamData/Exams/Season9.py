@@ -246,7 +246,7 @@ result9 = Result(DropType.EXECUTION_DROP, [Player.ANNIEK_9])
 episode9 = Episode(players9, result9,
                    {Player.VIVIENNE_9: TestInput({23: 2}), Player.ANNIEK_9: TestInput({31: 1}),
                     Player.JON_9: TestInput({40: 1})},
-                   {23: question9_23, 31: question9_31, 40: question9_40})
+                   {23: question9_23, 31: question9_31, 40: question9_40}, num_questions = 40)
 
 season9 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
                             8: episode8, 10: episode9})
