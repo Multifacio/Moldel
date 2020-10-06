@@ -35,10 +35,10 @@ from .SuspicionLevel import *
 # then the player has to be classified as NEUTRAL.
 
 SEASON21 = {Player.ELLIE_21: SuspicionLevel.UNLIKELY, Player.HORACE_21: SuspicionLevel.NEUTRAL,
-            Player.JEROEN_21: SuspicionLevel.NEUTRAL, Player.NADJA_21: SuspicionLevel.NEUTRAL,
-            Player.NIKKIE_21: SuspicionLevel.SLIGHTLY_UNLIKELY, Player.PATRICK_21: SuspicionLevel.SLIGHTLY_UNLIKELY,
-            Player.PEGGY_21: SuspicionLevel.NEUTRAL, Player.RON_21: SuspicionLevel.UNLIKELY,
-            Player.TINA_21: SuspicionLevel.SLIGHTLY_UNLIKELY, Player.TYGO_21: SuspicionLevel.SLIGHTLY_UNLIKELY}
+            Player.JEROEN_21: SuspicionLevel.UNLIKELY, Player.NADJA_21: SuspicionLevel.NEUTRAL,
+            Player.NIKKIE_21: SuspicionLevel.NEUTRAL, Player.PATRICK_21: SuspicionLevel.NEUTRAL,
+            Player.PEGGY_21: SuspicionLevel.NEUTRAL, Player.RON_21: SuspicionLevel.NEUTRAL,
+            Player.TINA_21: SuspicionLevel.NEUTRAL, Player.TYGO_21: SuspicionLevel.NEUTRAL}
 
 # Only based on https://www.ad.nl/show/wie-is-de-mol-deelnemers-doen-er-alles-aan-om-geheim-te-blijven-maar-helaas~adef878e/
 SEASON20 = {Player.ANITA_20: SuspicionLevel.NEUTRAL, Player.BUDDY_20: SuspicionLevel.LIKELY,
