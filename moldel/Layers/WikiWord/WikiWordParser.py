@@ -1,109 +1,177 @@
+from collections import Counter
 from Data.Player import Player
-from Data.PlayerData import get_season
+from Data.PlayerData import get_players_in_season, get_season
 from Data.WikiWord import Linker
 from Data.WikiWord.Job import Job
-from typing import Dict, Set, NamedTuple, List
+from typing import Counter as CounterType
+from typing import Dict, NamedTuple, Set
+import enchant
+import math
+import numpy as np
+import re
 import rootpath
-import string
 
-WikiWordData = NamedTuple("WikiWordData", [("job_frequency", Dict[Job, float]), ("number_words", int)])
+WikiWordSample = NamedTuple("WikiWordSample", [("job_features", np.array), ("word_feature", float)])
+WikiWordData = NamedTuple("WikiWordData", [("job_counts", CounterType[Job]), ("number_words", int)])
 class WikiWordParser:
     """ The Wiki Word Parser reads all wiki files of all players in the given seasons and converts it to interpretable
     and understandable features. """
 
-    @staticmethod
-    def parse(seasons: Set[int]) -> Dict[Player, WikiWordData]:
-        """ Parse all the wiki files of all players that participated in these seasons to features.
+    MIN_LENGTH_COMPOUND_WORD = 4 # The minimum length of the sub words that get extracted out of a larger compound word
+    STANDARD_DICTIONARY = "nl_NL" # The standard dictionary used to check if something is a sub word
+
+    @classmethod
+    def parse(self, seasons: Set[int]) -> Dict[Player, WikiWordSample]:
+        """ Parse the Wikipedia files of all players that participated in these seasons to features.
 
         Parameters:
             seasons (Set[int]): The seasons for which we want to compute all features of the players that participated
-            in these seasons.
+                in it.
+
+        Returns:
+            Dict[Player, WikiWordSample]: A dictionary with as key the players and as value a Wiki Word Sample tuple
+                with as first value all job features and as second value the feature related to the total number of
+                words in the players Wikipedia page.
+        """
+        feature_data = dict()
+        dictionary = self.get_standard_dictionary()
+        for season in seasons:
+            raw_data = self.parse_raw(season, dictionary)
+            job_counts = dict()
+            max_words = max(data.number_words for data in raw_data.values())
+            sum_words = sum(data.number_words for data in raw_data.values())
+            for player, data in raw_data.items():
+                for job in Job:
+                    job_counts[(player, job)] = 0.0 if data.number_words == 0 else data.job_counts[job] / data.number_words
+
+            for job in Job:
+                job_sum = sum(job_counts[(player, job)] for player in raw_data)
+                for player, data in raw_data.items():
+                    job_counts[(player, job)] = math.log(max(job_counts[(player, job)] / job_sum, 1 / max_words))
+
+            for player, data in raw_data.items():
+                job_features = np.array([job_counts[(player, job)] for job in Job])
+                word_feature = math.log(max(data.number_words, 1) / sum_words)
+                feature_data[player] = WikiWordSample(job_features, word_feature)
+
+        return feature_data
+
+    @classmethod
+    def get_standard_dictionary(self) -> enchant.Dict:
+        """ Get the standard dictionary used to check if something is a word.
+
+        Returns:
+            The standard dictionary.
+        """
+        return enchant.Dict(self.STANDARD_DICTIONARY)
+
+    @classmethod
+    def parse_raw(self, season: int, dictionary: enchant.Dict) -> Dict[Player, WikiWordData]:
+        """ Parse the Wikipedia files of all players that participated in this season to counts.
+
+        Parameters:
+            season (int): The season for which we want to compute all counts of the players that participated in it.
+            dictionary (enchant.Dict): The dictionary instance which checks if something is a word.
 
         Returns:
             Dict[Player, WikiWordData]: A dictionary with as key the players and as value a Wiki Word Data tuple with
-            as first value a dictionary with the frequency of all job for this player (so no job is excluded from the
-            dictionary) and as second value the total number of words in the players wiki page.
+                as first value a counter of all job for this player and as second value the total number of words in the
+                players Wikipedia page.
         """
-        data = dict()
-        word_to_job = WikiWordParser.__compute_word_to_job()
-        for player in Player:
-            if get_season(player) in seasons and player in Linker.LINKER:
-                data[player] = WikiWordParser.__feature_player_parse(player, word_to_job)
-        return data
+        raw_data = dict()
+        for player in get_players_in_season(season):
+            raw_data[player] = WikiWordParser.extract_player_features(player, dictionary)
+        return raw_data
 
-    @staticmethod
-    def __compute_word_to_job() -> Dict[str, List[Job]]:
-        """ Compute the word to job mapping. Which links a word to all jobs that it belongs to.
-
-        Returns:
-            A dictionary with as key all words that belong to jobs and as value a list of jobs to which it belongs.
-        """
-        word_to_job = dict()
-        for job in Job:
-            for word in job.value:
-                word_to_job[word] = word_to_job.get(word, []) + [job]
-        return word_to_job
-
-    @staticmethod
-    def __feature_player_parse(player: Player, word_to_job: Dict[str, List[Job]]) -> WikiWordData:
+    @classmethod
+    def extract_player_features(self, player: Player, dictionary: enchant.Dict) -> WikiWordData:
         """ Computes the features for a given player which are the frequencies of every Job and a total number of words
-        in the players wiki page.
+        in the players Wikipedia page.
 
         Parameters:
             player (Player): The player for which we want to compute the features.
-            word_to_job (Dict[str, List[Job]]): Mapping a word to all jobs that correspond to that word.
+            dictionary (enchant.Dict): The dictionary instance which checks if something is a word.
 
         Returns:
             WikiWordData: Which is a tuple with two values. The first value is a dictionary with Job as key and as value
             the total number of times each of the Job word occurs in the wiki page. The second value is the total number
-            of words in the players wiki page.
+            of words in the players Wikipedia page.
         """
-        file_path = rootpath.detect() + "/" + Linker.WIKI_FILES_PATH + Linker.LINKER[player]
-        word_frequency = WikiWordParser.__wiki_file_parse(file_path)
-        job_frequency = dict()
-        for word, jobs in word_to_job.items():
-            increase = word_frequency.get(word, 0.0)
-            for job in jobs:
-                job_frequency[job] = job_frequency.get(job, 0.0) + increase
+        word_counts = WikiWordParser.wiki_file_parse(player)
+        job_counts = Counter()
+        for word, count in word_counts.items():
+            related_jobs = self.get_related_jobs(word, dictionary)
+            for job in related_jobs:
+                job_counts[job] += count / len(related_jobs)
 
-        number_words = sum(word_frequency.values())
-        return WikiWordData(job_frequency, number_words)
+        return WikiWordData(job_counts, sum(job_counts.values()))
 
-    @staticmethod
-    def __wiki_file_parse(file_path: str) -> Dict[str, float]:
-        """ Will parse the word occurrences of a single wiki file.
+    @classmethod
+    def get_related_jobs(self, word: str, dictionary: enchant.Dict) -> Set[Job]:
+        """ Get all jobs related to a word.
 
-        Parameters:
-            file_path (str): The path to the file which will be parsed.
+        Arguments:
+            word (str): The word for which we determine all related jobs.
+            dictionary (enchant.Dict): The dictionary instance which checks if something is a word.
 
         Returns:
-            Dict[str, int]: A dictionary with the frequency of words. The key is the word and the value is the frequency
-            of that word. If a word is not included then it occurs 0 times.
+            The set of all related jobs, which can also be an empty set.
         """
-        file = open(file_path, "r", encoding="utf8")
-        lines = file.readlines()
-        word_occurrence = dict()
-        for line in lines:
-            filtered = WikiWordParser.__line_filter(line)
-            split = filtered.split(" ")
-            for word in split:
-                pure_word = WikiWordParser.__word_filter(word)
-                word_occurrence[pure_word] = word_occurrence.get(pure_word, 0) + 1
-        return word_occurrence
+        related_jobs = set()
+        min_words = 1
+        min_length = 0
+        sub_words = self.get_all_sub_words(word, dictionary, self.MIN_LENGTH_COMPOUND_WORD)
+        for job in Job:
+            intersection = sub_words.intersection(job.value)
+            new_words = len(intersection)
+            new_length = max(len(w) for w in intersection) if intersection else 0
+            if new_words > min_words or (new_words == min_words and new_length > min_length):
+                min_words = new_words
+                min_length = new_length
+                related_jobs = {job}
+            elif new_words == min_words and new_length == min_length:
+                related_jobs.add(job)
+        return related_jobs
 
     @staticmethod
-    def __line_filter(line: str) -> str:
+    def wiki_file_parse(player: Player) -> CounterType[str]:
+        """ Count the word occurrences for a given player.
+
+        Parameters:
+            player (Player): The player for which we count the word occurrences.
+
+        Returns:
+            Counter[str]: A counter which counted all word occurrences in the file.
+        """
+        file_path = rootpath.detect() + "/" + Linker.WIKI_FILES_PATH + Linker.LINKER[player]
+        file = open(file_path, "r", encoding = "utf8")
+        counter = Counter()
+        for line in file.readlines():
+            line = WikiWordParser.line_filter(line)
+            tokens = line.split(" ")
+            for token in tokens:
+                if token != "":
+                    counter[token] += 1
+        return counter
+
+    @staticmethod
+    def get_all_sub_words(word: str, dictionary: enchant.Dict, min_length: int) -> Set[str]:
+        """ Get all words included in a larger word, including that larger word.
+
+        Arguments:
+            word (str): The word of which we extract all sub words.
+            dictionary (enchant.Dict): The dictionary instance which checks if something is a word.
+            min_length (int): The minimum length of a sub word before it is taken into account.
+        """
+        all_sub_words = {word}
+        for i in range(len(word)):
+            for j in range(i + min_length, len(word) + 1):
+                sub_word = word[i:j]
+                if dictionary.check(sub_word):
+                    all_sub_words.add(sub_word)
+        return all_sub_words
+
+    @staticmethod
+    def line_filter(line: str) -> str:
         """ Filter unwanted symbols/characters from a read line in the wiki file. """
-        result = line.lower()
-        for char in string.punctuation:  # Remove symbols from text
-            result = result.replace(char, ' ')
-        result = result.strip("\n")
-        result = result.strip("\t")
-        return result
-
-    @staticmethod
-    def __word_filter(word: str) -> str:
-        """ Filter unwanted symbols/characters from a word in the wiki file.  """
-        result = word.strip("\n")
-        result = result.strip("\t")
-        return result
+        return re.sub('[^a-z0-9]', ' ', line.lower())
