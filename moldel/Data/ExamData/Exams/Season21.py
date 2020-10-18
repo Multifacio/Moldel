@@ -190,4 +190,37 @@ episode6 = Episode(players6, result6,
                     Player.JEROEN_21: TestInput({16: 1, 20: 2})},
                    {10: question6_10, 11: question6_11, 16: question6_16, 17: question6_17, 20: question6_20})
 
-season21 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 6: episode6})
+# Aflevering 7 (afvaller: Peggy)
+# Vragen:
+# 20 - Wie is de Mol:
+# 1: Jeroen; 2: Nikkie; 3: Peggy; 4: Tygo;
+# Antwoorden: Jeroen (20, 2), Tygo (20, 3), Peggy (20, 4), Nikkie (20, 1)
+players7 = [Player.JEROEN_21, Player.NIKKIE_21, Player.PEGGY_21, Player.TYGO_21]
+question7_20 = Question({1: [Player.JEROEN_21], 2: [Player.NIKKIE_21], 3: [Player.PEGGY_21], 4: [Player.TYGO_21]})
+result7 = Result(DropType.EXECUTION_DROP, [Player.PEGGY_21])
+episode7 = Episode(players7, result7,
+                   {Player.JEROEN_21: TestInput({20: 2}), Player.TYGO_21: TestInput({20: 3}),
+                    Player.PEGGY_21: TestInput({20: 4}), Player.NIKKIE_21: TestInput({20: 1})},
+                   {20: question7_20})
+
+# Aflevering 8 (afvaller: Onbekend)
+# Vragen:
+# 6 - Met wie vormde de Mol een team tijdens de opdracht 'Gastenlijst':
+# 1: Jeroen; 2: Tygo; 3: Nikkie;
+# 14 - Was de Mol betrokken bij de eerste geldwissel tijdens de opdracht 'Sleutel Bos':
+# 1: Tygo; 2: Jeroen, Nikkie;
+# 24 - Tilde de Mol het puzzelstuk met mes en vork naar de verzamelplaats tijdens 'Stuk voor Stuk' (Niet Bruikbaar)
+# 40 - Wie is de Mol:
+# 1: Jeroen; 2: Nikkie; 3: Tygo;
+# Antwoorden: Tygo (6, 3) (40, 2), Nikkie (14, 2) (40, 1), Jeroen (40, 2)
+players9 = [Player.JEROEN_21, Player.NIKKIE_21, Player.TYGO_21]
+question9_6 = Question({1: [Player.JEROEN_21], 2: [Player.TYGO_21], 3: [Player.NIKKIE_21]})
+question9_14 = Question({1: [Player.TYGO_21], 2: [Player.JEROEN_21, Player.NIKKIE_21]})
+question9_40 = Question({1: [Player.JEROEN_21], 2: [Player.NIKKIE_21], 3: [Player.TYGO_21]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.TYGO_21])
+episode9 = Episode(players9, result9,
+                   {Player.TYGO_21: TestInput({6: 3, 40: 2}), Player.NIKKIE_21: TestInput({14: 2, 40: 1}),
+                    Player.JEROEN_21: TestInput({40: 2})},
+                   {6: question9_6, 14: question9_14, 40: question9_40})
+
+season21 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 6: episode6, 7: episode7})

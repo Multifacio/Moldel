@@ -35,7 +35,7 @@ from .SuspicionLevel import *
 # then the player has to be classified as NEUTRAL.
 
 SEASON21 = {Player.ELLIE_21: SuspicionLevel.UNLIKELY, Player.HORACE_21: SuspicionLevel.NEUTRAL,
-            Player.JEROEN_21: SuspicionLevel.UNLIKELY, Player.NADJA_21: SuspicionLevel.NEUTRAL,
+            Player.JEROEN_21: SuspicionLevel.NEUTRAL, Player.NADJA_21: SuspicionLevel.NEUTRAL,
             Player.NIKKIE_21: SuspicionLevel.NEUTRAL, Player.PATRICK_21: SuspicionLevel.NEUTRAL,
             Player.PEGGY_21: SuspicionLevel.NEUTRAL, Player.RON_21: SuspicionLevel.NEUTRAL,
             Player.TINA_21: SuspicionLevel.NEUTRAL, Player.TYGO_21: SuspicionLevel.NEUTRAL}
