@@ -43,7 +43,7 @@ class FaceVisibilityExtractor:
         self.__outlier_cutoff = outlier_cutoff
 
     def get_train_data(self) -> Tuple[np.array, np.array]:
-        """ Get the formatted and sampled train data with train weights useable for machine learning algorithms.
+        """ Get the train data useable for machine learning algorithms.
 
         Returns:
             The train input and train output. The train input is a 2d array where each row
