@@ -13,6 +13,11 @@ import sys
 
 class InnerExamPassLayer(Layer):
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
+        available_seasons = EXAM_DATA.keys()
+        train_seasons = train_seasons.intersection(available_seasons)
+        if predict_season not in available_seasons:
+            return EqualLayer().predict(predict_season, latest_episode, train_seasons)
+
         estimator = self.__train(train_seasons)
         alive_players = EXAM_DATA[predict_season].get_alive_players(latest_episode)
         result = {player: 1.0 if player in alive_players else 0.0 for player in get_players_in_season(predict_season)}
