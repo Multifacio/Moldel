@@ -6,6 +6,18 @@ PlayerData = NamedTuple("PlayerData", [("name", str), ("season", int), ("is_mol"
 # This variable contains the first name of every player, the season in which every player participated and which player
 # is the Mol. If the is_mol value of a player is set to None then it is unknown whether that player is the Mol.
 __ALL_PLAYER_DATA = {
+    Player.GIJS_5: PlayerData("Gijs", 5, False), Player.ISABELLE_5: PlayerData("Isabelle", 5, False),
+    Player.JIM_5: PlayerData("Jim", 5, False), Player.LOTTIE_5: PlayerData("Lottie", 5, False),
+    Player.MARC_MARIE_5: PlayerData("Marc-Marie", 5, False), Player.ROELAND_5: PlayerData("Roeland", 5, False),
+    Player.SANDER_5: PlayerData("Sander", 5, False), Player.VICTORIA_5: PlayerData("Victoria", 5, False),
+    Player.YVON_5: PlayerData("Yvon", 5, True), Player.YVONNE_5: PlayerData("Yvonne", 5, False),
+
+    Player.CHRIS_6: PlayerData("Chris", 6, False), Player.FREDERIQUE_6: PlayerData("Frederique", 6, False),
+    Player.GEERT_6: PlayerData("Geert", 6, False), Player.LIZ_6: PlayerData("Liz", 6, False),
+    Player.MARY_LOU_6: PlayerData("Mary-Lou", 6, False), Player.MILOUSKA_6: PlayerData("Milouska", 6, True),
+    Player.PEGGY_6: PlayerData("Peggy", 6, False), Player.RICHARD_6: PlayerData("Richard", 6, False),
+    Player.RODERICK_6: PlayerData("Roderick", 6, False), Player.TOINE_6: PlayerData("Toine", 6, False),
+
     Player.ALEX_7: PlayerData("Alex", 7, False), Player.DICK_7: PlayerData("Dick", 7, False),
     Player.EVA_7: PlayerData("Eva", 7, False), Player.INGE_7: PlayerData("Inge", 7, True),
     Player.LIESBETH_7: PlayerData("Liesbeth", 7, False), Player.MENNO_7: PlayerData("Menno", 7, False),

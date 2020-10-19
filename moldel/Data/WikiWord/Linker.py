@@ -3,6 +3,10 @@ from Data.Player import Player
 # The path where the wiki files are stored in plaintext
 WIKI_FILES_PATH = "moldel/Data/WikiWord/WikiFiles/"
 
+# Seasons in which Wikipedia Data from a later timestamp is used than before the start of the season.
+CHEATING_SEASONS = {5, 6, 7, 8}
+
+# The LINKER maps players to their corresponding Wikipedia data.
 LINKER = {Player.ELLIE_21: "Ellie_21.txt", Player.HORACE_21: "Horace_21.txt", Player.JEROEN_21: "Jeroen_21.txt",
           Player.NADJA_21: "Nadja_21.txt", Player.NIKKIE_21: "Nikkie_21.txt", Player.PATRICK_21: "Patrick_21.txt",
           Player.PEGGY_21: "Peggy_21.txt", Player.RON_21: "Ron_21.txt", Player.TINA_21: "Tina_21.txt",
@@ -46,4 +50,17 @@ LINKER = {Player.ELLIE_21: "Ellie_21.txt", Player.HORACE_21: "Horace_21.txt", Pl
           Player.TIM_10: "Tim_10.txt", Player.ANNIEK_9: "Anniek_9.txt", Player.DENNIS_9: "Dennis_9.txt",
           Player.FROUKJE_9: "Froukje_9.txt", Player.HANS_9: "Hans_9.txt", Player.JON_9: "Jon_9.txt",
           Player.PAULA_9: "Paula_9.txt", Player.RICK_9: "Rick_9.txt", Player.SEBASTIAAN_9: "Sebastiaan_9.txt",
-          Player.VERA_9: "Vera_9.txt", Player.VIVIENNE_9: "Vivienne_9.txt"}
+          Player.VERA_9: "Vera_9.txt", Player.VIVIENNE_9: "Vivienne_9.txt", Player.ANNETTE_8: "Annette_8.txt",
+          Player.COEN_8: "Coen_8.txt", Player.DENNIS_8: "Dennis_8.txt", Player.DUNYA_8: "Dunya_8.txt",
+          Player.EDO_8: "Edo_8.txt", Player.GEORGINA_8: "Georgina_8.txt", Player.JORIS_8: "Joris_8.txt",
+          Player.NICOLETTE_8: "Nicolette_8.txt", Player.PATRICK_8: "Patrick_8.txt", Player.REGINA_8: "Regina_8.txt",
+          Player.ALEX_7: "Alex_7.txt", Player.DICK_7: "Dick_7.txt", Player.EVA_7: "Eva_7.txt",
+          Player.INGE_7: "Inge_7.txt", Player.LIESBETH_7: "Liesbeth_7.txt", Player.MENNO_7: "Menno_7.txt",
+          Player.NADJA_7: "Nadja_7.txt", Player.PAUL_7: "Paul_7.txt", Player.RENATE_7: "Renate_7.txt",
+          Player.SANDER_7: "Sander_7.txt", Player.CHRIS_6: "Chris_6.txt", Player.FREDERIQUE_6: "Frederique_6.txt",
+          Player.GEERT_6: "Geert_6.txt", Player.LIZ_6: "Liz_6.txt", Player.MARY_LOU_6: "Mary_Lou_6.txt",
+          Player.MILOUSKA_6: "Milouska_6.txt", Player.PEGGY_6: "Peggy_6.txt", Player.RICHARD_6: "Richard_6.txt",
+          Player.RODERICK_6: "Roderick_6.txt", Player.TOINE_6: "Toine_6.txt", Player.GIJS_5: "Gijs_5.txt",
+          Player.ISABELLE_5: "Isabelle_5.txt", Player.JIM_5: "Jim_5.txt", Player.LOTTIE_5: "Lottie_5.txt",
+          Player.MARC_MARIE_5: "Marc_Marie_5.txt", Player.ROELAND_5: "Roeland_5.txt", Player.SANDER_5: "Sander_5.txt",
+          Player.VICTORIA_5: "Victoria_5.txt", Player.YVON_5: "Yvon_5.txt", Player.YVONNE_5: "Yvonne_5.txt"}
