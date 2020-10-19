@@ -29,7 +29,7 @@ class InnerWikiWordLayer(Layer):
         train_seasons = train_seasons.intersection(available_seasons)
 
         extractor = WikiWordExtractor(predict_season, train_seasons, self.__pca_components, self.__random_generator)
-        extractor.train()
+        extractor.get_train_data()
         return self.__predict(extractor)
 
     def __predict(self, extractor: WikiWordExtractor) -> Dict[Player, float]:

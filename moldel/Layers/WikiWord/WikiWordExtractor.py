@@ -34,8 +34,14 @@ class WikiWordExtractor:
         self.__pca_components = pca_components
         self.__random_generator = random_generator
 
-    def train(self):
-        """ Train the Wiki Word Extractor. """
+    def get_train_data(self) -> Tuple[np.array, np.array]:
+        """ Get all formatted train data useable for the machine learning algorithms to do training.
+
+        Returns:
+            The train input and train output. The train input is a 2d array where each row represents a different train
+            element. The train output is 1d array of labels, where a 1 means that this player was the 'Mol' and a 0
+            means that this player was not the 'Mol'.
+        """
         raw_train_data = WikiWordParser.parse(self.__train_seasons)
         train_output = np.array([1.0 if get_is_mol(player) else 0.0 for player in raw_train_data])
         job_input = np.array([data.job_features for data in raw_train_data.values()])
@@ -47,7 +53,8 @@ class WikiWordExtractor:
                                for data in raw_train_data.values()])
         train_input = np.concatenate((job_input, word_input), axis = 1)
         self.__lda = LinearDiscriminantAnalysis()
-        self.__lda.fit(train_input, train_output)
+        train_input = self.__lda.fit_transform(train_input, train_output)
+        return train_input, train_output
 
     def get_predict_data(self) -> Dict[Player, np.array]:
         """ Get all formatted predict data useable for the machine learning algorithms to do a prediction.
