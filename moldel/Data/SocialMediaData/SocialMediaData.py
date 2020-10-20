@@ -1,92 +1,66 @@
 from Data.Player import *
-from .SuspicionLevel import *
 
-# Suspicion Levels must be determined manually by looking for early activity. "Wie is de Mol" is often recorded during
-# the month May and June, so during these months you have to check for activity. The recording of "Wie is de Mol" take
-# 18 days in total.
+# This Social Media Data file contains all players that are excluded, because of early activity or other evidence (found
+# on Social Media) which shows that these players have dropped out earlier during the recording of "Wie is de Mol". To
+# determine which players should be excluded, you can use the Social Media Analysis of Jaap van Zessen. All of his
+# analyses can be found at: http://www.jaapvanzessen.nl/tag/wie-is-de-mol/ If he has not posted a Social Media Analysis
+# or if the analysis does not provide enough information then you can manually analyse Facebook, Twitter, Youtube,
+# Instagram, etc. or look at Youtube channels that cover "Wie is de Mol" suspicions. "Wie is de Mol" is often recorded
+# during the month May and June, so during these months you have to check for activity. The recording of "Wie is de Mol"
+# takes around 18 days in total.
 
-# You can use the social media analysis of Jaap van Zessen to fill in these values. For example for season 19 this can
-# be found at the following url: https://www.ad.nl/show/de-social-media-analyse-van-wie-is-de-mol-2019~ac68622f/
-# If this is not possible for certain seasons then you should analyse Facebook, Twitter, Youtube, Instagram, etc
-# with a tool and determine if that player was active.
+# Note that you should only exclude players if there is clear evidence that the player drops out early. The following
+# cases are NOT considered as clear evidence that the player drops out early:
+# - High activity on Social Media, because "Wie is de Mol?" players often have internet access during the recording
+#   period. Moreover another person could have posted this as well.
+# - Posting pictures or videos on Social Media, because these pictures and videos might have been recorded at an earlier
+#   moment and uploaded at a later moment.
+# - Following behavior on Social Media, because being followed by many other players does not always mean that you will
+#   stay in the game.
+# - Phone calls during the night of the country in which "Wie is de Mol?" is recorded. This is indeed weird behavior,
+#   but not necessary a clear indication that someone dropped out earlier.
+# - Evidence of activity that happened very close to the end of the recording period or after the recording period.
+# - Witness statements, without pictures/videos to back these statements up, about players dropping out early or players
+#   that stayed in the game.
+#
+# The following cases are considered as clear evidence that the player drops out early:
+# - Pictures/videos of which the date when taken is known, where the date is early during the recording period and it
+#   should be clear in this picture/video that the player is not at the location where "Wie is de Mol?" is recorded.
+# - Multiple pictures/videos leaked of the recording on which players are shown to be still in the game. Players that
+#   are missing in these pictures/videos are considered to drop out early.
+# - A television show (different than "Wie is de Mol?") or radio show recorded during the recording period of
+#   "Wie is de Mol?" in which the given player was active.
+# - Death/serious illness of a family member of the given player during the recording period, which caused the player to
+#   return back to home.
+# - Evidence which proves that the given player was in the Netherlands during the recording period.
+# - Evidence which shows that the given player carried out his job during the recording period of "Wie is de Mol?".
+# - Situations which are extremely weird to take place during the recording period of "Wie is de Mol?", such as
+#   publishing a book.
 
-# Suspicion Levels are quite subjective, but these are the guidelines for the Suspicion Levels:
-# -VERY_LIKELY: If very reliable pictures have leaked of which is it clearly visible that the player participates in
-# the final episode.
-# -LIKELY: If multiple pictures or a picture with all players of that episode multiple is leaked that the player is
-# is present during a later episode of which it is clear that it is not one of the first episodes.
-# -SLIGHTLY_LIKELY: If a picture or other information is leaked that the player is present during a later episode.
-# -NEUTRAL: Only if you cannot find any form of activity during the recording period.
-# -SLIGHTLY_UNLIKELY: If the player has posted more tweets or facebook posts than before. Or had a phone call during
-# night time (of the recorded country). Etcetera...
-# -UNLIKELY: If the player has posted many tweets or facebook post. Has uploaded some instagram pictures. If the
-# player has posted some tweets or facebook posts with pictures. If the player was present during a dutch radio 
-# recording or had multiple phone call during night time (of the recorded country) or a combination of these things.
-# Or if the player has uploaded a some short video. Etcetera...
-# -VERY_UNLIKELY: If the player has uploaded a long video. Or if the player has some picture with a dutch background. 
-# If the player participated in another dutch television show/serie. Or if there is any clear evidence that the 
-# player was present in the Netherland during the recording. Or if the player carries out his/her current job. Or if 
-# the player was present during multiple dutch radio recording. Extremely many tweets or facebook posts or a 
-# combination is not enough the be classified in this category.
 
-# Activity closer to the end date of the recording will be considered NEUTRAL. Declaration of witnesses will not
-# be used to determine suspicion levels and also rumours of suspicions of any kind will also not be used to determine
-# suspicion levels. If there is no other form of activity or indications that the player appears in later episodes
-# then the player has to be classified as NEUTRAL.
-
-SEASON21 = {Player.ELLIE_21: SuspicionLevel.UNLIKELY, Player.HORACE_21: SuspicionLevel.NEUTRAL,
-            Player.JEROEN_21: SuspicionLevel.UNLIKELY, Player.NADJA_21: SuspicionLevel.NEUTRAL,
-            Player.NIKKIE_21: SuspicionLevel.NEUTRAL, Player.PATRICK_21: SuspicionLevel.NEUTRAL,
-            Player.PEGGY_21: SuspicionLevel.NEUTRAL, Player.RON_21: SuspicionLevel.NEUTRAL,
-            Player.TINA_21: SuspicionLevel.NEUTRAL, Player.TYGO_21: SuspicionLevel.NEUTRAL}
+# Based on manual Social Media Analysis
+SEASON21 = {Player.ELLIE_21}
 
 # Only based on https://www.ad.nl/show/wie-is-de-mol-deelnemers-doen-er-alles-aan-om-geheim-te-blijven-maar-helaas~adef878e/
-SEASON20 = {Player.ANITA_20: SuspicionLevel.NEUTRAL, Player.BUDDY_20: SuspicionLevel.LIKELY,
-            Player.CLAES_20: SuspicionLevel.SLIGHTLY_LIKELY, Player.JAIKE_20: SuspicionLevel.LIKELY,
-            Player.JOHAN_20: SuspicionLevel.NEUTRAL, Player.LEONIE_20: SuspicionLevel.LIKELY,
-            Player.MILJUSCHKA_20: SuspicionLevel.LIKELY, Player.NATHAN_20: SuspicionLevel.LIKELY,
-            Player.ROB_20: SuspicionLevel.LIKELY, Player.TINA_20: SuspicionLevel.NEUTRAL}
+SEASON20 = {Player.ANITA_20, Player.JOHAN_20, Player.TINA_20}
 
 # Only based on https://www.ad.nl/show/de-social-media-analyse-van-wie-is-de-mol-2019~ac68622f/
-SEASON19 = {Player.ROBERT_19: SuspicionLevel.UNLIKELY, Player.SINAN_19: SuspicionLevel.UNLIKELY,
-            Player.EVI_19: SuspicionLevel.VERY_UNLIKELY, Player.NIKKIE_19: SuspicionLevel.UNLIKELY,
-            Player.EVELIEN_19: SuspicionLevel.NEUTRAL, Player.JAMIE_19: SuspicionLevel.NEUTRAL,
-            Player.MEREL_19: SuspicionLevel.NEUTRAL, Player.NIELS_19: SuspicionLevel.NEUTRAL,
-            Player.RICK_PAUL_19: SuspicionLevel.NEUTRAL, Player.SARAH_19: SuspicionLevel.NEUTRAL}
+SEASON19 = {Player.ROBERT_19, Player.EVI_19, Player.NIKKIE_19}
 
 # Only based on https://www.ad.nl/show/social-media-analyse-wie-is-de-mol-2018~ac1d7cf8/
-SEASON18 = {Player.BELLA_18: SuspicionLevel.NEUTRAL, Player.EMILIO_18: SuspicionLevel.NEUTRAL,
-            Player.JAN_18: SuspicionLevel.NEUTRAL, Player.JEAN_MARC_18: SuspicionLevel.NEUTRAL,
-            Player.LOES_18: SuspicionLevel.NEUTRAL, Player.OLCAY_18: SuspicionLevel.NEUTRAL,
-            Player.RON_18: SuspicionLevel.NEUTRAL, Player.RUBEN_18: SuspicionLevel.NEUTRAL,
-            Player.SIMONE_18: SuspicionLevel.NEUTRAL, Player.STINE_18: SuspicionLevel.NEUTRAL}
+SEASON18 = set()
 
 # Only based on https://www.ad.nl/tv-en-radio/dit-zijn-de-afvallers-van-wie-is-de-mol-2017~a995a64a/
-SEASON17 = {Player.ROOS_17: SuspicionLevel.UNLIKELY, Player.SIGRID_17: SuspicionLevel.UNLIKELY,
-            Player.VINCENT_17: SuspicionLevel.SLIGHTLY_UNLIKELY, Player.DIEDERIK_17: SuspicionLevel.NEUTRAL,
-            Player.IMANUELLE_17: SuspicionLevel.NEUTRAL, Player.JEROEN_17: SuspicionLevel.NEUTRAL,
-            Player.JOCHEM_17: SuspicionLevel.NEUTRAL, Player.SANNE_17: SuspicionLevel.NEUTRAL,
-            Player.THOMAS_17: SuspicionLevel.NEUTRAL, Player.YVONNE_17: SuspicionLevel.NEUTRAL}
+SEASON17 = {Player.ROOS_17}
 
 # Only based on http://www.jaapvanzessen.nl/social-media-analist-blogs/nieuwe-wie-is-de-mol-social-media-analyse-live/
-SEASON16 = {Player.AIREN_16: SuspicionLevel.UNLIKELY, Player.TAEKE_16: SuspicionLevel.UNLIKELY,
-            Player.ELLIE_16: SuspicionLevel.SLIGHTLY_UNLIKELY, Player.MARJOLEIN_16: SuspicionLevel.SLIGHTLY_UNLIKELY,
-            Player.CECILE_16: SuspicionLevel.SLIGHTLY_UNLIKELY, Player.ANNEMIEKE_16: SuspicionLevel.NEUTRAL,
-            Player.ROP_16: SuspicionLevel.NEUTRAL, Player.KLAAS_16: SuspicionLevel.NEUTRAL,
-            Player.TIM_16: SuspicionLevel.NEUTRAL, Player.REMY_16: SuspicionLevel.NEUTRAL}
+SEASON16 = {Player.AIREN_16, Player.TAEKE_16}
 
 # Only based on https://www.marketingfacts.nl/berichten/social-media-voorspelt-ook-afvaller-wie-is-de-mol-door-monitoring
-SEASON15 = {Player.CAROLINA_15: SuspicionLevel.SLIGHTLY_UNLIKELY, Player.EVELIEN_15: SuspicionLevel.SLIGHTLY_UNLIKELY,
-            Player.AJOUAD_15: SuspicionLevel.NEUTRAL, Player.CHRIS_15: SuspicionLevel.NEUTRAL,
-            Player.MARGRIET_15: SuspicionLevel.NEUTRAL, Player.MARLIJN_15: SuspicionLevel.NEUTRAL,
-            Player.MARTINE_15: SuspicionLevel.NEUTRAL, Player.PIETER_15: SuspicionLevel.NEUTRAL,
-            Player.RIK_15: SuspicionLevel.NEUTRAL, Player.VIKTOR_15: SuspicionLevel.NEUTRAL}
+SEASON15 = set()
 
 # Only based on http://www.jaapvanzessen.nl/social-media-analist-blogs/wie-de-mol-deelnemer-laten-sporen-achter-op-social-media/
-SEASON14 = {Player.MAURICE_14: SuspicionLevel.UNLIKELY, Player.FREEK_14: SuspicionLevel.SLIGHTLY_UNLIKELY,
-            Player.TYGO_14: SuspicionLevel.UNLIKELY, Player.AAF_14: SuspicionLevel.NEUTRAL,
-            Player.DAPHNE_14: SuspicionLevel.NEUTRAL, Player.JAN_WILLEM_14: SuspicionLevel.NEUTRAL,
-            Player.JENNIFER_14: SuspicionLevel.NEUTRAL, Player.OWEN_14: SuspicionLevel.NEUTRAL,
-            Player.SOFIE_14: SuspicionLevel.NEUTRAL, Player.SUSAN_14: SuspicionLevel.NEUTRAL}
+SEASON14 = {Player.MAURICE_14}
 
-SUSPICION_DATA = {21: SEASON21, 20: SEASON20, 19: SEASON19, 18: SEASON18, 17: SEASON17, 16: SEASON16, 15: SEASON15, 14: SEASON14}
+SUSPICION_DATA = {21: SEASON21, 20: SEASON20, 19: SEASON19, 18: SEASON18, 17: SEASON17, 16: SEASON16, 15: SEASON15,
+                  14: SEASON14}
