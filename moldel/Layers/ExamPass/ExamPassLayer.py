@@ -4,6 +4,7 @@ from Data.ExamData.Exams.All import EXAM_DATA
 from Data.Player import Player
 from Data.PlayerData import get_players_in_season
 from Layers.Layer import Layer
+from Layers.Special.EqualLayer import EqualLayer
 from Layers.Special.NormalizeLayer import NormalizeLayer
 from sklearn.linear_model import LogisticRegression
 from typing import Dict, List, Set, Tuple
@@ -16,7 +17,7 @@ class InnerExamPassLayer(Layer):
         available_seasons = EXAM_DATA.keys()
         train_seasons = train_seasons.intersection(available_seasons)
         if predict_season not in available_seasons:
-            return EqualLayer().predict(predict_season, latest_episode, train_seasons)
+            return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
 
         estimator = self.__train(train_seasons)
         alive_players = EXAM_DATA[predict_season].get_alive_players(latest_episode)
