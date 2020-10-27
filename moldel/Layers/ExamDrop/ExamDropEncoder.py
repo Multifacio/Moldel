@@ -167,6 +167,7 @@ class ExamDropEncoder:
             The feature values.
         """
         joker_usage = episode.total_joker_usage(self.EXEMPTION_JOKER_VALUE)
-        drop_more_jokers = any([joker_usage[p] > joker_usage[player] for p in episode.result.players])
-        drop_less_jokers = any([joker_usage[p] < joker_usage[player] for p in episode.result.players])
+        dropouts = episode.result.players if episode.result.drop == DropType.EXECUTION_DROP else []
+        drop_more_jokers = any([joker_usage[p] > joker_usage[player] for p in dropouts])
+        drop_less_jokers = any([joker_usage[p] < joker_usage[player] for p in dropouts])
         return drop_more_jokers, drop_less_jokers
