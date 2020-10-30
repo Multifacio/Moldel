@@ -34,19 +34,13 @@ class ExamDropEncoder:
         num_players_drop, num_players_exam = self.__num_players_features(sample)
         entropy, num_answer_players, answer_probability = self.__answer_features(sample)
         num_same_pickers, prob_same_picker = self.__same_pick_features(sample, max_episode, exam_dropouts)
-        drop_jokers2_more, drop_jokers1_more, drop_jokers1_less = \
-            self.__joker_discretization(sample.player, sample.drop_episode, drop_dropouts)
-        exam_jokers2_more, exam_jokers1_more, exam_jokers1_less = \
-            self.__joker_discretization(sample.player, sample.exam_episode, exam_dropouts)
-        weighted_jokers2_more, weighted_jokers1_more, weighted_jokers1_less = \
-            self.__weighted_past_jokers(sample, drop_dropouts)
+        drop_jokers_more, drop_jokers_less = self.__joker_discretization(sample.player, sample.drop_episode, drop_dropouts)
+        exam_jokers_more, exam_jokers_less = self.__joker_discretization(sample.player, sample.exam_episode, exam_dropouts)
         drop_player_jokers_more, drop_player_jokers_less = self.__exam_joker_features(sample.player, sample.exam_episode)
 
         return np.array([drop_episode, exam_episode, fail_test, execution_episode, num_players_drop, num_players_exam,
-            entropy, num_answer_players, answer_probability, num_same_pickers, prob_same_picker, drop_jokers2_more,
-            drop_jokers1_more, drop_jokers1_less, exam_jokers2_more, exam_jokers1_more, exam_jokers1_less,
-            weighted_jokers2_more, weighted_jokers1_more, weighted_jokers1_less, drop_player_jokers_more,
-            drop_player_jokers_less])
+            entropy, num_answer_players, answer_probability, num_same_pickers, prob_same_picker, drop_jokers_more,
+            drop_jokers_less, exam_jokers_more, exam_jokers_less, drop_player_jokers_more, drop_player_jokers_less])
 
     @staticmethod
     def __episode_features(sample: TrainSample) -> Tuple[float, ...]:
@@ -100,35 +94,10 @@ class ExamDropEncoder:
         """
         picked_answer = sample.answer.difference({sample.player})
         probabilities = sample.exam_episode.same_pick_probabilities(picked_answer, max_episode)
-        num_same_pickers = sum([prob > 0.0 for player, prob in probabilities.items() if player not in exam_dropouts and
-                                player != sample.player])
-        prob_same_picker = mean([prob for player, prob in probabilities.items() if player not in exam_dropouts and
-                                 player != sample.player])
-        return num_same_pickers / len(sample.exam_episode.players), prob_same_picker
-
-    @classmethod
-    def __weighted_past_jokers(self, sample: TrainSample, excluded: Set[Player]) -> Tuple[float, ...]:
-        """ Get the features related to the overall usage of jokers/exemptions in previous episodes.
-
-        Arguments:
-            sample (TrainSample): The Train Sample that will be converted.
-            excluded (Set[Player]): All players that will be excluded in comparison.
-
-        Returns:
-            The feature values.
-        """
-        season = EXAM_DATA[sample.season]
-        weights = jokers2_more = jokers1_more = jokers1_less = []
-        for episode in season.episodes.values():
-            if episode <= sample.drop_episode and episode.result.drop == DropType.EXECUTION_DROP:
-                weights.append(1 / (len(episode) - 1))
-                joker_features = self.__joker_discretization(sample.player, episode, excluded)
-                jokers2_more.append(joker_features[0])
-                jokers1_more.append(joker_features[1])
-                jokers1_less.append(joker_features[2])
-
-        return np.average(jokers2_more, weights=weights), np.average(jokers1_more, weights=weights), \
-               np.average(jokers1_less, weights=weights)
+        selected_players = set(probabilities.keys()).difference(exam_dropouts).difference({sample.player})
+        num_same_pickers = sum([prob > 0.0 for player, prob in probabilities.items() if player in selected_players])
+        prob_same_picker = mean([prob for player, prob in probabilities.items() if player in selected_players])
+        return num_same_pickers / len(selected_players), prob_same_picker
 
     @classmethod
     def __joker_discretization(self, player: Player, episode: Episode, excluded: Set[Player]) -> Tuple[float, ...]:
@@ -144,14 +113,10 @@ class ExamDropEncoder:
             The feature values.
         """
         joker_usage = episode.total_joker_usage(self.EXEMPTION_JOKER_VALUE)
-        num_players = len(episode)
-        jokers2_more = sum([usage >= joker_usage[player] + 2 for p, usage in joker_usage.items() \
-                            if p not in excluded]) / num_players
-        jokers1_more = sum([usage == joker_usage[player] + 1 for p, usage in joker_usage.items() \
-                            if p not in excluded]) / num_players
-        jokers1_less = sum([usage <= joker_usage[player] - 1 for p, usage in joker_usage.items() \
-                            if p not in excluded]) / num_players
-        return jokers2_more, jokers1_more, jokers1_less
+        included = set(joker_usage.keys()).difference(excluded)
+        jokers_more = sum([usage > joker_usage[player] for p, usage in joker_usage.items() if p in included]) / (len(included) - 1)
+        jokers_less = sum([usage < joker_usage[player] for p, usage in joker_usage.items() if p in included]) / (len(included) - 1)
+        return jokers_more, jokers_less
 
     @classmethod
     def __exam_joker_features(self, player: Player, episode: Episode) -> Tuple[float, ...]:

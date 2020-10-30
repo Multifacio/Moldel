@@ -10,7 +10,7 @@ from numpy.random import RandomState
 
 class InnerMoldel(CompositeLayer):
     def __init__(self, random_generator: RandomState):
-        super().__init__([ExamDropLayer(1e-2, 0.95, 35), WikiWordLayer(-0.524, 30/51, 5, random_generator),
+        super().__init__([ExamDropLayer(1e-2, 0.95, 40), WikiWordLayer(-0.524, 30/51, 5, random_generator),
                           SocialMediaLayer(), FaceVisibilityLayer(1/5, 13, 4, 2, 0.01, 0.01), ExamPassLayer()])
 
 class Moldel(ManualExclusionLayer):

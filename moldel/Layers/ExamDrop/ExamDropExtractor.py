@@ -63,8 +63,6 @@ class ExamDropExtractor:
                                               strategy = ExamDropExtractor.BIN_STRATEGY)
         train_input = self.__discretizer.fit_transform(train_input)
         train_input = self.__add_answered_on_feature(train_data, train_input)
-        self.__zero_variance_remover = VarianceThreshold()
-        train_input = self.__zero_variance_remover.fit_transform(train_input)
         self.__anova_f_filter = SelectFpr(f_classif, alpha = self.__anova_f_significance)
         train_input = self.__anova_f_filter.fit_transform(train_input, train_output)
         self.__pca = PCA(n_components = self.__pca_explain)
@@ -86,7 +84,6 @@ class ExamDropExtractor:
         predict_input = np.array([ExamDropEncoder.extract_features(sample, self.__predict_episode) for sample in predict_data])
         predict_input = self.__discretizer.transform(predict_input)
         predict_input = self.__add_answered_on_feature(predict_data, predict_input)
-        predict_input = self.__zero_variance_remover.transform(predict_input)
         predict_input = self.__anova_f_filter.transform(predict_input)
         predict_input = self.__pca.transform(predict_input)
 
