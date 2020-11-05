@@ -48,16 +48,18 @@ class InnerExamPassLayer(Layer):
     @classmethod
     def __predict_for_episode(self, episode: Episode, alive_players: Set[Player], estimator: LogisticRegression) \
             -> Dict[Player, float]:
-        """ Determine the likelihood that someone is the mol based on the dropouts and joker usage during an episode.
+        """ Determine the probability that the execution result happens for each mol based on the dropouts and joker
+        usage during an episode.
 
         Arguments:
-            episode (Episode): The episode for which a prediction is made.
+            episode (Episode): The episode for which we estimate the probability that its execution result happens.
             alive_players (Set[Player]): The players that could still be the mol.
             estimator (LogisticRegression): The estimator used to estimate the likelihood that someone drops out based
                 on the joker usage.
 
         Returns:
-            A dictionary with as key a player that could be the Mol and as value the likelihood of being the Mol (float).
+            A dictionary with as key a player that could be the Mol and as value the probability that the execution
+            result of that episode happened.
         """
         drop_likelihoods = self.__get_drop_likelihoods(episode, estimator)
         mol_likelihoods = dict()
@@ -69,8 +71,7 @@ class InnerExamPassLayer(Layer):
             for players in it.combinations(possible_dropouts, len(dropouts)):
                 drop_sum += np.prod([drop_likelihoods[p] for p in players])
             mol_likelihoods[mol] = drop_likelihood / drop_sum
-        likelihood_sum = sum(mol_likelihoods.values())
-        return {player: likelihood / likelihood_sum for player, likelihood in mol_likelihoods.items()}
+        return mol_likelihoods
 
     @classmethod
     def __get_train_data(self, train_seasons: Set[int]) -> Tuple[np.array, np.array]:
