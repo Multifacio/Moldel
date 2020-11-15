@@ -1,19 +1,12 @@
 from Data.Player import Player
 from Data.PlayerData import get_season
-from Data.WikiWord.Linker import CHEATING_SEASONS, LINKER
+from Data.WikiWord.Linker import LINKER
 from Layers.Layer import Layer
 from Layers.Special.EqualLayer import EqualLayer
 from Layers.Special.NormalizeLayer import NormalizeLayer
 from Layers.WikiWord.WikiWordExtractor import WikiWordExtractor
 from numpy.random import RandomState
-from scipy.special import expit
-from scipy import optimize
-from sklearn.linear_model import LogisticRegression
-from statistics import mean
-from typing import Callable, Dict, Set, Tuple
-import math
-import numpy as np
-import scipy as sc
+from typing import Dict, Set
 
 class InnerWikiWordLayer(Layer):
     def __init__(self, unlikely_z_score: float, lower_likelihood: float, pca_components: int, random_generator: RandomState):
@@ -24,12 +17,13 @@ class InnerWikiWordLayer(Layer):
 
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         available_seasons = self.seasons_with_data()
-        if predict_season not in available_seasons or predict_season in CHEATING_SEASONS:
+        if predict_season not in available_seasons:
             return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)
         train_seasons = train_seasons.intersection(available_seasons)
 
-        extractor = WikiWordExtractor(predict_season, train_seasons, self.__pca_components, self.__random_generator)
-        extractor.get_train_data()
+        extractor = WikiWordExtractor(predict_season, train_seasons, self.__pca_components, self.__unlikely_z_score,
+                                      self.__random_generator)
+        extractor.train()
         return self.__predict(extractor)
 
     def __predict(self, extractor: WikiWordExtractor) -> Dict[Player, float]:
@@ -43,9 +37,7 @@ class InnerWikiWordLayer(Layer):
             of being the Mol.
         """
         predict_input = extractor.get_predict_data()
-        z_scores = sc.stats.zscore([data for data in predict_input.values()])
-        predict_output = {player: self.__lower_likelihood if z_score < self.__unlikely_z_score else 1.0
-                          for player, z_score in zip(predict_input.keys(), z_scores)}
+        predict_output = {p: self.__lower_likelihood if pi else 1.0 for p, pi in predict_input.items()}
         return predict_output
 
     @staticmethod

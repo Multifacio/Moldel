@@ -3,8 +3,7 @@ from Data.Player import Player
 # The path where the wiki files are stored in plaintext
 WIKI_FILES_PATH = "moldel/Data/WikiWord/WikiFiles/"
 
-# Seasons in which Wikipedia Data from a later timestamp is used than before the start of the season.
-CHEATING_SEASONS = {5, 6, 7, 8}
+# Note that in seasons 5, 6, 7 & 8 Wikipedia Data from a later time is used than before the start of the season.
 
 # The LINKER maps players to their corresponding Wikipedia data.
 LINKER = {Player.ELLIE_21: "Ellie_21.txt", Player.HORACE_21: "Horace_21.txt", Player.JEROEN_21: "Jeroen_21.txt",
