@@ -13,7 +13,7 @@ train_input = [d.job_features[job_index] for p, d in data.items()]
 train_output = [1.0 if get_is_mol(p) else 0.0 for p in data]
 
 plt.figure(figsize=(12, 3))
-plt.xlabel("Relative Appearance")
+plt.xlabel("Score")
 plt.ylabel("Is 'mol'")
 plt.yticks([0.0, 1.0])
 plt.gcf().subplots_adjust(bottom = 0.15)
