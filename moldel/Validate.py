@@ -7,8 +7,8 @@ from Validators.Precomputer import Precomputer
 from Validators.TotalLogLikelihood import TotalLogLikelihood
 
 RANDOM_SEED = 949019755
-VALIDATE_SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
-TRAIN_SEASONS = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
+VALIDATE_SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+TRAIN_SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
 
 distributions = dict()
 random_generator = RandomState(RANDOM_SEED)
@@ -23,7 +23,7 @@ for season in VALIDATE_SEASONS:
         progress_bar.next()
 progress_bar.finish()
 
-# validator = Precomputer("ForExamPass")
+validator = Precomputer("Exam Pass Stacker")
 # validator = PieChartCreator("Full Moldel: Season 14-20 (2020-08-25)", 2, 0.015)
-validator = TotalLogLikelihood()
+# validator = TotalLogLikelihood()
 validator.validate(distributions)

@@ -5,7 +5,7 @@ from Printers.TextSortedPrinter import TextSortedPrinter
 import sys
 
 RANDOM_SEED = 949019755
-TRAIN_SEASONS = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
+TRAIN_SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
 PREDICT_SEASON = 21
 LATEST_EPISODE = 7
 TRAIN_SEASONS.discard(PREDICT_SEASON)
