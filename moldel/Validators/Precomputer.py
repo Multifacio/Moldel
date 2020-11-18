@@ -1,8 +1,7 @@
-import os
-
 from Data.Player import Player
 from typing import Dict, Tuple, Union
 from Validators.Validator import Validator
+import os
 import pickle
 import rootpath
 
