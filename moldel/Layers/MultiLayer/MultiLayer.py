@@ -26,6 +26,6 @@ class MultiLayer:
                 are the 'Mol'. The key of this dictionary is the Player for which the predictions are made and the value
                 is a MultiLayerResult which consists of an array of floats that indicates how likely the player is the
                 'Mol' and an exclusion value which is True if this MultiLayer determined that that player cannot be the
-                'Mol' anymore and False if there is still a posibility that the player is the 'Mol'.
+                'Mol' anymore and False if there is still a possibility that the player is the 'Mol'.
         """
         pass
