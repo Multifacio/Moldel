@@ -19,6 +19,9 @@ class Precomputer(Validator):
         self.__save_folder = save_folder
 
     def validate(self, distributions: Dict[Tuple[int, int], Dict[Player, float]]):
+        folder = rootpath.detect() + "/" + self.MAIN_SAVE_FOLDER + self.__save_folder
+        os.mkdir(folder)
+
         for pair, distribution in distributions.items():
             file_path = self.__get_file_path(*pair)
             with open(file_path, 'wb') as file:
