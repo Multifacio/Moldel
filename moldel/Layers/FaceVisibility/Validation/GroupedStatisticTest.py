@@ -7,7 +7,7 @@ import itertools
 import matplotlib.pyplot as plt
 import numpy as np
 
-TEST_SEASONS = {13, 14, 15, 16, 17, 18, 19, 20}
+TEST_SEASONS = {13, 14, 15, 16, 17, 18, 19, 20, 21}
 
 appearances = dict()
 for season in TEST_SEASONS:
@@ -28,7 +28,7 @@ for player, features in appearances.items():
 
 non_mol = [data for data, label in zip(train_input, train_output) if label == 0.0]
 mol = [data for data, label in zip(train_input, train_output) if label == 1.0]
-statistics, p_value = mannwhitneyu(non_mol, mol, alternative = "greater")
+statistics, p_value = mannwhitneyu(mol, non_mol, alternative = "less")
 print("Score: " + str(statistics))
 print("p-value: " + str(p_value))
 
