@@ -34,11 +34,11 @@ class WikiWordParser:
                 words in the players Wikipedia page.
         """
         feature_data = dict()
+        min_job_features = dict()
         dictionary = self.get_standard_dictionary()
         for season in seasons:
             raw_data = self.parse_raw(season, dictionary)
             job_counts = dict()
-            max_words = max(data.number_words for data in raw_data.values())
             sum_words = sum(data.number_words for data in raw_data.values())
             for player, data in raw_data.items():
                 for job in Job:
@@ -47,12 +47,23 @@ class WikiWordParser:
             for job in Job:
                 job_sum = sum(job_counts[(player, job)] for player in raw_data)
                 for player, data in raw_data.items():
-                    job_counts[(player, job)] = math.log(max(job_counts[(player, job)] / job_sum, 1 / max_words))
+                    job_count = job_counts[(player, job)]
+                    if job_count > 0.0:
+                        job_count = math.log(job_count / job_sum)
+                        job_counts[(player, job)] = job_count
+                        min_job_features[job] = min(job_count, min_job_features.get(job, math.inf))
+                    else:
+                        job_counts[(player, job)] = None
 
             for player, data in raw_data.items():
-                job_features = np.array([job_counts[(player, job)] for job in Job])
+                job_features = {job: job_counts[(player, job)] for job in Job}
                 word_feature = math.log(max(data.number_words, 1) / sum_words)
-                feature_data[player] = WikiWordSample(job_features, word_feature)
+                feature_data[player] = (job_features, word_feature)
+
+        for player, data in feature_data.items():
+            job_features, word_feature = feature_data[player]
+            job_features = [min_job_features[job] if count is None else count for job, count in job_features.items()]
+            feature_data[player] = WikiWordSample(job_features, word_feature)
 
         return feature_data
 
