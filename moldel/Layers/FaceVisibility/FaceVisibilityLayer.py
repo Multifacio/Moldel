@@ -117,22 +117,9 @@ class InnerFaceVisibilityLayer(MultiLayer):
             train_input (np.array): The data on which Kernel Density Estimation is applied.
 
         Returns:
-            The bandwidth used for the Kernel Density Estimation.
+            The Kernel Density Estimator.
         """
-        bandwidth = InnerFaceVisibilityLayer.__get_bandwidth(train_input)
-        return gaussian_kde(train_input, bandwidth)
-
-    @staticmethod
-    def __get_bandwidth(data: np.array) -> float:
-        """ Compute bandwidth for kernel density estimation using the Normal reference rule.
-
-        Arguments:
-            data (np.array): The data on which Kernel Density Estimation is applied
-
-        Returns:
-            The bandwidth used for the Kernel Density Estimation.
-        """
-        return 1.06 * min(np.std(data), sc.stats.iqr(data) / 1.34) * len(data) ** (-1 / 5)
+        return gaussian_kde(train_input, bw_method = 'silverman')
 
     @classmethod
     def get_boundary(self, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde, num_players: int, cdf: float) -> float:
