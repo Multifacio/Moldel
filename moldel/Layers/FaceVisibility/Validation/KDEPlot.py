@@ -22,9 +22,11 @@ plt.gcf().subplots_adjust(bottom = 0.15)
 
 non_mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(non_mol)
 mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(mol)
-x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.005)
+x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.005, InnerFaceVisibilityLayer.MIN_VALUE,
+                                          InnerFaceVisibilityLayer.MAX_VALUE)
 plt.axvline(x = x, c = 'black')
-x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.995)
+x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.995, InnerFaceVisibilityLayer.MIN_VALUE,
+                                          InnerFaceVisibilityLayer.MAX_VALUE)
 plt.axvline(x = x, c = 'black')
 X = np.linspace(-3.0, 2.0, 500)
 non_mol_Y = [non_mol_kde.pdf([x]) for x in X]

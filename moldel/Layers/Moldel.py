@@ -1,3 +1,4 @@
+from Layers.AgeLayer.AgeLayer import AgeLayer
 from Layers.ExamDrop.ExamDropLayer import ExamDropLayer
 from Layers.ExamPass.ExamPassLayer import ExamPassLayer
 from Layers.ExamUniformLayer import ExamUniformLayer
@@ -16,9 +17,9 @@ class MoldelStacker(StackLayer):
 
     def __init__(self, random_generator: RandomState):
         predict_layers = [ExamDropLayer(1e-2, 0.95, 40), WikiWordLayer(-0.524, 0.417, 5, random_generator),
-                          FaceVisibilityLayer(1/5, 13, 4, 2, 0.01, 0.01), ExamPassLayer()]
+                          FaceVisibilityLayer(1/5, 13, 4, 2, 0.01, 0.01), ExamPassLayer(), AgeLayer(0.02)]
         train_layers = [MemoryLayer("Exam Drop Stacker"), MemoryLayer("Wikipedia Stacker"),
-                        MemoryLayer("Appearance Stacker"), MemoryLayer("Exam Pass Stacker")]
+                        MemoryLayer("Appearance Stacker"), MemoryLayer("Exam Pass Stacker"), MemoryLayer("Age Stacker")]
         super().__init__(CombineLayer(predict_layers, True), CombineLayer(train_layers, True), self.SPLITS)
 
 class Moldel(CompositeLayer):

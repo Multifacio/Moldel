@@ -12,7 +12,6 @@ from sklearn.preprocessing import KBinsDiscretizer
 from statistics import mean
 from typing import Dict, Set, Tuple
 import numpy as np
-import scipy as sc
 
 class InnerFaceVisibilityLayer(MultiLayer):
     # Values related to computing the cumulative distribution function and to determine the boundaries.
@@ -64,7 +63,7 @@ class InnerFaceVisibilityLayer(MultiLayer):
             extractor (FaceVisibilityExtractor): The extractor which delivers the training data.
 
         Returns:
-            The classifier model and the discretizer model (discretize data into bins).
+            The kernel density estimator for respectively the Mol data and non-Mol data.
         """
         train_input, train_output = extractor.get_train_data()
         non_mol_input = np.array([ti[0] for ti, to in zip(train_input, train_output) if to == 0.0])
@@ -79,8 +78,8 @@ class InnerFaceVisibilityLayer(MultiLayer):
 
         Arguments:
             extractor (FaceVisibilityExtractor): The extractor which delivers the prediction data.
-            classifier (LogisticRegression): The trained machine learning model used to classify instances.
-            discretizer (KBinsDiscretizer): The trained discretizer used to discetize the data into bins.
+            non_mol_kde (gaussian_kde): The Kernel Density Estimator for non-Mol appearance values.
+            mol_kde (gaussian_kde): The Kernel Density Estimator for Mol appearance values.
             predict_season (int): For which season we make the prediction.
 
         Returns:
@@ -92,8 +91,10 @@ class InnerFaceVisibilityLayer(MultiLayer):
         if not predict_data:
             return EmptyMultiLayer().predict(predict_season, 0, set())
 
-        min_value = self.get_boundary(non_mol_kde, mol_kde, len(predict_data), self.__cdf_cutoff / 2)
-        max_value = self.get_boundary(non_mol_kde, mol_kde, len(predict_data), 1 - self.__cdf_cutoff / 2)
+        min_value = self.get_boundary(non_mol_kde, mol_kde, len(predict_data), self.__cdf_cutoff / 2, self.MIN_VALUE,
+                                      self.MAX_VALUE)
+        max_value = self.get_boundary(non_mol_kde, mol_kde, len(predict_data), 1 - self.__cdf_cutoff / 2, self.MIN_VALUE,
+                                      self.MAX_VALUE)
         for player in get_players_in_season(predict_season):
             if player in predict_data:
                 predictions = []
@@ -122,7 +123,8 @@ class InnerFaceVisibilityLayer(MultiLayer):
         return gaussian_kde(train_input, bw_method = 'silverman')
 
     @classmethod
-    def get_boundary(self, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde, num_players: int, cdf: float) -> float:
+    def get_boundary(self, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde, num_players: int, cdf: float,
+                     lowerbound: float, upperbound: float) -> float:
         """ Get the approximated boundary value x such that the cumulative distribution function of x is equal to cdf.
 
         Arguments:
@@ -130,12 +132,12 @@ class InnerFaceVisibilityLayer(MultiLayer):
             mol_kde (gaussian_kde): The Kernel Density Estimation of the mol data.
             num_players (int): The number of players still in the game.
             cdf (float): The cumulative distribution value of this x.
+            lowerbound (float): The lowest value used when searching for the boundary
+            upperbound (float): The highest value used when searching for the boundary.
 
         Returns:
             The boundary value x.
         """
-        lowerbound = self.MIN_VALUE
-        upperbound = self.MAX_VALUE
         middle = (lowerbound + upperbound) / 2
         for _ in range(self.SEARCH_STEPS):
             cur_cdf = non_mol_kde.integrate_box_1d(self.MIN_VALUE, middle) * (num_players - 1) / num_players + \

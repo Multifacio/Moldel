@@ -36,7 +36,9 @@ class CutLayer(NormalizeLayer):
 
         Parameters:
             layer (Layer): The layer of which the likelihoods get cut off for too low and high values.
-            upperbound (float): The relative upperbound with respect to the uniform likelihood.
-            lowerbound (float): The relative lowerbound with respect to the uniform likelihood.
+            aggregate (Callable[[List[float]], float]): The aggregate function that produces the aggregation result
+                based on the given likelihoods.
+            upperbound (float): The relative upperbound with respect to the aggregation result.
+            lowerbound (float): The relative lowerbound with respect to the aggregation result.
         """
         super().__init__(InnerCutLayer(NormalizeLayer(layer), aggregate, upperbound, lowerbound))
