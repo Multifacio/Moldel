@@ -1,5 +1,5 @@
 from Data.PlayerData import get_is_mol
-from Layers.FaceVisibility.FaceVisibilityLayer import InnerFaceVisibilityLayer
+from Layers.Appearance.AppearanceLayer import InnerAppearanceLayer
 from Layers.Wikipedia.WikipediaExtractor import WikipediaExtractor
 from numpy.random.mtrand import RandomState
 from scipy.stats import kruskal, levene, norm
@@ -23,8 +23,8 @@ _, mean_p_value = kruskal(mol_features, non_mol_features)
 _, std_p_value = levene(mol_features, non_mol_features)
 print("Mean: " + str(mean_p_value) + ", Std: " + str(std_p_value))
 
-mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(mol_features)
-non_mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(non_mol_features)
+mol_kde = InnerAppearanceLayer.kernel_density_estimation(mol_features)
+non_mol_kde = InnerAppearanceLayer.kernel_density_estimation(non_mol_features)
 
 predict_data = extractor.get_predict_data()
 predict_input = np.array([data for data in predict_data.values()])

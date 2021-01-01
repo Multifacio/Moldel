@@ -1,19 +1,17 @@
 from Data.Player import Player
 from Data.PlayerData import get_players_in_season
-from Layers.FaceVisibility.FaceVisibilityExtractor import FaceVisibilityExtractor
-from Layers.FaceVisibility.VideoParser import VideoParser
+from Layers.Appearance.AppearanceExtractor import AppearanceExtractor
+from Layers.Appearance.VideoParser import VideoParser
 from Layers.MultiLayer.EmptyMultiLayer import EmptyMultiLayer
 from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
 from Layers.Special.CutLayer import CutLayer
 from scipy.stats import gaussian_kde
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import KBinsDiscretizer
 from statistics import mean
 from typing import Dict, Set, Tuple
 import numpy as np
 
-class InnerFaceVisibilityLayer(MultiLayer):
+class InnerAppearanceLayer(MultiLayer):
     # Values related to computing the cumulative distribution function and to determine the boundaries.
     MIN_VALUE = -6.0 # The lowest value used when searching for the boundaries. It is also used to compute the cdf.
     MAX_VALUE = 6.0 # The highest value used when searching for the boundaries.
@@ -33,8 +31,8 @@ class InnerFaceVisibilityLayer(MultiLayer):
         if max_episode == 0 or predict_season < self.__first_season:
             return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
-        extractor = FaceVisibilityExtractor(predict_season, max_episode, train_seasons, self.__aug_num_cuts,
-                                            self.__aug_min_cuts_on, self.__outlier_cutoff)
+        extractor = AppearanceExtractor(predict_season, max_episode, train_seasons, self.__aug_num_cuts,
+                                        self.__aug_min_cuts_on, self.__outlier_cutoff)
         non_mol_kde, mol_kde = self.__training(extractor)
         return self.__prediction(extractor, non_mol_kde, mol_kde, predict_season)
 
@@ -56,11 +54,11 @@ class InnerFaceVisibilityLayer(MultiLayer):
                 return max_episode
         return max_episode
 
-    def __training(self, extractor: FaceVisibilityExtractor) -> Tuple[gaussian_kde, gaussian_kde]:
-        """ Execute the training phase of the Face Visibility Layer.
+    def __training(self, extractor: AppearanceExtractor) -> Tuple[gaussian_kde, gaussian_kde]:
+        """ Execute the training phase of the Appearance Layer.
 
         Arguments:
-            extractor (FaceVisibilityExtractor): The extractor which delivers the training data.
+            extractor (AppearanceExtractor): The extractor which delivers the training data.
 
         Returns:
             The kernel density estimator for respectively the Mol data and non-Mol data.
@@ -72,12 +70,12 @@ class InnerFaceVisibilityLayer(MultiLayer):
         mol_kde = self.kernel_density_estimation(mol_input)
         return non_mol_kde, mol_kde
 
-    def __prediction(self, extractor: FaceVisibilityExtractor, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde,
+    def __prediction(self, extractor: AppearanceExtractor, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde,
                      predict_season: int) -> Dict[Player, MultiLayerResult]:
-        """ Execute the prediction phase of the Face Visibility Layer.
+        """ Execute the prediction phase of the Appearance Layer.
 
         Arguments:
-            extractor (FaceVisibilityExtractor): The extractor which delivers the prediction data.
+            extractor (AppearanceExtractor): The extractor which delivers the prediction data.
             non_mol_kde (gaussian_kde): The Kernel Density Estimator for non-Mol appearance values.
             mol_kde (gaussian_kde): The Kernel Density Estimator for Mol appearance values.
             predict_season (int): For which season we make the prediction.
@@ -149,19 +147,19 @@ class InnerFaceVisibilityLayer(MultiLayer):
             middle = (lowerbound + upperbound) / 2
         return middle
 
-class FaceVisibilityLayer(CutLayer):
-    """ The Face Visibility Layer predict which player is the Mol based on how often this player appears during
-    the episode. This code is based on the project of mattijn: https://github.com/mattijn/widm """
+class AppearanceLayer(CutLayer):
+    """ The Appearance Layer predict which player is the Mol based on how often this player appears during the episode.
+    This code is based on the project of mattijn: https://github.com/mattijn/widm """
 
     def __init__(self, predict_lowerbound: float, first_season: int, aug_num_cuts: int, aug_min_cuts_on: int,
                  cdf_cutoff: float, outlier_cutoff: float):
-        """ Constructor of the Face Visibility Layer.
+        """ Constructor of the Appearance Layer.
 
         Arguments:
             predict_lowerbound (float): The relative lowerbound with respect to the highest likelihood. All predictions
                 with a lower likelihood than this lowerbound will be set equal to the lowerbound (after that the
                 likelihoods will be normalized).
-            first_season (int): The first season for which the Face Visibility Layer can do predictions. So on earlier
+            first_season (int): The first season for which the Appearance Layer can do predictions. So on earlier
                 seasons it will give an uniform prediction back. Note however that earlier seasons are still used as
                 training data.
             aug_num_cuts (int): In how many cuts the episodes get divided. All cuts are turned on/off, where the
@@ -173,5 +171,5 @@ class FaceVisibilityLayer(CutLayer):
                 distributions.
             outlier_cutoff (float): This is the relative amount of highest and lowest appearance values that get removed.
         """
-        super().__init__(MultiplyAggregateLayer(InnerFaceVisibilityLayer(first_season, aug_num_cuts, aug_min_cuts_on,
-                                                cdf_cutoff, outlier_cutoff)), mean, 1.0, predict_lowerbound)
+        super().__init__(MultiplyAggregateLayer(InnerAppearanceLayer(first_season, aug_num_cuts, aug_min_cuts_on,
+                                                                     cdf_cutoff, outlier_cutoff)), mean, 1.0, predict_lowerbound)

@@ -1,5 +1,5 @@
-from Layers.FaceVisibility.FaceVisibilityLayer import InnerFaceVisibilityLayer
-from Layers.FaceVisibility.FaceVisibilityExtractor import FaceVisibilityExtractor
+from Layers.Appearance.AppearanceLayer import InnerAppearanceLayer
+from Layers.Appearance.AppearanceExtractor import AppearanceExtractor
 from scipy.stats import mannwhitneyu
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,7 +9,7 @@ AUGMENTATION_CUTS = 4
 AUGMENTATION_MIN_CUTS_ON = 2
 OUTLIER_CUTOFF = 0.01
 
-extractor = FaceVisibilityExtractor(0, 0, TEST_SEASONS, AUGMENTATION_CUTS, AUGMENTATION_MIN_CUTS_ON, OUTLIER_CUTOFF)
+extractor = AppearanceExtractor(0, 0, TEST_SEASONS, AUGMENTATION_CUTS, AUGMENTATION_MIN_CUTS_ON, OUTLIER_CUTOFF)
 train_input, train_output = extractor.get_train_data()
 non_mol = [data[0] for data, label in zip(train_input, train_output) if label == 0.0]
 mol = [data[0] for data, label in zip(train_input, train_output) if label == 1.0]
@@ -20,13 +20,13 @@ plt.ylabel("Is 'mol'")
 plt.yticks(np.linspace(0.0, 1.0, 11))
 plt.gcf().subplots_adjust(bottom = 0.15)
 
-non_mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(non_mol)
-mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(mol)
-x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.005, InnerFaceVisibilityLayer.MIN_VALUE,
-                                          InnerFaceVisibilityLayer.MAX_VALUE)
+non_mol_kde = InnerAppearanceLayer.kernel_density_estimation(non_mol)
+mol_kde = InnerAppearanceLayer.kernel_density_estimation(mol)
+x = InnerAppearanceLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.005, InnerAppearanceLayer.MIN_VALUE,
+                                      InnerAppearanceLayer.MAX_VALUE)
 plt.axvline(x = x, c = 'black')
-x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.995, InnerFaceVisibilityLayer.MIN_VALUE,
-                                          InnerFaceVisibilityLayer.MAX_VALUE)
+x = InnerAppearanceLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.995, InnerAppearanceLayer.MIN_VALUE,
+                                      InnerAppearanceLayer.MAX_VALUE)
 plt.axvline(x = x, c = 'black')
 X = np.linspace(-3.0, 2.0, 500)
 non_mol_Y = [non_mol_kde.pdf([x]) for x in X]

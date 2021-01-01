@@ -1,6 +1,6 @@
 # Show at which frames each player occurs in a given episode.
 from Data.PlayerData import get_name
-from Layers.FaceVisibility.VideoParser import VideoParser, ParsedVideo
+from Layers.Appearance.VideoParser import VideoParser, ParsedVideo
 
 SEASON = 17
 EPISODE = 5

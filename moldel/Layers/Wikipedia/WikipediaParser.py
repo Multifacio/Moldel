@@ -14,7 +14,7 @@ import rootpath
 WikipediaSample = NamedTuple("WikipediaSample", [("job_features", np.array), ("word_feature", float)])
 WikipediaData = NamedTuple("WikipediaData", [("job_counts", CounterType[Job]), ("number_words", int)])
 class WikipediaParser:
-    """ The Wiki Word Parser reads all wiki files of all players in the given seasons and converts it to interpretable
+    """ The Wikipedia Parser reads all wiki files of all players in the given seasons and converts it to interpretable
     and understandable features. """
 
     MIN_LENGTH_COMPOUND_WORD = 4 # The minimum length of the sub words that get extracted out of a larger compound word
@@ -29,7 +29,7 @@ class WikipediaParser:
                 in it.
 
         Returns:
-            Dict[Player, WikiWordSample]: A dictionary with as key the players and as value a Wiki Word Sample tuple
+            Dict[Player, WikipediaSample]: A dictionary with as key the players and as value a Wikipedia Sample tuple
                 with as first value all job features and as second value the feature related to the total number of
                 words in the players Wikipedia page.
         """

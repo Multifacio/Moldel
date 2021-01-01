@@ -1,4 +1,4 @@
-from Layers.FaceVisibility.FaceVisibilityExtractor import FaceVisibilityExtractor
+from Layers.Appearance.AppearanceExtractor import AppearanceExtractor
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -7,7 +7,7 @@ AUGMENTATION_CUTS = 4
 AUGMENTATION_MIN_CUTS_ON = 2
 OUTLIER_CUTOFF = 0.01
 
-extractor = FaceVisibilityExtractor(0, 0, TEST_SEASONS, AUGMENTATION_CUTS, AUGMENTATION_MIN_CUTS_ON, OUTLIER_CUTOFF)
+extractor = AppearanceExtractor(0, 0, TEST_SEASONS, AUGMENTATION_CUTS, AUGMENTATION_MIN_CUTS_ON, OUTLIER_CUTOFF)
 train_input, train_output = extractor.get_train_data()
 
 non_mol = [data[0] for data, label in zip(train_input, train_output) if label == 0.0]

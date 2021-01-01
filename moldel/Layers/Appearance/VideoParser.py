@@ -1,5 +1,5 @@
 from Data.Player import Player
-from Layers.FaceVisibility.ParserConfiguration import ALIVE_PLAYERS, FACE_IMAGE_LOCATIONS, EPISODE_VIDEO_LOCATION, \
+from Layers.Appearance.ParserConfiguration import ALIVE_PLAYERS, FACE_IMAGE_LOCATIONS, EPISODE_VIDEO_LOCATION, \
     FRAME_SKIP, SAVE_FOLDER, SEASON_NUMBER, EPISODE_NUMBER
 from typing import Dict, Set, List, NamedTuple, Union
 import cv2

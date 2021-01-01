@@ -1,7 +1,6 @@
 from Data.Player import Player
 from Data.PlayerData import get_is_mol, get_players_in_season
-from Layers.FaceVisibility.VideoParser import ParsedVideo, VideoParser
-from numpy.random.mtrand import RandomState
+from Layers.Appearance.VideoParser import ParsedVideo, VideoParser
 from typing import Dict, List, Tuple, Set, NamedTuple
 import bisect
 import itertools
@@ -9,14 +8,14 @@ import math
 import numpy as np
 
 TrainSample = NamedTuple("TrainSample", [("season", int), ("relative_occurrence", float), ("is_mol", bool)])
-class FaceVisibilityExtractor:
-    """ The Face Visibility Extractor deals with obtaining the train data and predict data. For this feature encoding
+class AppearanceExtractor:
+    """ The Appearance Extractor deals with obtaining the train data and predict data. For this feature encoding
     and extraction techniques are used. Likewise train data gets resampled such that closer seasons have more influence
     in the training process than seasons further aways. """
 
     # The size of the resampled train data list. Higher sample sizes will decrease the variance in the results (with
     # resampling the results you obtain when re-running the layer might be different), but will increase the running
-    # time of the Face Visibility layer.
+    # time of the Appearance layer.
     SAMPLE_SIZE = 100000
 
     # A small log addition constant used to prevent situations where the log is taken of zero.
@@ -24,7 +23,7 @@ class FaceVisibilityExtractor:
 
     def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], aug_num_cuts: int,
                  aug_min_cuts_on: int, outlier_cutoff: float):
-        """ Constructor of the Face Visibility Extractor.
+        """ Constructor of the Appearance Extractor.
 
         Arguments:
             predict_season (int): The season for which we make the prediction.
@@ -125,7 +124,7 @@ class FaceVisibilityExtractor:
 
         total_occurrence = sum(frame_count.values())
         own_occurrence = frame_count.get(player, 0) * len(parsed_video.alive_players)
-        return math.log(FaceVisibilityExtractor.SMALL_LOG_ADDITION + own_occurrence / total_occurrence)
+        return math.log(AppearanceExtractor.SMALL_LOG_ADDITION + own_occurrence / total_occurrence)
 
     @classmethod
     def __get_parsed_videos(self, season: int) -> Dict[int, ParsedVideo]:

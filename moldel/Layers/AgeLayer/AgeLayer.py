@@ -1,6 +1,6 @@
 from Data.Player import Player
 from Data.PlayerData import get_players_in_season, get_age, get_is_mol, get_season
-from Layers.FaceVisibility.FaceVisibilityLayer import InnerFaceVisibilityLayer
+from Layers.Appearance.AppearanceLayer import InnerAppearanceLayer
 from Layers.Layer import Layer
 from Layers.Special.CutLayer import CutLayer
 from Layers.Special.NormalizeLayer import NormalizeLayer
@@ -34,8 +34,8 @@ class InnerAgeLayer(Layer):
         train_output = [1.0 if get_is_mol(player) else 0.0 for player in players]
         non_mol = np.array([data for data, label in zip(train_input, train_output) if label == 0.0])
         mol = np.array([data for data, label in zip(train_input, train_output) if label == 1.0])
-        non_mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(non_mol)
-        mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(mol)
+        non_mol_kde = InnerAppearanceLayer.kernel_density_estimation(non_mol)
+        mol_kde = InnerAppearanceLayer.kernel_density_estimation(mol)
         return non_mol_kde, mol_kde
 
     def __prediction(self, predict_season: int, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde) -> Dict[Player, float]:
@@ -52,10 +52,10 @@ class InnerAgeLayer(Layer):
         """
         all_predictions = dict()
         predict_data = {player: float(get_age(player)) for player in get_players_in_season(predict_season)}
-        min_value = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, len(predict_data),
-                                                          self.__cdf_cutoff / 2, self.MIN_VALUE, self.MAX_VALUE)
-        max_value = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, len(predict_data),
-                                                          1 - self.__cdf_cutoff / 2, self.MIN_VALUE, self.MAX_VALUE)
+        min_value = InnerAppearanceLayer.get_boundary(non_mol_kde, mol_kde, len(predict_data),
+                                                      self.__cdf_cutoff / 2, self.MIN_VALUE, self.MAX_VALUE)
+        max_value = InnerAppearanceLayer.get_boundary(non_mol_kde, mol_kde, len(predict_data),
+                                                      1 - self.__cdf_cutoff / 2, self.MIN_VALUE, self.MAX_VALUE)
         for player, age in predict_data.items():
             age = min(max(age, min_value), max_value)
             non_mol_likelihood = non_mol_kde.pdf(age)[0] * (len(predict_data) - 1) / len(predict_data)

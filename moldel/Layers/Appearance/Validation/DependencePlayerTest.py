@@ -1,6 +1,6 @@
 from Data.PlayerData import get_is_mol
-from Layers.FaceVisibility.FaceVisibilityExtractor import FaceVisibilityExtractor
-from Layers.FaceVisibility.VideoParser import VideoParser, ParsedVideo
+from Layers.Appearance.AppearanceExtractor import AppearanceExtractor
+from Layers.Appearance.VideoParser import VideoParser, ParsedVideo
 from scipy.stats import pearsonr, kendalltau
 import itertools
 
@@ -15,7 +15,7 @@ for season in TEST_SEASONS:
 
         for player in parsed_video.alive_players:
             if not get_is_mol(player):
-                appearance = FaceVisibilityExtractor.get_relative_occurrence(player, parsed_video, [True])
+                appearance = AppearanceExtractor.get_relative_occurrence(player, parsed_video, [True])
                 appearances[player] = appearances.get(player, []) + [appearance]
 
 input = []

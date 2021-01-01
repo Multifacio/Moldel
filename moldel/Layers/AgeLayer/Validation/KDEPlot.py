@@ -1,6 +1,6 @@
 from Data.Player import Player
 from Data.PlayerData import get_age, get_season, get_is_mol
-from Layers.FaceVisibility.FaceVisibilityLayer import InnerFaceVisibilityLayer
+from Layers.Appearance.AppearanceLayer import InnerAppearanceLayer
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -18,11 +18,11 @@ plt.ylabel("Is 'mol'")
 plt.yticks(np.linspace(0.0, 1.0, 101))
 plt.gcf().subplots_adjust(bottom = 0.15)
 
-non_mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(non_mol)
-mol_kde = InnerFaceVisibilityLayer.kernel_density_estimation(mol)
-x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.01, 0, 100)
+non_mol_kde = InnerAppearanceLayer.kernel_density_estimation(non_mol)
+mol_kde = InnerAppearanceLayer.kernel_density_estimation(mol)
+x = InnerAppearanceLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.01, 0, 100)
 plt.axvline(x = x, c = 'black')
-x = InnerFaceVisibilityLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.99, 0, 100)
+x = InnerAppearanceLayer.get_boundary(non_mol_kde, mol_kde, 10, 0.99, 0, 100)
 plt.axvline(x = x, c = 'black')
 X = np.linspace(15.0, 75.0, 500)
 non_mol_Y = [non_mol_kde.pdf([x]) for x in X]
