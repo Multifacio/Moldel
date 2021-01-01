@@ -1,7 +1,7 @@
 from Data.Player import Player
 
 # The path where the wiki files are stored in plaintext
-WIKI_FILES_PATH = "moldel/Data/WikiWord/WikiFiles/"
+WIKI_FILES_PATH = "moldel/Data/Wikipedia/WikiFiles/"
 
 # Note that in seasons 5, 6, 7 & 8 Wikipedia Data from a later time is used than before the start of the season.
 

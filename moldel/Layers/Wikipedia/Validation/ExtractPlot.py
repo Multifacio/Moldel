@@ -1,6 +1,6 @@
 from Data.PlayerData import get_is_mol
 from Layers.FaceVisibility.FaceVisibilityLayer import InnerFaceVisibilityLayer
-from Layers.WikiWord.WikiWordExtractor import WikiWordExtractor
+from Layers.Wikipedia.WikipediaExtractor import WikipediaExtractor
 from numpy.random.mtrand import RandomState
 from scipy.stats import kruskal, levene, norm
 import matplotlib.pyplot as plt
@@ -13,7 +13,7 @@ RANDOM_SEED = 949019755
 PCA_COMPONENTS = 4
 LOWER_Z_SCORE = -0.674
 
-extractor = WikiWordExtractor(PREDICT_SEASON, TRAIN_SEASONS, PCA_COMPONENTS, RandomState(RANDOM_SEED))
+extractor = WikipediaExtractor(PREDICT_SEASON, TRAIN_SEASONS, PCA_COMPONENTS, RandomState(RANDOM_SEED))
 train_input, train_output = extractor.get_train_data()
 train_input = np.squeeze(train_input)
 

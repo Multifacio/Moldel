@@ -1,13 +1,13 @@
-from Data.WikiWord.Job import Job
-from Layers.WikiWord.WikiWordParser import WikiWordParser
+from Data.Wikipedia.Job import Job
+from Layers.Wikipedia.WikipediaParser import WikipediaParser
 
 SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 
-dictionary = WikiWordParser.get_standard_dictionary()
+dictionary = WikipediaParser.get_standard_dictionary()
 job_occurrences = dict()
 all_data = dict()
 for season in SEASONS:
-    all_data.update(WikiWordParser.parse_raw(season, dictionary))
+    all_data.update(WikipediaParser.parse_raw(season, dictionary))
 
 for data in all_data.values():
     for job in Job:

@@ -1,7 +1,7 @@
 from progress.bar import Bar
 
 from Data.PlayerData import get_is_mol
-from Layers.WikiWord.WikiWordExtractor import WikiWordExtractor
+from Layers.Wikipedia.WikipediaExtractor import WikipediaExtractor
 from numpy.random.mtrand import RandomState
 
 RANDOM_SEED = 949019755
@@ -19,7 +19,7 @@ mol_inliers = 0
 for season in SEASONS:
     random_generator = RandomState(RANDOM_SEED)
     train_seasons = SEASONS.difference({season})
-    extractor = WikiWordExtractor(season, train_seasons, PCA_COMPONENTS, UNLIKELY_Z_SCORE, random_generator)
+    extractor = WikipediaExtractor(season, train_seasons, PCA_COMPONENTS, UNLIKELY_Z_SCORE, random_generator)
     extractor.train()
     predict_input = extractor.get_predict_data()
     for player, is_outlier in predict_input.items():

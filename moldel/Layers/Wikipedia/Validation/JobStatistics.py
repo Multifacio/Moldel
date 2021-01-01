@@ -1,12 +1,12 @@
 from Data.PlayerData import get_is_mol
-from Data.WikiWord.Job import Job
-from Layers.WikiWord.WikiWordParser import WikiWordParser
+from Data.Wikipedia.Job import Job
+from Layers.Wikipedia.WikipediaParser import WikipediaParser
 from scipy.stats import kruskal, levene
 import numpy as np
 
 TRAIN_SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 
-data = WikiWordParser.parse(TRAIN_SEASONS)
+data = WikipediaParser.parse(TRAIN_SEASONS)
 predict_input = np.array([d.job_features for p, d in data.items()])
 predict_output = np.array([1.0 if get_is_mol(p) else 0.0 for p in data])
 for job, column in zip(Job, predict_input.T):

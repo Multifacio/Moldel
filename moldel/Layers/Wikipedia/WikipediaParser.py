@@ -1,8 +1,8 @@
 from collections import Counter
 from Data.Player import Player
 from Data.PlayerData import get_players_in_season, get_season
-from Data.WikiWord import Linker
-from Data.WikiWord.Job import Job
+from Data.Wikipedia import Linker
+from Data.Wikipedia.Job import Job
 from typing import Counter as CounterType
 from typing import Dict, NamedTuple, Set
 import enchant
@@ -11,9 +11,9 @@ import numpy as np
 import re
 import rootpath
 
-WikiWordSample = NamedTuple("WikiWordSample", [("job_features", np.array), ("word_feature", float)])
-WikiWordData = NamedTuple("WikiWordData", [("job_counts", CounterType[Job]), ("number_words", int)])
-class WikiWordParser:
+WikipediaSample = NamedTuple("WikipediaSample", [("job_features", np.array), ("word_feature", float)])
+WikipediaData = NamedTuple("WikipediaData", [("job_counts", CounterType[Job]), ("number_words", int)])
+class WikipediaParser:
     """ The Wiki Word Parser reads all wiki files of all players in the given seasons and converts it to interpretable
     and understandable features. """
 
@@ -21,7 +21,7 @@ class WikiWordParser:
     STANDARD_DICTIONARY = "nl_NL" # The standard dictionary used to check if something is a sub word
 
     @classmethod
-    def parse(self, seasons: Set[int]) -> Dict[Player, WikiWordSample]:
+    def parse(self, seasons: Set[int]) -> Dict[Player, WikipediaSample]:
         """ Parse the Wikipedia files of all players that participated in these seasons to features.
 
         Parameters:
@@ -63,7 +63,7 @@ class WikiWordParser:
         for player, data in feature_data.items():
             job_features, word_feature = feature_data[player]
             job_features = [min_job_features[job] if count is None else count for job, count in job_features.items()]
-            feature_data[player] = WikiWordSample(job_features, word_feature)
+            feature_data[player] = WikipediaSample(job_features, word_feature)
 
         return feature_data
 
@@ -77,7 +77,7 @@ class WikiWordParser:
         return enchant.Dict(self.STANDARD_DICTIONARY)
 
     @classmethod
-    def parse_raw(self, season: int, dictionary: enchant.Dict) -> Dict[Player, WikiWordData]:
+    def parse_raw(self, season: int, dictionary: enchant.Dict) -> Dict[Player, WikipediaData]:
         """ Parse the Wikipedia files of all players that participated in this season to counts.
 
         Parameters:
@@ -85,17 +85,17 @@ class WikiWordParser:
             dictionary (enchant.Dict): The dictionary instance which checks if something is a word.
 
         Returns:
-            Dict[Player, WikiWordData]: A dictionary with as key the players and as value a Wiki Word Data tuple with
+            Dict[Player, WikipediaData]: A dictionary with as key the players and as value a Wikipedia Data tuple with
                 as first value a counter of all job for this player and as second value the total number of words in the
                 players Wikipedia page.
         """
         raw_data = dict()
         for player in get_players_in_season(season):
-            raw_data[player] = WikiWordParser.extract_player_features(player, dictionary)
+            raw_data[player] = WikipediaParser.extract_player_features(player, dictionary)
         return raw_data
 
     @classmethod
-    def extract_player_features(self, player: Player, dictionary: enchant.Dict) -> WikiWordData:
+    def extract_player_features(self, player: Player, dictionary: enchant.Dict) -> WikipediaData:
         """ Computes the features for a given player which are the frequencies of every Job and a total number of words
         in the players Wikipedia page.
 
@@ -104,18 +104,18 @@ class WikiWordParser:
             dictionary (enchant.Dict): The dictionary instance which checks if something is a word.
 
         Returns:
-            WikiWordData: Which is a tuple with two values. The first value is a dictionary with Job as key and as value
+            WikipediaData: Which is a tuple with two values. The first value is a dictionary with Job as key and as value
             the total number of times each of the Job word occurs in the wiki page. The second value is the total number
             of words in the players Wikipedia page.
         """
-        word_counts = WikiWordParser.wiki_file_parse(player)
+        word_counts = WikipediaParser.wiki_file_parse(player)
         job_counts = Counter()
         for word, count in word_counts.items():
             related_jobs = self.get_related_jobs(word, dictionary)
             for job in related_jobs:
                 job_counts[job] += count / len(related_jobs)
 
-        return WikiWordData(job_counts, sum(job_counts.values()))
+        return WikipediaData(job_counts, sum(job_counts.values()))
 
     @classmethod
     def get_related_jobs(self, word: str, dictionary: enchant.Dict) -> Set[Job]:
@@ -158,7 +158,7 @@ class WikiWordParser:
         file = open(file_path, "r", encoding = "utf8")
         counter = Counter()
         for line in file.readlines():
-            line = WikiWordParser.line_filter(line)
+            line = WikipediaParser.line_filter(line)
             tokens = line.split(" ")
             for token in tokens:
                 if token != "":

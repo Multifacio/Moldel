@@ -1,6 +1,6 @@
 from Data.Player import Player
 from Data.PlayerData import get_is_mol, get_season
-from Layers.WikiWord.WikiWordParser import WikiWordParser, WikiWordSample
+from Layers.Wikipedia.WikipediaParser import WikipediaParser, WikipediaSample
 from numpy.random import RandomState
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -9,8 +9,8 @@ from typing import Dict, Set, Tuple
 import numpy as np
 import scipy as sc
 
-class WikiWordExtractor:
-    """ The Wiki Word Extractor transforms an array of features in a new array of features which can be used by the
+class WikipediaExtractor:
+    """ The Wikipedia Extractor transforms an array of features in a new array of features which can be used by the
     classification algorithm. """
 
     # How often a Gaussian Mixture model is tried to fit through the data (from which the best result is taken).
@@ -22,7 +22,7 @@ class WikiWordExtractor:
 
     def __init__(self, predict_season: int, train_seasons: Set[int], pca_components: int, unlikely_z_score: float,
                  random_generator: RandomState):
-        """ Constructor of the Wiki Word Extractor.
+        """ Constructor of the Wikipedia Extractor.
 
         Arguments:
             predict_season (int): The season for which we make the prediction.
@@ -38,8 +38,8 @@ class WikiWordExtractor:
         self.__random_generator = random_generator
 
     def train(self):
-        """ Execute the training process for the WikiWord Extractor. """
-        raw_train_data = WikiWordParser.parse(self.__train_seasons)
+        """ Execute the training process for the Wikipedia Extractor. """
+        raw_train_data = WikipediaParser.parse(self.__train_seasons)
         train_output = np.array([1.0 if get_is_mol(player) else 0.0 for player in raw_train_data])
         job_input = np.array([data.job_features for data in raw_train_data.values()])
         self.__train_job_clusters(job_input)
@@ -58,7 +58,7 @@ class WikiWordExtractor:
         Returns:
             A dictionary with as key the players of that season and as value the formatted predict input.
         """
-        raw_predict_data = WikiWordParser.parse({self.__predict_season})
+        raw_predict_data = WikipediaParser.parse({self.__predict_season})
         predict_data = dict()
         for player, data in raw_predict_data.items():
             job_input = self.__discretize_jobs(np.array([data.job_features]))
