@@ -27,7 +27,7 @@ Ook voor de nieuwste aflevering van seizoen 21 is een voorspelling gedaan. (Laat
 <details>
   <summary>Spoiler Alert! Voorspelling voor seizoen 21, aflevering 1</summary>
   
-  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Season%2022%20(Original)/00%20-%20Before%20Start.png)
+  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Season%2022%20(Original)/01%20-%20After%20Episode%201.png)
 </details>
 
 # Credits
