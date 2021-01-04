@@ -181,7 +181,7 @@ class Player(Enum):
     JOSHUA_22 = auto()
     LAKSHMI_22 = auto()
     MARIJE_22 = auto()
-    RENEE_22 = auto()
     REMCO_22 = auto()
+    RENEE_22 = auto()
     ROCKY_22 = auto()
     SPLINTER_22 = auto()
