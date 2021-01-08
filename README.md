@@ -23,7 +23,7 @@ Het Moldel is getest op de seizoenen 13 tot en met 20 en is getest op de seizoen
 Meer voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https://github.com/Multifacio/Moldel/tree/master/results).
 
 # Voorspelling
-Ook voor de nieuwste aflevering van seizoen 21 is een voorspelling gedaan. (Laatst geüpdate op 4 Januari 2021)
+Ook voor de nieuwste aflevering van seizoen 21 is een voorspelling gedaan. (Laatst geüpdate op 9 Januari 2021)
 <details>
   <summary>Spoiler Alert! Voorspelling voor seizoen 21, aflevering 2</summary>
   
