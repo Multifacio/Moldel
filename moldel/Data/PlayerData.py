@@ -5,8 +5,34 @@ PlayerData = NamedTuple("PlayerData", [("name", str), ("season", int), ("is_mol"
 
 # This variable contains the first name of every player, the season in which every player participated and which player
 # is the Mol. If the is_mol value of a player is set to None then it is unknown whether that player is the Mol. Moreover
-# the age of every player when the first episode was broadcast of the season in which that player participated.
+# the age of every player when the first episode was broadcast of the season in which that player participated. Or if
+# the players birthdate is unknown, the age revealed during the season.
 __ALL_PLAYER_DATA = {
+    Player.ARNOUD_1: PlayerData("Arnoud", 1, False, 52), Player.DEBORAH_1: PlayerData("Deborah", 1, True, 34),
+    Player.FOKE_1: PlayerData("Foke", 1, False, 56), Player.JOHN_1: PlayerData("John", 1, False, 37),
+    Player.PETRA_1: PlayerData("Petra", 1, False, 22), Player.ROBIN_1: PlayerData("Robin", 1, False, 29),
+    Player.SANDY_1: PlayerData("Sandy", 1, False, 27), Player.WARNER_1: PlayerData("Warner", 1, False, 30),
+    Player.WILLY_1: PlayerData("Willy", 1, False, 44), Player.WILMIE_1: PlayerData("Wilmie", 1, False, 43),
+
+    Player.BJORN_2: PlayerData("Björn", 2, False, 26), Player.COR_2: PlayerData("Cor", 2, False, 61),
+    Player.DAN_2: PlayerData("Dan", 2, False, 32), Player.DOORTJE_2: PlayerData("Doortje", 2, False, 22),
+    Player.GERDA_2: PlayerData("Gerda", 2, False, 48), Player.NAZIFE_2: PlayerData("Nazife", 2, False, 30),
+    Player.NICO_2: PlayerData("Nico", 2, True, 35), Player.SIGRID_2: PlayerData("Sigrid", 2, False, 27),
+    Player.WARD_2: PlayerData("Ward", 2, False, 26), Player.YVONNE_2: PlayerData("Yvonne", 2, False, 32),
+
+    Player.DICK_3: PlayerData("Dick", 3, False, 50), Player.ELLEN_3: PlayerData("Ellen", 3, False, 37),
+    Player.ERIK_3: PlayerData("Erik", 3, False, 47), Player.GEORGE_3: PlayerData("George", 3, True, 30),
+    Player.HARRY_3: PlayerData("Harry", 3, False, 39), Player.JANTIEN_3: PlayerData("Jantien", 3, False, 35),
+    Player.JOHN_3: PlayerData("John", 3, False, 27), Player.KAREN_3: PlayerData("Karen", 3, False, 33),
+    Player.KERSTIN_3: PlayerData("Kerstin", 3, False, 36), Player.PAMELA_3: PlayerData("Paméla", 3, False, 26),
+    Player.PRINCE_3: PlayerData("Prince", 3, False, 26),
+
+    Player.AAFKE_4: PlayerData("Aafke", 4, False, 40), Player.ASTRID_4: PlayerData("Astrid", 4, False, 44),
+    Player.CHANDRIKA_4: PlayerData("Chandrika", 4, False, 26), Player.ELISE_4: PlayerData("Elise", 4, True, 26),
+    Player.FERDI_4: PlayerData("Ferdi", 4, False, 27), Player.JULIEN_4: PlayerData("Julien", 4, False, 30),
+    Player.LOUIS_4: PlayerData("Louis", 4, False, 38), Player.PATRICIA_4: PlayerData("Patricia", 4, False, 39),
+    Player.RENE_4: PlayerData("René", 4, False, 37), Player.RON_4: PlayerData("Ron", 4, False, 33),
+
     Player.GIJS_5: PlayerData("Gijs", 5, False, 38), Player.ISABELLE_5: PlayerData("Isabelle", 5, False, 32),
     Player.JIM_5: PlayerData("Jim", 5, False, 32), Player.LOTTIE_5: PlayerData("Lottie", 5, False, 27),
     Player.MARC_MARIE_5: PlayerData("Marc-Marie", 5, False, 40), Player.ROELAND_5: PlayerData("Roeland", 5, False, 32),

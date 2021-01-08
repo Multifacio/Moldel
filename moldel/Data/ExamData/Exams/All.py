@@ -1,3 +1,7 @@
+from .Season1 import season1
+from .Season2 import season2
+from .Season3 import season3
+from .Season4 import season4
 from .Season5 import season5
 from .Season6 import season6
 from .Season7 import season7
@@ -17,6 +21,6 @@ from .Season20 import season20
 from .Season21 import season21
 from .Season22 import season22
 
-EXAM_DATA = {5: season5, 6: season6, 7: season7, 8: season8, 9: season9, 10: season10, 11: season11, 12: season12,
-             13: season13, 14: season14, 15: season15, 16: season16, 17: season17, 18: season18, 19: season19,
-             20: season20, 21: season21, 22: season22}
+EXAM_DATA = {1: season1, 2: season2, 3: season3, 4: season4, 5: season5, 6: season6, 7: season7, 8: season8, 9: season9,
+             10: season10, 11: season11, 12: season12, 13: season13, 14: season14, 15: season15, 16: season16,
+             17: season17, 18: season18, 19: season19, 20: season20, 21: season21, 22: season22}
