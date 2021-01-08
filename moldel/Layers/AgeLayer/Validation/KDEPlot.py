@@ -4,7 +4,7 @@ from Layers.Appearance.AppearanceLayer import InnerAppearanceLayer
 import matplotlib.pyplot as plt
 import numpy as np
 
-TEST_SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+TEST_SEASONS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
 
 players = [player for player in Player if get_season(player) in TEST_SEASONS]
 train_input = [float(get_age(player)) for player in players]
