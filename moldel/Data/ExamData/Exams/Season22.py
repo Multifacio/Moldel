@@ -145,4 +145,40 @@ episode3 = Episode(players3, result3,
                     Player.CHARLOTTE_22: TestInput({14: 1}, jokers = 1), Player.RENEE_22: TestInput(jokers = 1),
                     Player.JOSHUA_22: TestInput({20: 7}), Player.ROCKY_22: TestInput(jokers = 2)},
                    {4: question3_4, 5: question3_5, 12: question3_12, 14: question3_14, 20: question3_20})
-season22 = Season(players1, {1: episode1, 2: episode2, 3: episode3})
+
+# Aflevering 4 (afvaller: Lakshmi)
+# 4 - Op welke verdieping stond de Mol tijdens de opdracht 'Meeliften':
+# 1: Rocky; 2: Splinter; 3: Lakshmi; 4: Charlotte, Joshua, Marije, Renee;
+# 8 - Is de Mol de huidige penningmeester:
+# 1: Splinter; 2: Charlotte, Joshua, Lakshmi, Marije, Renee, Rocky;
+# 9 - Welke rol had de Mol tijdens de opdracht 'Fotogenie(k)':
+# 1: Joshua, Lakshmi, Renee, Rocky, Splinter; 2: Charlotte, Marije;
+# 12 - Op welk bord stond de foto van de Mol:
+# 1: Splinter; 2: Marije; 3: Renee; 4: Charlotte; 5: Rocky; 6: Lakshmi; 7: Joshua;
+# 17 - Maakde de Mol als eerste een slot open tijdens de opdracht 'In Vuur en Vlam':
+# 1: Charlotte; 2: Joshua, Lakshmi, Marije, Renee, Rocky, Splinter;
+# Antwoorden: Rocky (4, 4), Marije (8, 2), Renee (9, 2) (1 joker), Charlotte (12, 1), Splinter (17, 1)
+players4 = [Player.CHARLOTTE_22, Player.JOSHUA_22, Player.LAKSHMI_22, Player.MARIJE_22, Player.RENEE_22,
+            Player.ROCKY_22, Player.SPLINTER_22]
+question4_4 = Question({1: [Player.ROCKY_22],
+                        2: [Player.SPLINTER_22],
+                        3: [Player.LAKSHMI_22],
+                        4: [Player.CHARLOTTE_22, Player.JOSHUA_22, Player.MARIJE_22, Player.RENEE_22]})
+question4_8 = Question({1: [Player.SPLINTER_22],
+                        2: [Player.CHARLOTTE_22, Player.JOSHUA_22, Player.LAKSHMI_22, Player.MARIJE_22, Player.RENEE_22,
+                            Player.ROCKY_22]})
+question4_9 = Question({1: [Player.JOSHUA_22, Player.LAKSHMI_22, Player.RENEE_22, Player.ROCKY_22, Player.SPLINTER_22],
+                        2: [Player.CHARLOTTE_22, Player.MARIJE_22]})
+question4_12 = Question({1: [Player.SPLINTER_22], 2: [Player.MARIJE_22], 3: [Player.RENEE_22], 4: [Player.CHARLOTTE_22],
+                         5: [Player.ROCKY_22], 6: [Player.LAKSHMI_22], 7: [Player.JOSHUA_22]})
+question4_17 = Question({1: [Player.CHARLOTTE_22],
+                         2: [Player.JOSHUA_22, Player.LAKSHMI_22, Player.MARIJE_22, Player.RENEE_22, Player.ROCKY_22,
+                             Player.SPLINTER_22]})
+result4 = Result(DropType.EXECUTION_DROP, [Player.LAKSHMI_22])
+episode4 = Episode(players4, result4,
+                   {Player.ROCKY_22: TestInput({4: 4}), Player.MARIJE_22: TestInput({8: 2}),
+                    Player.RENEE_22: TestInput({9: 2}, jokers = 1), Player.CHARLOTTE_22: TestInput({12: 1}),
+                    Player.SPLINTER_22: TestInput({17: 1})},
+                   {4: question4_4, 8: question4_8, 9: question4_9, 12: question4_12, 17: question4_17})
+
+season22 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4})
