@@ -181,4 +181,33 @@ episode4 = Episode(players4, result4,
                     Player.SPLINTER_22: TestInput({17: 1})},
                    {4: question4_4, 8: question4_8, 9: question4_9, 12: question4_12, 17: question4_17})
 
-season22 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4})
+# Aflevering 5 (afvaller: Joshua)
+# 6 - Met wie vormde de Mol een duo tijdens de opdracht 'Wie, Wat ... Waar':
+# 1: Joshua; 2: Charlotte; 3: Rocky; 4: Splinter; 5: Marije; 6: Renee;
+# 14 - Had de Mol beide handen in de zakken op de groepsfoto van aflevering 5:
+# 1: Renee; 2: Charlotte, Joshua, Marije, Rocky, Splinter;
+# 18 - Wat was de taak van de Mol tijdens de opdracht 'Wie, Wat ... Waar':
+# 1: Charlotte, Rocky, Splinter; 2: Joshua, Marije, Renee;
+# 20 - Wie is de Mol:
+# 1: Charlotte; 2: Joshua; 3: Marije; 4: Renee; 5: Rocky; 6: Splinter;
+# Antwoorden: Charlotte (6, 5) (Vrijstelling), Marije (20, 2) (Vrijstelling), Rocky (Vrijstelling), Joshua (14, 2),
+# Splinter (18, 2), Renee (20, 2)
+players5 = [Player.CHARLOTTE_22, Player.JOSHUA_22, Player.MARIJE_22, Player.RENEE_22, Player.ROCKY_22,
+            Player.SPLINTER_22]
+question5_6 = Question({1: [Player.JOSHUA_22], 2: [Player.CHARLOTTE_22], 3: [Player.ROCKY_22], 4: [Player.SPLINTER_22],
+                        5: [Player.MARIJE_22], 6: [Player.RENEE_22]})
+question5_14 = Question({1: [Player.RENEE_22],
+                         2: [Player.CHARLOTTE_22, Player.JOSHUA_22, Player.MARIJE_22, Player.ROCKY_22, Player.SPLINTER_22]})
+question5_18 = Question({1: [Player.CHARLOTTE_22, Player.ROCKY_22, Player.SPLINTER_22],
+                         2: [Player.JOSHUA_22, Player.MARIJE_22, Player.RENEE_22]})
+question5_20 = Question({1: [Player.CHARLOTTE_22], 2: [Player.JOSHUA_22], 3: [Player.MARIJE_22], 4: [Player.RENEE_22],
+                         5: [Player.ROCKY_22], 6: [Player.SPLINTER_22]})
+result5 = Result(DropType.EXECUTION_DROP, [Player.JOSHUA_22])
+episode5 = Episode(players5, result5,
+                   {Player.CHARLOTTE_22: TestInput({6: 5}, immunity = True),
+                    Player.MARIJE_22: TestInput({20: 2}, immunity = True), Player.ROCKY_22: TestInput(immunity = True),
+                    Player.JOSHUA_22: TestInput({14: 2}), Player.SPLINTER_22: TestInput({18: 2}),
+                    Player.RENEE_22: TestInput({20: 2})},
+                   {6: question5_6, 14: question5_14, 18: question5_18, 20: question5_20})
+
+season22 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5})
