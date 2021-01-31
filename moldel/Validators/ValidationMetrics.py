@@ -17,32 +17,40 @@ class ValidationMetrics(Validator):
     # If the difference between 2 floats is smaller than this value then they are considered to be equal
     FLOAT_DIFF_EQUALITY = 1e-9
 
-    def __init__(self, episode_partitioning: int, potential_mol_groups: List[int]):
-        self.__episode_partitioning = episode_partitioning
+    def __init__(self, episode_groups: int, potential_mol_groups: List[int]):
+        """ Constructor of the Validation Metrics.
+
+        Arguments:
+            episode_groups (int): The number of episode groups in which we group all predictions based on episode number.
+            potential_mol_groups (List[int]): The number of potential mol player groups in which we group all predictions.
+        """
+        self.__episode_groups = episode_groups
         self.__potential_mol_groups = potential_mol_groups
 
     def validate(self, distributions: Dict[Tuple[int, int], Dict[Player, float]]):
-        for episode in range(self.__episode_partitioning + 1):
-            dis = self.__filter_prediction_episode_num(distributions, episode)
+        for episode in range(self.__episode_groups + 1):
+            dis = self.filter_prediction_episode_num(distributions, episode, self.__episode_groups)
             if dis:
                 print("Episode Number: " + str(episode))
                 self.__evaluate(dis)
                 print()
 
         for num_potential_mol in self.__potential_mol_groups:
-            dis = self.__filter_prediction_potential_mols(distributions, num_potential_mol)
+            dis = self.filter_prediction_potential_mols(distributions, num_potential_mol)
             if dis:
                 print("Number potential mol players: " + str(num_potential_mol))
                 self.__evaluate(dis)
                 print()
 
-    def __filter_prediction_episode_num(self, distributions: Dict[Tuple[int, int], Dict[Player, float]],
-                                        episode_num: int) -> Dict[Tuple[int, int], Dict[Player, float]]:
+    @staticmethod
+    def filter_prediction_episode_num(distributions: Dict[Tuple[int, int], Dict[Player, float]], episode_num: int,
+                                      episode_groups: int) -> Dict[Tuple[int, int], Dict[Player, float]]:
         """ Select only the predictions with a certain episode number.
 
         Arguments:
             distributions (Dict[Tuple[int, int], Dict[Player, float]]): All the predictions.
             episode_num (int): The episode number which get selected.
+            episode_groups (int): The number of episode groups in which we group all predictions based on episode number.
 
         Returns:
             The prediction filtered on episode number.
@@ -50,12 +58,13 @@ class ValidationMetrics(Validator):
         seasons = {id[0] for id in distributions.keys()}
         dis = dict()
         for season in seasons:
-            num = int(round(get_last_episode(season) * episode_num / self.__episode_partitioning))
+            num = int(round(get_last_episode(season) * episode_num / episode_groups))
             dis[(season, num)] = distributions[(season, num)]
         return dis
 
-    def __filter_prediction_potential_mols(self, distributions: Dict[Tuple[int, int], Dict[Player, float]],
-                                           num_potential_mol: int) -> Dict[Tuple[int, int], Dict[Player, float]]:
+    @classmethod
+    def filter_prediction_potential_mols(self, distributions: Dict[Tuple[int, int], Dict[Player, float]],
+                                         num_potential_mol: int) -> Dict[Tuple[int, int], Dict[Player, float]]:
         """ Select only the last predictions of every season with this number of potential mols.
 
         Arguments:
@@ -68,6 +77,7 @@ class ValidationMetrics(Validator):
         latest_episodes = self.__latest_potential_mol_episode(distributions, num_potential_mol)
         return {(s, e): distributions[(s, e)] for s, e in latest_episodes.items()}
 
+    @classmethod
     def __latest_potential_mol_episode(self, distributions: Dict[Tuple[int, int], Dict[Player, float]],
                                        num_potential_mol: int) -> Dict[int, int]:
         """ Get the last episodes on every season with this number of potential mol players.
@@ -87,6 +97,21 @@ class ValidationMetrics(Validator):
             if num == num_potential_mol:
                 latest_episodes[season] = max(episode, latest_episodes.get(season, -math.inf))
         return latest_episodes
+
+    @staticmethod
+    def __num_potential_mol(season: int, episode: int) -> float:
+        """ Get the number of potential mol players after an episode in a given season.
+
+        Arguments:
+            season (int): The season for which we compute the number of potential mol player.
+            episode (int): The episode after which we compute the number of potential mol player.
+
+        Returns:
+            The number of potential mol players
+        """
+        layer = CompositeLayer([ExamUniformLayer(), ManualExclusionLayer()])
+        distribution = layer.compute_distribution(season, episode, set())
+        return sum(prob > 0.0 for prob in distribution.values())
 
     def __evaluate(self, distributions: Dict[Tuple[int, int], Dict[Player, float]]):
         print("Log Loss: " + str(self.__log_loss(distributions)))
@@ -164,20 +189,6 @@ class ValidationMetrics(Validator):
             return 1/2
         else:
             return concordant / (concordant + discordant)
-
-    def __num_potential_mol(self, season: int, episode: int) -> float:
-        """ Get the number of potential mol players after an episode in a given season.
-
-        Arguments:
-            season (int): The season for which we compute the number of potential mol player.
-            episode (int): The episode after which we compute the number of potential mol player.
-
-        Returns:
-            The number of potential mol players
-        """
-        layer = CompositeLayer([ExamUniformLayer(), ManualExclusionLayer()])
-        distribution = layer.compute_distribution(season, episode, set())
-        return sum(prob > 0.0 for prob in distribution.values())
 
     def __mean_mol_likelihood(self, distributions: Dict[Tuple[int, int], Dict[Player, float]]) -> float:
         """ Compute the mean Mol likelihood.

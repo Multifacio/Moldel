@@ -1,36 +1,19 @@
 from Data.LastEpisodes import get_last_episode
-from Data.PlayerData import get_players_in_season, get_is_mol
+from Data.PlayerData import get_mol_in_season
+from Layers.Appearance.AppearanceLayer import AppearanceLayer
+from Layers.ExamDrop.ExamDropLayer import ExamDropLayer
+from Layers.PerfectLayer import PerfectLayer
+from Layers.ExamUniformLayer import ExamUniformLayer
+from Layers.Moldel import Moldel
+from numpy.random.mtrand import RandomState
+from progress.bar import Bar
 from scipy.stats import ttest_rel, wilcoxon
-from sklearn.metrics import log_loss
-from typing import Callable, Set, Tuple
-from Validators.Precomputer import Precomputer
+from typing import Tuple
+
+from Layers.Special.CompositeLayer import CompositeLayer
+from Layers.Special.ManualExclusionLayer import ManualExclusionLayer
+from Validators.ValidationMetrics import ValidationMetrics
 import numpy as np
-
-def get_predictions(validate_seasons: Set[int], folder: str, episode_used: Callable[[int, Set[int]], bool]) \
-        -> Tuple[np.array, np.array]:
-    """ Get the likelihood predictions.
-
-    Arguments:
-        train_seasons (Set[int]): The seasons for which we get the likelihood predictions.
-        folder (str): The folder in which the precomputed distribution are stored.
-        episode_used (Callable[[int, Set[int]], bool]): A function which determines when an episode should be included
-            in the data. The first argument of this function is the episode number and the second argument is the set of
-            all episodes that can be used of that season.
-    """
-    likelihoods = []
-    labels = []
-    for season in sorted(validate_seasons):
-        episode_range = set(range(get_last_episode(season) + 1))
-        player_range = sorted(get_players_in_season(season), key = lambda p: p.value)
-        precomputer = Precomputer(folder)
-        for episode in sorted(episode_range):
-            if not episode_used(episode, episode_range):
-                continue
-            distribution = precomputer.load_distribution(season, episode)
-            for player in player_range:
-                likelihoods.append(distribution[player])
-                labels.append(1.0 if get_is_mol(player) else 0.0)
-    return likelihoods, labels
 
 def t_test(likelihoods1: np.array, likelihoods2: np.array) -> Tuple[float, float]:
     """ Do the paired student-t test, with "greater than" as alternative hypothesis.
@@ -46,37 +29,64 @@ def t_test(likelihoods1: np.array, likelihoods2: np.array) -> Tuple[float, float
     p_value = 1 - p_value / 2 if statistic < 0 else p_value / 2
     return statistic, p_value
 
-def mol_log_loss(likelihoods: np.array) -> float:
-    """ Compute the log loss score for only mol data.
+def evaluate(likelihoods1: np.array, likelihoods2: np.array):
+    print("Sample Size: " + str(len(likelihoods1)) )
+    print("Paired T-Test (Greater): " + str(t_test(likelihoods1, likelihoods2)))
+    print("Log Paired T-Test (Greater): " + str(t_test(np.log(likelihoods1), np.log(likelihoods2))))
+    print("Wilcoxon Test (Greater): " + str(tuple(wilcoxon(likelihoods1, likelihoods2, zero_method = "zsplit",
+                                                           alternative = "greater"))))
 
-    Arguments:
-        likelihoods (np.array): All mol likelihoods.
+RANDOM_SEED = 949019755
+VALIDATE_SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+TRAIN_SEASONS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+EPISODE_GROUPS = 9
+POTENTIAL_MOL_GROUPS = [2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-    Returns:
-        The corresponding log loss score.
-    """
-    return -1 * np.sum(np.log(likelihoods)) / len(likelihoods)
+distributions1 = dict()
+distributions2 = dict()
+random_generator = RandomState(RANDOM_SEED)
+model1 = Moldel(random_generator)
+model2 = CompositeLayer([ExamUniformLayer(), ManualExclusionLayer()])
 
-def compare(folder1: str, folder2: str, validate_seasons: Set[int], episode_used: Callable[[int, Set[int]], bool]):
-    """ Compare 2 prediction models with each other.
+# Obtain the predictions from the first model, which is supposed to be the better performing model.
+total_tasks = sum([get_last_episode(season) + 1 for season in VALIDATE_SEASONS])
+progress_bar = Bar("Distributions Computed of First Model: ", max = total_tasks)
+for season in VALIDATE_SEASONS:
+    train_seasons = TRAIN_SEASONS.difference({season})
+    for episode in range(get_last_episode(season) + 1):
+        distributions1[(season, episode)] = model1.compute_distribution(season, episode, train_seasons)
+        progress_bar.next()
+progress_bar.finish()
 
-    Arguments:
-        folder1 (str): The folder in which the precomputed distribution are stored for the first prediction model.
-        folder2 (str): The folder in which the precomputed distribution are stored for the second prediction model.
-        validate_seasons (Set[int]): All season on which the models are evaluated.
-        episode_used (Callable[[int, Set[int]], bool]): A function which determines when an episode should be included
-            in the data. The first argument of this function is the episode number and the second argument is the set of
-            all episodes that can be used of that season.
-    """
-    likelihoods1, labels1 = get_predictions(validate_seasons, folder1, episode_used)
-    likelihoods2, labels2 = get_predictions(validate_seasons, folder2, episode_used)
-    mol_likelihoods1 = np.array([likelihood for likelihood, label in zip(likelihoods1, labels1) if label == 1.0])
-    mol_likelihoods2 = np.array([likelihood for likelihood, label in zip(likelihoods2, labels2) if label == 1.0])
-    print(folder1 + " vs. " + folder2)
-    print("Paired T-Test (Greater): " + str(t_test(mol_likelihoods1, mol_likelihoods2)))
-    print("Log Paired T-Test (Greater): " + str(t_test(np.log(mol_likelihoods1), np.log(mol_likelihoods2))))
-    print("Wilcoxon Test (Greater): " + str(tuple(wilcoxon(mol_likelihoods1, mol_likelihoods2, alternative = "greater"))))
-    print("Mol Log Losses: " + str(mol_log_loss(mol_likelihoods1)) + " vs. " + str(mol_log_loss(mol_likelihoods2)))
-    print("Total Log Losses: " + str(log_loss(labels1, likelihoods1)) + " vs. " + str(log_loss(labels2, likelihoods2)))
+# Obtain the predictions from the second model, which is supposed to be the worser performing model.
+progress_bar = Bar("Distributions Computed of Second Model: ", max = total_tasks)
+for season in VALIDATE_SEASONS:
+    train_seasons = TRAIN_SEASONS.difference({season})
+    for episode in range(get_last_episode(season) + 1):
+        distributions2[(season, episode)] = model2.compute_distribution(season, episode, train_seasons)
+        progress_bar.next()
+progress_bar.finish()
+print()
 
-compare("MoldelV2", "ExamUniform", {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}, lambda x, y: True)
+# Compare the predictions based on episode number
+for episode in range(EPISODE_GROUPS + 1):
+    dis1 = ValidationMetrics.filter_prediction_episode_num(distributions1, episode, EPISODE_GROUPS)
+    dis2 = ValidationMetrics.filter_prediction_episode_num(distributions2, episode, EPISODE_GROUPS)
+    likelihoods1 = np.array([dis[get_mol_in_season(id[0])] for id, dis in dis1.items()])
+    likelihoods2 = np.array([dis[get_mol_in_season(id[0])] for id, dis in dis2.items()])
+
+    print("Episode Number: " + str(episode))
+    evaluate(likelihoods1, likelihoods2)
+    print()
+
+# Compare the predictions based on number potential mol players
+for num_potential_mol in POTENTIAL_MOL_GROUPS:
+    dis1 = ValidationMetrics.filter_prediction_potential_mols(distributions1, num_potential_mol)
+    dis2 = ValidationMetrics.filter_prediction_potential_mols(distributions2, num_potential_mol)
+    if dis1 and dis2:
+        likelihoods1 = np.array([dis[get_mol_in_season(id[0])] for id, dis in dis1.items()])
+        likelihoods2 = np.array([dis[get_mol_in_season(id[0])] for id, dis in dis2.items()])
+
+        print("Number potential mol players: " + str(num_potential_mol))
+        evaluate(likelihoods1, likelihoods2)
+        print()
