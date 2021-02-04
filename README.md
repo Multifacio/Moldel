@@ -14,9 +14,9 @@ Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk d
 # Oude Resultaten
 Het Moldel is getest op de seizoenen 13 tot en met 20 en is getest op de seizoen 9 tot en met 12. Echter voor de seizoenen 9 tot en met 12 zijn alleen de Exam Drop Layer, Exam Pass Layer, Wikipedia Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor de seizoenen 9 t/m 20, e.g. in 11 van de 12 finales krijgt de echte 'Mol' de hoogste likelihood, zie de afbeelding hieronder: 
 <details>
-  <summary>Spoiler Alert! Voorspellingen voor finales (seizoen 9 t/m 20)</summary>
+  <summary>Spoiler Alert! Voorspellingen voor finales (seizoen 9 t/m Renaissance)</summary>
   
-  ![Finale Voorspellingen](https://github.com/Multifacio/Moldel/blob/master/results/Final%20Results%20(9-20)%20(2020-08-25).jpeg)
+  ![Finale Voorspellingen](https://github.com/Multifacio/Moldel/blob/master/results/Final%20Results%20(9-21)%20(2021-01-01).png)
 </details>
 
 Meer voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https://github.com/Multifacio/Moldel/tree/master/results). De voorspellingen van de laatste versie van het Moldel vind je in de map 'results/Latest Version (2021-01-01)' (https://github.com/Multifacio/Moldel/tree/master/results/Latest%20Version%20(2021-01-01)). In alle voorspellingen zijn spelers met een likelihood lager dan 1.5% verwijdert om de leesbaarheid te bevorderen, dus als een speler niet in de plot te zien is betekent dat niet dat speler niet meer meedeed.
