@@ -14,7 +14,7 @@ Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk d
 # Oude Resultaten
 Het Moldel is getest op de seizoenen 13 tot en met 21 (Renaissance) en is getest op de seizoen 9 tot en met 12. Echter voor de seizoenen 9 tot en met 12 zijn alleen de Exam Drop Layer, Exam Pass Layer, Wikipedia Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor de seizoenen 9 t/m 21 (Renaissance), e.g. in 13 van de 13 finales krijgt de echte 'Mol' de hoogste likelihood, zie de afbeelding hieronder: 
 <details>
-  <summary>Spoiler Alert! Voorspellingen voor finales (seizoen 9 t/m Renaissance)</summary>
+  <summary>Spoiler Alert! Voorspellingen voor finales (seizoen 9 t/m 21)</summary>
   
   ![Finale Voorspellingen](https://github.com/Multifacio/Moldel/blob/master/results/Final%20Results%20(9-21)%20(2021-01-01).png)
 </details>
