@@ -12,12 +12,14 @@ class InnerSocialMediaLayer(Layer):
     should manually be inserted in the Social Media Data file. Credits for this layer Jaap van Zessen:
     http://www.jaapvanzessen.nl/tag/wie-is-de-mol/ """
 
+    __EPSILON = 1e-9
+
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         if predict_season in SUSPICION_DATA:
             exclude_players = SUSPICION_DATA[predict_season]
             distribution = dict()
             for player in get_players_in_season(predict_season):
-                distribution[player] = 0.0 if player in exclude_players else 1.0
+                distribution[player] = self.__EPSILON if player in exclude_players else 1.0
             return distribution
         else:
             return EqualLayer().compute_distribution(predict_season, latest_episode, train_seasons)

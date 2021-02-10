@@ -10,20 +10,13 @@ class PieChartCreator(Validator):
     """ Create a Pie Chart image file for every distribution. """
     RESULT_FOLDER = "/results/"
 
-    def __init__(self, name: str, precision: int, include_threshold: float):
+    def __init__(self, name: str):
         """ Constructor of the Pie Chart Creator.
 
         Arguments:
             name (str): The name of the subfolder where the results will be stored.
-            precision (int): Up to how many decimals the likelihoods will be rounded before printing them
-                    (if you do not round the likelihoods then the pie chart will be cluttered).
-            include_threshold (float): Only players with a likelihood larger or equal than this threshold will be
-                included in the pie chart (if you do not use this then you can have slice where the text is larger
-                than the slice itself which means that the text can overlap with text from other slices).
         """
         self.__name = name
-        self.__precision = precision
-        self.__include_threshold = include_threshold
 
     def validate(self, distributions: Dict[Tuple[int, int], Dict[Player, float]]):
         folder = rootpath.detect() + self.RESULT_FOLDER + self.__name
@@ -36,7 +29,7 @@ class PieChartCreator(Validator):
         for pair, distribution in distributions.items():
             season, latest_episode = pair
             file_name = self.get_file_name(folder, season, latest_episode)
-            printer = PieChartPrinter(self.__precision, self.__include_threshold, file_name)
+            printer = PieChartPrinter(file_name)
             printer.print(distribution)
 
     @staticmethod
