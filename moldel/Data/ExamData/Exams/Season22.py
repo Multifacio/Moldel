@@ -240,4 +240,29 @@ episode6 = Episode(players6, result6,
                     Player.MARIJE_22: TestInput({20: 1})},
                    {4: question6_4, 5: question6_5, 10: question6_10, 12: question6_12, 20: question6_20})
 
-season22 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6})
+# Aflevering 7 (afvaller: Marije)
+# 1 - De Mol is een:
+# 1: Splinter; 2: Charlotte, Marije, Renee, Rocky;
+# 2 - Waar was de Mol bij aanvang van de opdracht 'Steen Goed':
+# 1: Charlotte, Marije, Rocky; 2: Renee, Splinter;
+# 14 - Wat was de rol van de Mol bij aanvang van de opdracht 'Aanwijzingen':
+# 1: Marije, Rocky, Splinter; 2: Charlotte, Renee;
+# 17 - Hoeveel rondes heeft de Mol liedjes uitgebeeld tijdens de opdracht 'Aanwijzingen':
+# 1: Marije, Renee, Splinter (Twee rondes); 2: Charlotte, Rocky (Drie rondes);
+# Antwoorden: Renee (14, 1) (1 joker), Rocky (1, 2), Marije (2, 1), Charlotte (17, 1)
+players7 = [Player.CHARLOTTE_22, Player.MARIJE_22, Player.RENEE_22, Player.ROCKY_22, Player.SPLINTER_22]
+question7_1 = Question({1: [Player.SPLINTER_22],
+                        2: [Player.CHARLOTTE_22, Player.MARIJE_22, Player.RENEE_22, Player.ROCKY_22]})
+question7_2 = Question({1: [Player.CHARLOTTE_22, Player.MARIJE_22, Player.ROCKY_22],
+                        2: [Player.RENEE_22, Player.SPLINTER_22]})
+question7_14 = Question({1: [Player.MARIJE_22, Player.ROCKY_22, Player.SPLINTER_22],
+                         2: [Player.CHARLOTTE_22, Player.RENEE_22]})
+question7_17 = Question({1: [Player.MARIJE_22, Player.RENEE_22, Player.SPLINTER_22],
+                         2: [Player.CHARLOTTE_22, Player.ROCKY_22]})
+result7 = Result(DropType.EXECUTION_DROP, [Player.MARIJE_22])
+episode7 = Episode(players7, result7,
+                   {Player.RENEE_22: TestInput({14: 1}, jokers = 1), Player.ROCKY_22: TestInput({1: 2}),
+                    Player.MARIJE_22: TestInput({2: 1}), Player.CHARLOTTE_22: TestInput({17: 1})},
+                   {1: question7_1, 2: question7_2, 14: question7_14, 17: question7_17})
+
+season22 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7})
