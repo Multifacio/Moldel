@@ -15,7 +15,7 @@ import sys
 
 FeatureSample = NamedTuple("FeatureSample", [("features", np.array), ("is_mol", bool)])
 PredictSample = NamedTuple("PredictSample", [("in_answer", Set[Player]), ("out_answer", Set[Player]),
-                                             ("in_features", np.array), ("out_features", np.array)])
+                                             ("in_features", np.array), ("out_features", np.array), ("weight", float)])
 class ExamDropExtractor:
     """ The Exam Drop Extractor deals with obtaining the train data and predict data for the Exam Layer. For this we use
     the following techniques: polynomial transformations, local outlier removal, zero variance removal, ANOVA F filter
@@ -88,10 +88,11 @@ class ExamDropExtractor:
         predict_input = self.__pca.transform(predict_input)
 
         predict_samples = []
-        for data, in_features, out_features in zip(predict_data[::2], predict_input[1::2], predict_input[::2]):
+        weights = self.__get_train_weights(predict_data)
+        for data, in_features, out_features, weight in zip(predict_data[::2], predict_input[1::2], predict_input[::2], weights):
             in_answer = data.answer
             out_answer = set(data.exam_episode.players).difference(data.answer)
-            predict_samples.append(PredictSample(in_answer, out_answer, in_features, out_features))
+            predict_samples.append(PredictSample(in_answer, out_answer, in_features, out_features, weight))
         return predict_samples
 
     @staticmethod

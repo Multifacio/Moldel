@@ -70,6 +70,8 @@ class InnerExamDropLayer(MultiLayer):
             out_likelihood = classifier.predict_proba(np.array([data.out_features]))[0][1]
             if out_likelihood < in_likelihood:
                 in_likelihood = out_likelihood = 1 / len(alive_players)
+            in_likelihood = in_likelihood ** data.weight
+            out_likelihood = out_likelihood ** data.weight
             for player in data.in_answer:
                 all_predictions[player] = all_predictions[player] + [in_likelihood]
             for player in data.out_answer:
