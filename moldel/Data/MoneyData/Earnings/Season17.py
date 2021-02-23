@@ -188,3 +188,21 @@ exercise7_3 = Exercise(episode = 7, alive = alive7, maximum = 2500, earned = [
 # Opdracht 3 (Maximaal €0): Niks verdiend
 alive8 = {Player.DIEDERIK_17, Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17}
 exercise8_1 = Exercise(episode = 8, alive = alive8, maximum = 1000, earned = [])
+exercise8_2 = Exercise(episode = 8, alive = alive8, maximum = None, earned = [
+                            Earning(money = 300, major = {Player.THOMAS_17}, minor = {Player.DIEDERIK_17, Player.JOCHEM_17}),
+                            Earning(money = 600, major = {Player.SANNE_17}, minor = {Player.DIEDERIK_17, Player.JOCHEM_17}),
+                            Earning(money = 600, major = {Player.DIEDERIK_17}, minor = {Player.SANNE_17, Player.THOMAS_17}),
+                            Earning(money = 200, major = {Player.JOCHEM_17}, minor = {Player.SANNE_17, Player.THOMAS_17})
+                        ])
+
+# Aflevering 9
+# Opdracht 1 (Maximaal €1500): Onduidelijk wie wat verdiend heeft
+# Opdracht 2 (Maximaal €12160): Onduidelijk wie wat verdiend heeft
+alive9 = {Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17}
+exercise9_1 = Exercise(episode = 9, alive = alive9, maximum = 1500, earned = [])
+exercise9_2 = Exercise(episode = 9, alive = alive9, maximum = 12160, earned = [])
+
+season17 = Season([exercise1_2, exercise2_1, exercise2_2, exercise2_3, exercise3_1, exercise3_2, exercise3_3,
+                   exercise4_1, exercise4_2, exercise4_3, exercise5_1, exercise5_3, exercise6_1, exercise6_2,
+                   exercise6_3, exercise7_1, exercise7_2, exercise7_3, exercise8_1, exercise8_2, exercise9_1,
+                   exercise9_2])
