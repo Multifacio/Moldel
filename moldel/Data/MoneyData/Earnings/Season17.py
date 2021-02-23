@@ -185,3 +185,6 @@ exercise7_3 = Exercise(episode = 7, alive = alive7, maximum = 2500, earned = [
 # €100 (Major: Diederik) (Minor: Sanne, Thomas), €100 (Major: Diederik) (Minor: Sanne, Thomas),
 # €100 (Major: Jochem) (Minor: Sanne, Thomas), €100 (Major: Diederik) (Minor: Sanne, Thomas),
 # €100 (Major: Jochem) (Minor: Sanne, Thomas), €100 (Major: Diederik) (Minor: Sanne, Thomas)
+# Opdracht 3 (Maximaal €0): Niks verdiend
+alive8 = {Player.DIEDERIK_17, Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17}
+exercise8_1 = Exercise(episode = 8, alive = alive8, maximum = 1000, earned = [])
