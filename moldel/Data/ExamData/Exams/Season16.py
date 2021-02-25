@@ -46,7 +46,7 @@ episode1 = Episode(players1, result1,
 # 1: Remy, Marjolein, Cecile; 2: Airen, Annemiek, Ellie, Klaas, Rop, Taeke, Tim
 # 8 - Wat bestelde de Mol tijdens de lunch voor de Trappen-opdracht? (Niet bruikbaar)
 # 10 - Waar stond de Mol tijdens de Trappen-opdracht?
-# 1: Taeke, Marjolein, Rop; 2: Ellie, Remy, Annemieke; 3: Cecile, Airen, Tim; 4: Klaas
+# 1: Klaas, Rop, Taeke; 2: Annemieke, Ellie, Remy; 3: Airen, Cecile, Tim; 4: Marjolein;
 # 12 - Waar stond de Mol op de groepsfoto van aflevering 2?
 # 1: Ellie, Airen, Taeke, Marjolein, Cecille, Annemieke; 2: Tim, Klaas, Rop, Remy
 # 16 - Als hoeveelste kwam het duo van de Mol aan bij de Klooster-opdracht:
@@ -63,10 +63,10 @@ question2_1 = Question({1: [Player.KLAAS_16, Player.REMY_16, Player.ROP_16, Play
 question2_5 = Question({1: [Player.REMY_16, Player.MARJOLEIN_16, Player.CECILE_16],
                         2: [Player.AIREN_16, Player.ANNEMIEKE_16, Player.ELLIE_16, Player.KLAAS_16, Player.ROP_16,
                             Player.TAEKE_16, Player.TIM_16]})
-question2_10 = Question({1: [Player.TAEKE_16, Player.MARJOLEIN_16, Player.ROP_16],
-                         2: [Player.ELLIE_16, Player.REMY_16, Player.ANNEMIEKE_16],
-                         3: [Player.CECILE_16, Player.AIREN_16, Player.TIM_16],
-                         4: [Player.KLAAS_16]})
+question2_10 = Question({1: [Player.KLAAS_16, Player.ROP_16, Player.TAEKE_16],
+                         2: [Player.ANNEMIEKE_16, Player.ELLIE_16, Player.REMY_16],
+                         3: [Player.AIREN_16, Player.CECILE_16, Player.TIM_16],
+                         4: [Player.MARJOLEIN_16]})
 question2_12 = Question({1: [Player.ELLIE_16, Player.AIREN_16, Player.TAEKE_16, Player.MARJOLEIN_16,
                              Player.CECILE_16, Player.ANNEMIEKE_16],
                          2: [Player.TIM_16, Player.KLAAS_16, Player.ROP_16, Player.REMY_16]})
