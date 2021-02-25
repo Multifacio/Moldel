@@ -17,7 +17,7 @@ exercise1_1 = Exercise(episode = 1, alive = alive1, maximum = 2000, earned = [
                                              Player.TINA_21})
                         ])
 exercise1_2 = Exercise(episode = 1, alive = alive1, maximum = 2000, earned = [])
-exercise1_3 = Exercise(episode = 1, alive = alive1, maximum = 2500, earned = [
+exercise1_3 = Exercise(episode = 3, alive = alive1, maximum = 2500, earned = [
                             Earning(money = 250, major = {Player.HORACE_21}, minor = set())
                         ])
 
