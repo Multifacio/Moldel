@@ -3,6 +3,8 @@ from Data.Player import Player
 # The path where the mentions are stored.
 WIKI_FILES_PATH = "moldel/Data/Wikipedia/WikiFiles/"
 
+# Season 20 too hard for speech recognition.
+
 # The LINKER maps players to corresponding texts recognized in speeches
 LINKER = {Player.CHARLOTTE_22: {"charlotte", "sjalotten", "charlot", "sjalot"},
           Player.ERIK_22: {"eric", "erik"},
@@ -23,5 +25,5 @@ LINKER = {Player.CHARLOTTE_22: {"charlotte", "sjalotten", "charlot", "sjalot"},
           Player.PEGGY_21: {"peggy"},
           Player.RON_21: {"ron", "roon", "rhoon"},
           Player.TINA_21: {"tina"},
-          Player.TYGO_21: {"tygo", "ticho", "tigo", "tycho"}
+          Player.TYGO_21: {"tygo", "ticho", "tigo", "tycho"},
           }
