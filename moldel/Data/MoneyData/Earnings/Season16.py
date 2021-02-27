@@ -78,3 +78,42 @@ exercise4_3 = Exercise(episode = 4, alive = alive4, maximum = 1500, earned = [
                         ])
 
 # Aflevering 5
+# Opdracht 1 (Maximaal €2400):
+# €200 (Major: Rop) (Minor: Klaas, Taeke), €200 (Major: Annemieke) (Minor: Taeke, Tim),
+# €200 (Major: Klaas) (Minor: Taeke, Tim)
+# Opdracht 2 (Maximaal €1000): Gezamelijk verdiend
+# Opdracht 3 (Maximaal €1000): Niks verdiend
+alive5 = {Player.ANNEMIEKE_16, Player.CECILE_16, Player.KLAAS_16, Player.MARJOLEIN_16, Player.ROP_16, Player.TAEKE_16,
+          Player.TIM_16}
+exercise5_1 = Exercise(episode = 5, alive = alive5, maximum = 2400, earned = [
+                            Earning(money = 200, major = {Player.ROP_16}, minor = {Player.KLAAS_16, Player.TAEKE_16}),
+                            Earning(money = 200, major = {Player.ANNEMIEKE_16}, minor = {Player.TAEKE_16, Player.TIM_16}),
+                            Earning(money = 200, major = {Player.KLAAS_16}, minor = {Player.TAEKE_16, Player.TIM_16})
+                        ])
+exercise5_2 = Exercise(episode = 5, alive = alive5, maximum = 1000, earned = [])
+exercise5_3 = Exercise(episode = 5, alive = alive5, maximum = 1000, earned = [])
+
+# Aflevering 6
+# Opdracht 1 (Maximaal €1500): Niks verdiend
+# Opdracht 2 (Maximaal €1000):
+# Annemieke (Bandera, Ermana, Jessezeist),
+# €100 (Major: Annemieke) (Minor: Klaas, Rop, Taeke), €100 (Major: Annemieke) (Minor: Klaas, Rop, Taeke),
+# €100 (Major: Annemieke), €100 (Major: Rop) (Minor: Annemieke, Cecile, Tim)
+# Opdracht 3 (Maximaal €2000): Niks verdiend
+alive6 = {Player.ANNEMIEKE_16, Player.CECILE_16, Player.KLAAS_16, Player.ROP_16, Player.TAEKE_16, Player.TIM_16}
+exercise6_1 = Exercise(episode = 6, alive = alive6, maximum = 1500, earned = [])
+exercise6_2 = Exercise(episode = 6, alive = alive6, maximum = 1000, earned = [
+                            Earning(money = 200, major = {Player.ANNEMIEKE_16}, minor = {Player.KLAAS_16, Player.ROP_16,
+                                Player.TAEKE_16}),
+                            Earning(money = 100, major = {Player.ANNEMIEKE_16}),
+                            Earning(money = 100, major = {Player.ROP_16}, minor = {Player.ANNEMIEKE_16, Player.CECILE_16,
+                                Player.TIM_16}),
+                        ])
+exercise6_3 = Exercise(episode = 6, alive = alive6, maximum = 2000, earned = [])
+
+# Aflevering 7
+# Opdracht 1 (Maximaal €1500):
+# €300 (Major: Tim) (Minor: Annemieke)
+# Opdracht 2 (Maximaal €1000):
+# -€250 (Major: Annemieke), -€750 (Major: Taeke)
+# Opdracht 3 (Maximaal €?): Gezamelijk verdiend
