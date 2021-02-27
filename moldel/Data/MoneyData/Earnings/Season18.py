@@ -31,15 +31,16 @@ exercise1_1 = Exercise(episode = 1, alive = alive1, maximum = 10000, earned = [
 alive2 = {Player.BELLA_18, Player.EMILIO_18, Player.JAN_18, Player.JEAN_MARC_18, Player.LOES_18, Player.OLCAY_18,
           Player.RUBEN_18, Player.SIMONE_18, Player.STINE_18}
 exercise2_1 = Exercise(episode = 2, alive = alive2, maximum = 1000, earned = [
-                            Earning(money = 17.2, major = {Player.OLCAY_18}),
-                            Earning(money = 51.6, major = {Player.JAN_18}, minor = {Player.OLCAY_18}),
-                            Earning(money = 103.2, major = {Player.EMILIO_18}, minor = {Player.JAN_18, Player.OLCAY_18}),
-                            Earning(money = 172, major = {Player.JEAN_MARC_18}, minor = {Player.EMILIO_18, Player.JAN_18,
+                            Earning(money = 20 * 0.86, major = {Player.OLCAY_18}),
+                            Earning(money = 60 * 0.86, major = {Player.JAN_18}, minor = {Player.OLCAY_18}),
+                            Earning(money = 120 * 0.86, major = {Player.EMILIO_18}, minor = {Player.JAN_18,
                                 Player.OLCAY_18}),
-                            Earning(money = 516, major = {Player.RUBEN_18}, minor = {Player.EMILIO_18, Player.JAN_18,
-                                Player.JEAN_MARC_18, Player.OLCAY_18}),
-                            Earning(money = 860, major = {Player.RUBEN_18}, minor = {Player.EMILIO_18, Player.JAN_18,
-                                Player.JEAN_MARC_18, Player.OLCAY_18}),
+                            Earning(money = 200 * 0.86, major = {Player.JEAN_MARC_18}, minor = {Player.EMILIO_18,
+                                Player.JAN_18, Player.OLCAY_18}),
+                            Earning(money = 600 * 0.86, major = {Player.RUBEN_18}, minor = {Player.EMILIO_18,
+                                Player.JAN_18, Player.JEAN_MARC_18, Player.OLCAY_18}),
+                            Earning(money = 1000 * 0.86, major = {Player.RUBEN_18}, minor = {Player.EMILIO_18,
+                                Player.JAN_18, Player.JEAN_MARC_18, Player.OLCAY_18}),
                         ])
 exercise2_2 = Exercise(episode = 2, alive = alive2, maximum = 2000, earned = [])
 exercise2_3 = Exercise(episode = 2, alive = alive2, maximum = 3000, earned = [])

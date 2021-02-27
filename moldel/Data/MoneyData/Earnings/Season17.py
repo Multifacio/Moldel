@@ -42,7 +42,7 @@ exercise2_3 = Exercise(episode = 2, alive = alive2, maximum = 1000, earned = [])
 # Opdracht 1 (Maximaal: €3000):
 # €20 (Major: Jeroen), 3x (Major: Roos), €500 (Major: Roos, Sanne), €250 (Major: Sigrid), 2x (Major: Sigrid),
 # 2x (Major: Sanne), €70 (Major: Imanuelle), -€1000 (Major: Jochem, Thomas), 2x (Major: Jochem), €500 (Major: Thomas),
-# 4x (Major: Thomas) (€500 missing, so Roos, Sanne, Thomas only earn €250)
+# 4x (Major: Thomas) (€500 missing, so Roos, Sanne, Thomas only earn €250) (€1130 positive earned)
 # Opdracht 2 (Maximaal: €4000):
 # €500 (Major: Sigrid), €500 (Major: Imanuelle), €500 (Major: Sigrid), €500 (Major: Sigrid), €500 (Major: Sigrid)
 # For all earned (Minor: Diederik, Jeroen, Jochem, Roos, Sanne, Thomas)
@@ -52,23 +52,28 @@ alive3 = {Player.DIEDERIK_17, Player.IMANUELLE_17, Player.JEROEN_17, Player.JOCH
 exercise3_1 = Exercise(episode = 3, alive = alive3, maximum = 3000, earned = [
                             Earning(money = 20, major = {Player.JEROEN_17}, minor = {Player.DIEDERIK_17, Player.IMANUELLE_17,
                                 Player.JOCHEM_17, Player.ROOS_17, Player.SANNE_17, Player.SIGRID_17, Player.THOMAS_17}),
-                            Earning(money = 66.92, major = {Player.ROOS_17}, minor = {Player.DIEDERIK_17, Player.IMANUELLE_17,
-                                Player.JEROEN_17, Player.JOCHEM_17, Player.SANNE_17, Player.SIGRID_17, Player.THOMAS_17}),
+                            Earning(money = 290 * 3/13, major = {Player.ROOS_17}, minor = {Player.DIEDERIK_17,
+                                Player.IMANUELLE_17, Player.JEROEN_17, Player.JOCHEM_17, Player.SANNE_17, Player.SIGRID_17,
+                                Player.THOMAS_17}),
                             Earning(money = 250, major = {Player.ROOS_17, Player.SANNE_17}, minor = {Player.DIEDERIK_17,
                                 Player.IMANUELLE_17, Player.JEROEN_17, Player.JOCHEM_17, Player.SIGRID_17, Player.THOMAS_17}),
-                            Earning(money = 294.62, major = {Player.SIGRID_17}, minor = {Player.DIEDERIK_17, Player.IMANUELLE_17,
-                                Player.JEROEN_17, Player.JOCHEM_17, Player.ROOS_17, Player.SANNE_17, Player.THOMAS_17}),
-                            Earning(money = 44.62, major = {Player.SANNE_17}, minor = {Player.DIEDERIK_17, Player.IMANUELLE_17,
-                                Player.JEROEN_17, Player.JOCHEM_17, Player.ROOS_17, Player.SIGRID_17, Player.THOMAS_17}),
+                            Earning(money = 250 + 290 * 2/13, major = {Player.SIGRID_17}, minor = {Player.DIEDERIK_17,
+                                Player.IMANUELLE_17, Player.JEROEN_17, Player.JOCHEM_17, Player.ROOS_17, Player.SANNE_17,
+                                Player.THOMAS_17}),
+                            Earning(money = 290 * 2/13, major = {Player.SANNE_17}, minor = {Player.DIEDERIK_17,
+                                Player.IMANUELLE_17, Player.JEROEN_17, Player.JOCHEM_17, Player.ROOS_17, Player.SIGRID_17,
+                                Player.THOMAS_17}),
                             Earning(money = 70, major = {Player.IMANUELLE_17}, minor = {Player.DIEDERIK_17, Player.JEROEN_17,
                                 Player.JOCHEM_17, Player.ROOS_17, Player.SANNE_17, Player.SIGRID_17, Player.THOMAS_17}),
                             Earning(money = -1000, major = {Player.JOCHEM_17, Player.THOMAS_17}),
-                            Earning(money = 44.62, major = {Player.JOCHEM_17}, minor = {Player.DIEDERIK_17, Player.IMANUELLE_17,
-                                Player.JEROEN_17, Player.ROOS_17, Player.SANNE_17, Player.SIGRID_17, Player.THOMAS_17}),
+                            Earning(money = 290 * 2/13, major = {Player.JOCHEM_17}, minor = {Player.DIEDERIK_17,
+                                Player.IMANUELLE_17, Player.JEROEN_17, Player.ROOS_17, Player.SANNE_17, Player.SIGRID_17,
+                                Player.THOMAS_17}),
                             Earning(money = 250, major = {Player.THOMAS_17}, minor = {Player.DIEDERIK_17, Player.IMANUELLE_17,
                                 Player.JEROEN_17, Player.JOCHEM_17, Player.ROOS_17, Player.SANNE_17, Player.SIGRID_17}),
-                            Earning(money = 89.23, major = {Player.SANNE_17}, minor = {Player.DIEDERIK_17, Player.IMANUELLE_17,
-                                Player.JEROEN_17, Player.JOCHEM_17, Player.ROOS_17, Player.SIGRID_17, Player.THOMAS_17})
+                            Earning(money = 290 * 4/13, major = {Player.SANNE_17}, minor = {Player.DIEDERIK_17,
+                                Player.IMANUELLE_17, Player.JEROEN_17, Player.JOCHEM_17, Player.ROOS_17, Player.SIGRID_17,
+                                Player.THOMAS_17})
                         ])
 exercise3_2 = Exercise(episode = 3, alive = alive3, maximum = 4000, earned = [
                             Earning(money = 2000, major = {Player.SIGRID_17}, minor = {Player.DIEDERIK_17,
