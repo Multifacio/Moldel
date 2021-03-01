@@ -29,6 +29,13 @@ Ook voor de nieuwste aflevering van seizoen 21 is een voorspelling gedaan. (Laat
   ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Season%2022%20(Original)/09%20-%20After%20Episode%209.png)
 </details>
 
+Daarnaast bij wijze van uitzondering zijn de voorspellingen van alle individuele layers voor de ontknoping beschikbaar:
+<details>
+  <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling van alle individuele layers voor seizoen 21, aflevering 10</summary>
+  
+  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Season%2022%20(Original)/09%20-%20After%20Episode%209%20(Individual%20Layers).png)
+</details>
+
 # Credits
 Ik bedank iedereen die mij meegeholpen heeft bij dit project, daaronder vallen:
 * Jesse van Elteren: Ik ben initieel aan dit project begonnen onder zijn repository (https://github.com/jvanelteren/wie_is_de_mol). Op 15 September 2019 heb ik echter besloten los te splitsen van zijn project, omdat mijn project meer over het voorspellen van de 'Mol' ging en zijn project meer over de algemene statistiek achter 'Wie is de Mol?' ging. Ik wil Jesse van Elteren wel bedanken voor enkele adviezen en tips die hij gegeven heeft om het Moldel mee te verbeteren.
