@@ -289,5 +289,42 @@ episode8 = Episode(players8, result8,
                     Player.SPLINTER_22: TestInput({18: 4}, jokers = 2), Player.ROCKY_22: TestInput({5: 2})},
                    {5: question8_5, 6: question8_6, 10: question8_10, 18: question8_18})
 
+# Aflevering 9 (afvaller: Charlotte)
+# 9 - Werd de Mol uitgeschakeld tijdens de opdracht 'Blacklight Ballerina's':
+# 1: Charlotte, Renée; 2: Rocky;
+# 18 - Heeft de Mol vanaf de kant aan een touw getrokken tijdens de opdracht 'Op Vlot':
+# 1: Charlotte, Renée, Rocky; 2: -;
+# 21 - Hoeveel heeft de Mol geboden op voorkennis tijdens de opdracht 'Zekerheid Bieden':
+# 1: Renée; 2: Charlotte, Rocky;
+# 27 - Waar was de Mol bij aanvang van de opdracht 'Steen Goed':
+# 1: Charlotte, Rocky; 2: Renée;
+# 32 - Heeft de Mol in een zweefvliegtuig gezeten tijdens de opdracht 'Voor Joker Staan':
+# 1: Charlotte, Rocky; 2: Renée;
+# 34 - Op welk stoelnummer zat de Mol bij aanvang van de opdracht 'Rij Gedrag':
+# 1: Rocky; 2: Charlotte; 3: Renée;
+# 40 - Wie is de Mol:
+# 1: Charlotte; 2: Renée; 3: Rocky;
+# Antwoorden: Renée (21, 2) (34, 1) (40, 3), Rocky (9, 1) (32, 2) (40, 2), Charlotte (18, 1) (27, 2) (40, 2)
+players9 = [Player.CHARLOTTE_22, Player.RENEE_22, Player.ROCKY_22]
+question9_9 = Question({1: [Player.CHARLOTTE_22, Player.RENEE_22],
+                        2: [Player.ROCKY_22]})
+question9_18 = Question({1: [Player.CHARLOTTE_22, Player.RENEE_22, Player.ROCKY_22],
+                         2: []})
+question9_21 = Question({1: [Player.RENEE_22],
+                         2: [Player.CHARLOTTE_22, Player.ROCKY_22]})
+question9_27 = Question({1: [Player.CHARLOTTE_22, Player.ROCKY_22],
+                         2: [Player.RENEE_22]})
+question9_32 = Question({1: [Player.CHARLOTTE_22, Player.ROCKY_22],
+                         2: [Player.RENEE_22]})
+question9_34 = Question({1: [Player.ROCKY_22], 2: [Player.CHARLOTTE_22], 3: [Player.RENEE_22]})
+question9_40 = Question({1: [Player.CHARLOTTE_22], 2: [Player.RENEE_22], 3: [Player.ROCKY_22]})
+result9 = Result(DropType.EXECUTION_DROP, [Player.CHARLOTTE_22])
+episode9 = Episode(players9, result9,
+                   {Player.RENEE_22: TestInput({21: 2, 34: 1, 40: 3}), Player.ROCKY_22: TestInput({9: 1, 32: 2, 40: 2}),
+                    Player.CHARLOTTE_22: TestInput({18: 1, 27: 2, 40: 2})},
+                   {9: question9_9, 18: question9_18, 21: question9_21, 27: question9_27, 32: question9_32,
+                    34: question9_34, 40: question9_40})
+
+
 season22 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 5: episode5, 6: episode6, 7: episode7,
-                             8: episode8})
+                             8: episode8, 9: episode9})

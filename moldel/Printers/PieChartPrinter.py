@@ -64,7 +64,7 @@ class PieChartPrinter(Printer):
                 angle = (wedge.theta2 - wedge.theta1) / 2 + wedge.theta1
                 text_angle = angle
                 if previous_angle is not None and self.__angle_distance(angle, previous_angle) < self.__THRESHOLD_MIN_ANGLE_INC:
-                    text_angle = (previous_angle + self.__THRESHOLD_MIN_ANGLE_INC + 360) % 360
+                    text_angle = (previous_angle - self.__THRESHOLD_MIN_ANGLE_INC + 360) % 360
                 x, y = np.cos(np.deg2rad(angle)), np.sin(np.deg2rad(angle))
                 x_text = (1 + self.__THRESHOLD_LINE_LENGTH) * np.cos(np.deg2rad(text_angle))
                 y_text = (1 + self.__THRESHOLD_LINE_LENGTH) * np.sin(np.deg2rad(text_angle))
