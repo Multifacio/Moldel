@@ -4,7 +4,7 @@ from ..Dataclasses.Episode import Episode
 from ..Dataclasses.Question import Question
 from ..Dataclasses.Result import Result
 from ..Dataclasses.Season import Season
-from ..Dataclasses.TestInput import TestInput
+from ..Dataclasses.TestInput import TestInput, DelayedAnswer
 
 # Aflevering 1 (afvaller: Pieter)
 # Vragen:
@@ -115,14 +115,23 @@ episode3 = Episode(players3, result3,
 # 1: Ajouad, Chris, Rik, Viktor; 2: Carolina, Margriet, Marlijn, Martine;
 # 3 - Wat was de samenstelling van het team van de Mol bij de Vakantiekiekjes-opdracht?
 # 1: Marlijn, Viktor; 2: Rik, Carolina, Ajouad; 3: Chris, Martine, Margriet;
+# 7 - Wat is een bijnaam van de Mol:
+# 1: Ajouad; 2: Carolien; 3: Chris; 4: Marlijn; (Niet zeker) 5: Rik; 6: Martine; (Niet zeker) 7: Margriet; 8: Viktor;
 # 11 - Heeft de Mol een zwarte vrijstelling in het bezit bij aanvang van deze test:
 # 1: Margriet; 2: Ajouad, Carolina, Chris, Martine, Marlijn, Rik, Viktor;
+# 12 - Voor welk schaaltje koos de Mol uiteindelijk bij de Dagoba:
+# 1: Martine; 2: -; 3: -; 4: -; 5: Carolina; 6: Chris; 7: Viktor; 8: -; 9: Marlijn; 10: Rik; 11: Margriet; 12: Ajouad;
 # 17 - Wanneer betrad de Mol de Dagoba tijdens de Russisch Roulette-opdracht:
 # 1: Martine; 2: Ajouad; 3: Carolina; 4: Viktor; 5: Rik; 6: Margriet; 7: Marlijn; 8: Chris;
+# 18 - Met welk bootje ging het team van de Mol naar Taprobane Eiland (Niet bruikbaar)
+# 19 - Hoeveel goede antwoorden opperde de Mol te geven bij de wrap van de Meet & Greet:
+# 1: -; 2: Carolina, Marlijn, Martine, Rik, Viktor; 3: Ajouad, Chris, Margriet; 4: -;
 # 20 - Wie is de Mol:
 # 1: Ajouad; 2: Carolina; 3: Chris; 4: Margriet; 5: Marlijn; 6: Martine; 7: Rik; 8: Viktor;
-# Antwoorden (Zwarte vrijstelling ingezet): Chris (3, 3), Marlijn (20, 7) (1 joker), Rik (11, 2) (1 joker),
-# Martine (20, 4) (2 jokers), Viktor (17, 8), Carolina (2 jokers), Ajouad (1, 2) (1 joker), Margriet (11, 2)
+# Antwoorden (Zwarte vrijstelling ingezet): Chris (3, 3), Marlijn (20, 7) (7, 3 pas bekend vanaf aflevering 5) (1 joker),
+# Rik (11, 2) (1 joker), Martine (20, 4) (2 jokers), Viktor (17, 8) (19, 2 pas bekend vanaf aflevering 5),
+# Carolina (11, 2 pas bekend vanaf aflevering 5) (2 jokers), Ajouad (1, 2) (1 joker),
+# Margriet (11, 2) (12, 11 pas bekend vanaf aflevering 5)
 players4 = [Player.AJOUAD_15, Player.CAROLINA_15, Player.CHRIS_15, Player.MARGRIET_15, Player.MARLIJN_15,
             Player.MARTINE_15, Player.RIK_15, Player.VIKTOR_15]
 question4_1 = Question({1: [Player.AJOUAD_15, Player.CHRIS_15, Player.RIK_15, Player.VIKTOR_15],
@@ -130,20 +139,30 @@ question4_1 = Question({1: [Player.AJOUAD_15, Player.CHRIS_15, Player.RIK_15, Pl
 question4_3 = Question({1: [Player.MARLIJN_15, Player.VIKTOR_15],
                         2: [Player.RIK_15, Player.CAROLINA_15, Player.AJOUAD_15],
                         3: [Player.CHRIS_15, Player.MARTINE_15, Player.MARGRIET_15]})
+question4_7 = Question({1: [Player.AJOUAD_15], 2: [Player.CAROLINA_15], 3: [Player.CHRIS_15], 4: [Player.MARLIJN_15],
+                        5: [Player.RIK_15], 6: [Player.MARTINE_15], 7: [Player.MARGRIET_15], 8: [Player.VIKTOR_15]})
 question4_11 = Question({1: [Player.MARGRIET_15],
                          2: [Player.AJOUAD_15, Player.CAROLINA_15, Player.CHRIS_15, Player.MARTINE_15,
                              Player.MARLIJN_15, Player.RIK_15, Player.VIKTOR_15]})
+question4_12 = Question({1: [Player.MARTINE_15], 2: [], 3: [], 4: [], 5: [Player.CAROLINA_15], 6: [Player.CHRIS_15],
+                         7: [Player.VIKTOR_15], 8: [], 9: [Player.MARLIJN_15], 10: [Player.RIK_15],
+                         11: [Player.MARGRIET_15], 12: [Player.AJOUAD_15]})
 question4_17 = Question({1: [Player.MARTINE_15], 2: [Player.AJOUAD_15], 3: [Player.CAROLINA_15], 4: [Player.VIKTOR_15],
                          5: [Player.RIK_15], 6: [Player.MARGRIET_15], 7: [Player.MARLIJN_15], 8: [Player.CHRIS_15]})
+question4_19 = Question({1: [],
+                         2: [Player.CAROLINA_15, Player.MARLIJN_15, Player.MARTINE_15, Player.RIK_15, Player.VIKTOR_15],
+                         3: [Player.AJOUAD_15, Player.CHRIS_15, Player.MARGRIET_15],
+                         4: []})
 question4_20 = Question({1: [Player.AJOUAD_15], 2: [Player.CAROLINA_15], 3: [Player.CHRIS_15], 4: [Player.MARGRIET_15],
                          5: [Player.MARLIJN_15], 6: [Player.MARTINE_15], 7: [Player.RIK_15], 8: [Player.VIKTOR_15]})
 result4 = Result(DropType.EXECUTION_DROP, [Player.AJOUAD_15])
 episode4 = Episode(players4, result4,
-                   {Player.CHRIS_15: TestInput({3: 3}), Player.MARLIJN_15: TestInput({20: 7}),
-                    Player.RIK_15: TestInput({11: 2}), Player.MARTINE_15: TestInput({20: 4}),
-                    Player.VIKTOR_15: TestInput({17: 8}), Player.AJOUAD_15: TestInput({1: 2}),
-                    Player.MARGRIET_15: TestInput({11: 2})},
-                   {1: question4_1, 3: question4_3, 11: question4_11, 17: question4_17, 20: question4_20})
+                   {Player.CAROLINA_15: TestInput({11: DelayedAnswer(2, 5)}), Player.CHRIS_15: TestInput({3: 3}),
+                    Player.MARLIJN_15: TestInput({20: 7, 7: DelayedAnswer(3, 5)}), Player.RIK_15: TestInput({11: 2}),
+                    Player.MARTINE_15: TestInput({20: 4}), Player.VIKTOR_15: TestInput({17: 8, 19: DelayedAnswer(2, 5)}),
+                    Player.AJOUAD_15: TestInput({1: 2}), Player.MARGRIET_15: TestInput({11: 2, 12: DelayedAnswer(11, 5)})},
+                   {1: question4_1, 3: question4_3, 7: question4_7, 11: question4_11, 12: question4_12, 17: question4_17,
+                    19: question4_19, 20: question4_20})
 
 # Aflevering 5 (afvaller: Viktor)
 # Vragen:
