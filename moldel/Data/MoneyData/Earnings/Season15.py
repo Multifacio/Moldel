@@ -106,5 +106,16 @@ exercise6_2 = Exercise(episode = 6, alive = alive6, maximum = None, earned = [
                             Earning(money = 1250 * 2/11, minor = {Player.CHRIS_15}),
                         ])
 exercise6_3 = Exercise(episode = 6, alive = alive6, maximum = None, earned = [
-                            Earning(money = -750, minor = {Player.MARLIJN_15, Player.RIK_15}),
+                            Earning(money = -750, major = {Player.MARLIJN_15, Player.RIK_15}),
+                        ])
+
+# Aflevering 7
+# Opdracht 1 (Maximaal €1000): Niks verdiend
+# Opdracht 2 (Maximaal €2000): Onduidelijk wie wat verdiend heeft
+# Daarnaast: -€750 ingeleverd door Rik
+alive7 = {Player.CHRIS_15, Player.MARGRIET_15, Player.MARLIJN_15, Player.MARTINE_15, Player.RIK_15}
+exercise7_1 = Exercise(episode = 7, alive = alive7, maximum = 1000, earned = [])
+exercise7_2 = Exercise(episode = 7, alive = alive7, maximum = 2000, earned = [])
+exercise7_3 = Exercise(episode = 7, alive = alive7, maximum = None, earned = [
+                            Earning(money = -750, major = {Player.RIK_15}),
                         ])
