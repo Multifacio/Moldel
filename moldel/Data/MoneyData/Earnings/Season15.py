@@ -119,3 +119,36 @@ exercise7_2 = Exercise(episode = 7, alive = alive7, maximum = 2000, earned = [])
 exercise7_3 = Exercise(episode = 7, alive = alive7, maximum = None, earned = [
                             Earning(money = -750, major = {Player.RIK_15}),
                         ])
+
+# Aflevering 8
+# Opdracht 1 (Maximaal €1851): Niks verdiend
+# Opdracht 2 (Maximaal €1500):
+# €1500 (Major: Martine) (Minor: Chris, Margriet, Rik)
+# Opdracht 3 (Maximaal €2500):
+# €500 (Major: Margriet), €250 (Major: Chris)
+alive8 = {Player.CHRIS_15, Player.MARGRIET_15, Player.MARLIJN_15, Player.MARTINE_15, Player.RIK_15}
+exercise8_1 = Exercise(episode = 8, alive = alive8, maximum = 1851, earned = [])
+exercise8_2 = Exercise(episode = 8, alive = alive8, maximum = 1500, earned = [
+                            Earning(money = 1500, major = {Player.MARTINE_15}, minor = {Player.CHRIS_15,
+                                Player.MARGRIET_15, Player.RIK_15}),
+                        ])
+exercise8_3 = Exercise(episode = 8, alive = alive8, maximum = 2500, earned = [
+                            Earning(money = 500, major = {Player.MARGRIET_15}),
+                            Earning(money = 250, major = {Player.CHRIS_15})
+                        ])
+
+# Aflevering 9
+# Opdracht 1 (Maximaal €1000):
+# €500 (Major: Marlijn)
+# Opdracht 2 (Maximaal €1500): Niks verdiend
+alive9f = {Player.CHRIS_15, Player.MARGRIET_15, Player.MARLIJN_15, Player.RIK_15}
+alive9s = {Player.MARGRIET_15, Player.MARLIJN_15, Player.RIK_15}
+exercise9_1 = Exercise(episode = 9, alive = alive9f, maximum = 1000, earned = [
+                            Earning(money = 500, major = {Player.MARLIJN_15})
+                        ])
+exercise9_2 = Exercise(episode = 9, alive = alive9s, maximum = 1500, earned = [])
+
+season15 = Season([exercise1_1, exercise1_2, exercise2_1, exercise2_2, exercise2_3, exercise2_4, exercise3_1,
+                   exercise4_1, exercise4_2, exercise4_3, exercise5_3, exercise6_1, exercise6_2, exercise6_3,
+                   exercise7_1, exercise7_2, exercise7_3, exercise8_1, exercise8_2, exercise8_3, exercise9_1,
+                   exercise9_2])
