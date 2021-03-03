@@ -114,13 +114,14 @@ class ValidationMetrics(Validator):
         return sum(prob > 0.0 for prob in distribution.values())
 
     def __evaluate(self, distributions: Dict[Tuple[int, int], Dict[Player, float]]):
-        print("Log Loss: " + str(self.__log_loss(distributions)))
+        print("Log Loss: " + str(self.log_loss(distributions)))
         print("Mol Log Loss: " + str(self.__mol_log_loss(distributions)))
         print("Concordant-Discordant Ratio: " + str(self.__concordant_discordant_ratio(distributions)))
         print("Mean Mol Likelihood: " + str(self.__mean_mol_likelihood(distributions)))
         print("Mean Mol Rank: " + str(self.__mean_mol_rank(distributions)))
 
-    def __log_loss(self, distributions: Dict[Tuple[int, int], Dict[Player, float]]) -> float:
+    @staticmethod
+    def log_loss(distributions: Dict[Tuple[int, int], Dict[Player, float]]) -> float:
         """ Compute the log loss over the predictions.
 
         Arguments:
