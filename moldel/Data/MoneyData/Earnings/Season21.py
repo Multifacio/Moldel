@@ -80,7 +80,7 @@ exercise3_2 = Exercise(episode = 3, alive = alive3, maximum = 2000, earned = [
                                 Player.HORACE_21})
                         ])
 exercise3_3 = Exercise(episode = 3, alive = alive3, maximum = 1600, earned = [
-                            Earning(money = 200, major = {Player.PATRICK_21}, minor = {Player.JEROEN_21, Player.NIKKIE_21,
+                            Earning(money = 400, major = {Player.PATRICK_21}, minor = {Player.JEROEN_21, Player.NIKKIE_21,
                                 Player.RON_21, Player.TYGO_21}),
                             Earning(money = 200, major = {Player.NIKKIE_21}, minor = {Player.JEROEN_21, Player.RON_21,
                                 Player.TYGO_21}),
@@ -88,8 +88,6 @@ exercise3_3 = Exercise(episode = 3, alive = alive3, maximum = 1600, earned = [
                                 Player.RON_21, Player.TYGO_21}),
                             Earning(money = 200, major = {Player.HORACE_21}, minor = {Player.ELLIE_21, Player.PATRICK_21,
                                 Player.PEGGY_21}),
-                            Earning(money = 200, major = {Player.PATRICK_21}, minor = {Player.JEROEN_21, Player.NIKKIE_21,
-                                Player.RON_21, Player.TYGO_21}),
                             Earning(money = 200, major = {Player.JEROEN_21}, minor = {Player.ELLIE_21, Player.HORACE_21,
                                 Player.PATRICK_21, Player.PEGGY_21}),
                         ])
@@ -110,14 +108,9 @@ exercise4_1 = Exercise(episode = 4, alive = alive4, maximum = 2000, earned = [
                         ])
 exercise4_2 = Exercise(episode = 4, alive = alive4, maximum = 2250, earned = [])
 exercise4_3 = Exercise(episode = 4, alive = alive4, maximum = 1350, earned = [
-                            Earning(money = 50, major = {Player.JEROEN_21, Player.PATRICK_21}, minor = set()),
-                            Earning(money = 50, major = {Player.ELLIE_21, Player.PEGGY_21, Player.TYGO_21}, minor = set()),
-                            Earning(money = 100, major = {Player.JEROEN_21, Player.PATRICK_21}, minor = set()),
-                            Earning(money = 50, major = {Player.JEROEN_21, Player.PATRICK_21}, minor = set()),
+                            Earning(money = 300, major = {Player.JEROEN_21, Player.PATRICK_21}, minor = set()),
+                            Earning(money = 450, major = {Player.ELLIE_21, Player.PEGGY_21, Player.TYGO_21}, minor = set()),
                             Earning(money = 100, major = {Player.NIKKIE_21, Player.RON_21}, minor = set()),
-                            Earning(money = 250, major = {Player.ELLIE_21, Player.PEGGY_21, Player.TYGO_21}, minor = set()),
-                            Earning(money = 100, major = {Player.JEROEN_21, Player.PATRICK_21}, minor = set()),
-                            Earning(money = 150, major = {Player.ELLIE_21, Player.PEGGY_21, Player.TYGO_21}, minor = set()),
                         ])
 
 # Aflevering 5
@@ -134,14 +127,9 @@ exercise5_2 = Exercise(episode = 5, alive = alive5, maximum = 1500, earned = [])
 # €100 (Major: Ron), €100 (Major: Ron), €100 (Major: Patrick), €100 (Major: Patrick)
 alive6 = {Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21, Player.PEGGY_21, Player.RON_21, Player.TYGO_21}
 exercise6_1 = Exercise(episode = 6, alive = alive6, maximum = 4500, earned = [
-                            Earning(money = 500, major = {Player.PATRICK_21}, minor = set()),
-                            Earning(money = 1000, major = {Player.PATRICK_21}, minor = set()),
+                            Earning(money = 2700, major = {Player.PATRICK_21}, minor = set()),
                             Earning(money = 500, major = {Player.PEGGY_21}, minor = set()),
-                            Earning(money = 1000, major = {Player.PATRICK_21}, minor = set()),
-                            Earning(money = 100, major = {Player.RON_21}, minor = set()),
-                            Earning(money = 100, major = {Player.RON_21}, minor = set()),
-                            Earning(money = 100, major = {Player.PATRICK_21}, minor = set()),
-                            Earning(money = 100, major = {Player.PATRICK_21}, minor = set()),
+                            Earning(money = 200, major = {Player.RON_21}, minor = set()),
                         ])
 
 # Aflevering 7

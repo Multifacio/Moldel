@@ -91,7 +91,7 @@ alive4 = {Player.EMILIO_18, Player.JAN_18, Player.LOES_18, Player.OLCAY_18, Play
           Player.STINE_18}
 exercise4_1 = Exercise(episode = 4, alive = alive4, maximum = 1500, earned = [])
 exercise4_3 = Exercise(episode = 4, alive = alive4, maximum = 5000, earned = [
-                            Earning(money = 5000, major = {Player.EMILIO_18, Player.JAN_18, Player.LOES_18,
+                            Earning(money = 5000, minor = {Player.EMILIO_18, Player.JAN_18, Player.LOES_18,
                                                            Player.OLCAY_18, Player.SIMONE_18}),
                         ])
 
@@ -182,14 +182,11 @@ exercise8_3 = Exercise(episode = 8, alive = alive8, maximum = 4000, earned = [
                         ])
 
 # Aflevering 9
-# Opdracht 1 (Maximaal €1000):
-# €1000 (Major: Jan) (Minor: Olcay, Ruben)
+# Opdracht 1 (Maximaal €1000): Gezamelijk verdiend
 # Opdracht 2 (Maximaal €1500): Niks verdiend
-# Opdracht 3 (€2500): Onduidelijk wie wat verdiend heeft
+# Opdracht 3 (Maximaal €2500): Onduidelijk wie wat verdiend heeft
 alive9 = {Player.JAN_18, Player.OLCAY_18, Player.RUBEN_18}
-exercise9_1 = Exercise(episode = 9, alive = alive9, maximum = 1000, earned = [
-                            Earning(money = 1000, major = {Player.JAN_18}, minor = {Player.OLCAY_18, Player.RUBEN_18})
-                        ])
+exercise9_1 = Exercise(episode = 9, alive = alive9, maximum = 1000, earned = [])
 exercise9_2 = Exercise(episode = 9, alive = alive9, maximum = 1500, earned = [])
 exercise9_3 = Exercise(episode = 9, alive = alive9, maximum = 2500, earned = [])
 
