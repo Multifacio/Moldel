@@ -36,7 +36,7 @@ exercise2_2 = Exercise(episode = 2, alive = alive2, maximum = 2000, earned = [
 # Opdracht 2 (Maximaal €3000):
 # €200 (Major: Klaas), €1000 (Major: Taeke), €400 (Major: Ellie, Remy), €100 (Major: Cecille)
 # Opdracht 3 (Maximaal €0):
-# -€2345 (Major: Annemieke, Cecile, Ellie, Klaas, Marjolein, Rop, Taeke, Tim)
+# -€2345 (Minor: Annemieke, Cecile, Ellie, Klaas, Marjolein, Rop, Taeke, Tim)
 alive3 = {Player.ANNEMIEKE_16, Player.CECILE_16, Player.ELLIE_16, Player.KLAAS_16, Player.MARJOLEIN_16, Player.REMY_16,
           Player.ROP_16, Player.TAEKE_16, Player.TIM_16}
 exercise3_1 = Exercise(episode = 3, alive = alive3, maximum = 1750, earned = [
@@ -50,7 +50,7 @@ exercise3_2 = Exercise(episode = 3, alive = alive3, maximum = 3000, earned = [
                             Earning(money = 100, major = {Player.CECILE_16})
                         ])
 exercise3_3 = Exercise(episode = 3, alive = alive3, maximum = None, earned = [
-                            Earning(money = -2345, major = {Player.ANNEMIEKE_16, Player.CECILE_16, Player.ELLIE_16,
+                            Earning(money = -2345, minor = {Player.ANNEMIEKE_16, Player.CECILE_16, Player.ELLIE_16,
                                 Player.KLAAS_16, Player.MARJOLEIN_16, Player.ROP_16, Player.TAEKE_16, Player.TIM_16}),
                         ])
 

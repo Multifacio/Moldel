@@ -87,7 +87,7 @@ exercise4_3 = Exercise(episode = 4, alive = alive4, maximum = 3500, earned = [
 
 # Aflevering 5
 # Opdracht 1 (Maximaal €1500):
-# €250 (Major: Buddy, Claes, Leonie, Miljuschka, Rob)
+# €250 (Minor: Buddy, Claes, Leonie, Miljuschka, Rob)
 # Opdracht 2 (Maximaal €1500):
 # €600 (Major: Buddy) (Minor: Claes, Leonie, Rob)
 # Opdracht 3 (Maximaal €1750):
@@ -95,7 +95,7 @@ exercise4_3 = Exercise(episode = 4, alive = alive4, maximum = 3500, earned = [
 alive5 = {Player.BUDDY_20, Player.CLAES_20, Player.JOHAN_20, Player.LEONIE_20, Player.MILJUSCHKA_20, Player.NATHAN_20,
           Player.ROB_20}
 exercise5_1 = Exercise(episode = 5, alive = alive5, maximum = 1500, earned = [
-                            Earning(money = 250, major = {Player.BUDDY_20, Player.CLAES_20, Player.LEONIE_20,
+                            Earning(money = 250, minor = {Player.BUDDY_20, Player.CLAES_20, Player.LEONIE_20,
                                     Player.MILJUSCHKA_20, Player.ROB_20})
                         ])
 exercise5_2 = Exercise(episode = 5, alive = alive5, maximum = 1500, earned = [
