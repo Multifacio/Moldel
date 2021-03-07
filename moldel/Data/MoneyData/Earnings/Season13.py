@@ -78,5 +78,38 @@ exercise3_2 = Exercise(episode = 3, alive = alive3, maximum = 4000, earned = [
 # €50 (Major: Daniel) (Minor: Zarayda) (Schorriemorrie)
 # €50 (Major: Daniel) (Minor: Paulien) (Idyllisch)
 # €25 (Major: Daniel) (Minor: Paulien) (Jottum)
-# €225 (Major: Carolien) (In totaal)
-# €225 (Major: Tim) (In totaal)
+# €50 (Major: Carolien) (Minor: Tania) (Belhamel)
+# €50 (Major: Carolien) (Minor: Zarayda) (Schobbejak)
+# €50 (Major: Carolien) (Minor: Zarayda) (Kakefonie)
+# €25 (Major: Carolien) (Minor: Paulien) (Mieters)
+# €25 (Major: Carolien) (Minor: Kees) (Phantoom)
+# €25 (Major: Carolien) (Minor: Kees) (Woord)
+# €100 (Major: Tim) (Minor: Tania) (Chronischevermoeidheidssyndroom)
+# €50 (Major: Tim) (Minor: Tania) (Copulaire)
+# €25 (Major: Tim) (Minor: Paulien) (Schaars)
+# €50 (Major: Tim) (Minor: Paulien) (Xenofobie)
+# Opdracht 3 (Maximaal €0): Niks verdiend
+alive4 = {Player.CAROLIEN_13, Player.DANIEL_13, Player.KEES_13, Player.PAULIEN_13, Player.TANIA_13, Player.TIM_13,
+          Player.ZARAYDA_13}
+exercise4_2 = Exercise(episode = 4, alive = alive4, maximum = None, earned = [
+                            Earning(money = 100, major = {Player.DANIEL_13}, minor = {Player.TANIA_13}),
+                            Earning(money = 50, major = {Player.DANIEL_13}, minor = {Player.ZARAYDA_13}),
+                            Earning(money = 75, major = {Player.DANIEL_13}, minor = {Player.PAULIEN_13}),
+                            Earning(money = 50, major = {Player.CAROLIEN_13}, minor = {Player.TANIA_13}),
+                            Earning(money = 100, major = {Player.CAROLIEN_13}, minor = {Player.ZARAYDA_13}),
+                            Earning(money = 25, major = {Player.CAROLIEN_13}, minor = {Player.PAULIEN_13}),
+                            Earning(money = 50, major = {Player.CAROLIEN_13}, minor = {Player.KEES_13}),
+                            Earning(money = 150, major = {Player.TIM_13}, minor = {Player.TANIA_13}),
+                            Earning(money = 75, major = {Player.TIM_13}, minor = {Player.PAULIEN_13})
+                        ])
+
+# Aflevering 5
+# Opdracht 1 (Maximaal €3000): Gezamelijk verdiend
+# Opdracht 2 (Maximaal €1500): Niks verdiend
+# Opdracht 3 (Maximaal €2500): Gezamelijk verdiend
+alive5 = {Player.CAROLIEN_13, Player.DANIEL_13, Player.KEES_13, Player.PAULIEN_13, Player.TANIA_13, Player.TIM_13,
+          Player.ZARAYDA_13}
+exercise5_1 = Exercise(episode = 5, alive = alive5, maximum = 3000, earned = [])
+exercise5_3 = Exercise(episode = 5, alive = alive5, maximum = 2500, earned = [])
+
+# Aflevering 6
