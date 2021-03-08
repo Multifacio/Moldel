@@ -122,3 +122,42 @@ exercise5_3 = Exercise(episode = 5, alive = alive5, maximum = 2500, earned = [])
 # €500 (Major: Kees, Paulien) (Minor: Allen)
 # Opdracht 2 (Maximaal €0): Niks verdiend
 # Opdracht 3 (Maximaal €2000): Niks verdiend
+alive7 = {Player.CAROLIEN_13, Player.DANIEL_13, Player.KEES_13, Player.PAULIEN_13, Player.ZARAYDA_13}
+exercise7_1 = Exercise(episode = 7, alive = alive7, maximum = 6000, earned = [
+                            Earning(money = 500, major = {Player.KEES_13, Player.PAULIEN_13}, minor = {
+                                Player.CAROLIEN_13, Player.DANIEL_13, Player.ZARAYDA_13}),
+                        ])
+
+# Aflevering 8
+# Opdracht 1 (Maximaal €6000):
+# €200 (Major: Paulien) (Minor: Carolien, Kees), €200 (Major: Zarayda) (Minor: Carolien, Kees),
+# €200 (Major: Paulien) (Minor: Carolien, Kees), €200 (Major: Paulien) (Minor: Carolien, Kees),
+# €200 (Major: Zarayda) (Minor: Carolien, Kees), €200 (Major: Paulien) (Minor: Carolien, Kees),
+# €200 (Major: Paulien) (Minor: Carolien, Kees), €200 (Major: Paulien) (Minor: Carolien, Kees)
+# Opdracht 2 (Maximaal €1500): Niks verdiend
+# Opdracht 3 (Maximaal €2000): Gezamelijk verdiend
+alive8 = {Player.CAROLIEN_13, Player.KEES_13, Player.PAULIEN_13, Player.ZARAYDA_13}
+exercise8_1 = Exercise(episode = 8, alive = alive8, maximum = 6000, earned = [
+                            Earning(money = 1200, major = {Player.PAULIEN_13}, minor = {Player.CAROLIEN_13, Player.KEES_13}),
+                            Earning(money = 400, major = {Player.ZARAYDA_13}, minor = {Player.CAROLIEN_13, Player.KEES_13}),
+                        ])
+
+# Aflevering 9
+# Opdracht 1 (Maximaal €?):
+# €200 (Major: Paulien), €300 (Major: Paulien), €700 (Major: Carolien)
+# Opdracht 2 (Maximaal €?):
+# €250 (Major: Kees), €250 (Major: Kees), €250 (Major: Kees), €250 (Major: Paulien), €250 (Major: Paulien),
+# €250 (Major: Paulien), €250 (Major: Carolien), €250 (Major: Carolien), €250 (Major: Carolien)
+alive9 = {Player.CAROLIEN_13, Player.KEES_13, Player.PAULIEN_13}
+exercise9_1 = Exercise(episode = 9, alive = alive9, maximum = None, earned = [
+                            Earning(money = 500, major = {Player.PAULIEN_13}),
+                            Earning(money = 700, major = {Player.CAROLIEN_13})
+                        ])
+exercise9_2 = Exercise(episode = 9, alive = alive9, maximum = None, earned = [
+                            Earning(money = 750, major = {Player.CAROLIEN_13}),
+                            Earning(money = 750, major = {Player.KEES_13}),
+                            Earning(money = 750, major = {Player.PAULIEN_13})
+                        ])
+
+season13 = Season([exercise1_1, exercise1_2, exercise2_1, exercise2_2, exercise2_3, exercise3_1, exercise3_2,
+                   exercise4_2, exercise5_1, exercise5_3, exercise7_1, exercise8_1, exercise9_1, exercise9_2])

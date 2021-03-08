@@ -1,7 +1,7 @@
 from Data.MoneyData.Earnings.All import MONEY_DATA
 import math
 
-TEST_SEASON = [14, 15, 16, 17, 18, 19, 20, 21]
+TEST_SEASON = [13, 14, 15, 16, 17, 18, 19, 20, 21]
 
 num_non_mol = 0
 num_mol = 0
