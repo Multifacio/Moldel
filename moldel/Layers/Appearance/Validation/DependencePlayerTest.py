@@ -4,7 +4,7 @@ from Layers.Appearance.VideoParser import VideoParser, ParsedVideo
 from scipy.stats import pearsonr, kendalltau
 import itertools
 
-TEST_SEASONS = {13, 14, 15, 16, 17, 18, 19, 20}
+TEST_SEASONS = {13, 14, 15, 16, 17, 18, 19, 20, 21}
 
 appearances = dict()
 for season in TEST_SEASONS:
@@ -21,7 +21,7 @@ for season in TEST_SEASONS:
 input = []
 output = []
 for player, features in appearances.items():
-    for feat1, feat2 in itertools.combinations(features, 2):
+    for feat1, feat2 in itertools.permutations(features, 2):
         input.append(feat1)
         output.append(feat2)
 

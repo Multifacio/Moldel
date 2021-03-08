@@ -1,7 +1,7 @@
 from Layers.Appearance.AppearanceExtractor import AppearanceExtractor
 from scipy.stats import mannwhitneyu
 
-TEST_SEASONS = {13, 14, 15, 16, 17, 18, 19, 20}
+TEST_SEASONS = {13, 14, 15, 16, 17, 18, 19, 20, 21}
 
 extractor = AppearanceExtractor(0, 0, TEST_SEASONS, 1, 1, 0.0)
 train_input, train_output = extractor.get_train_data()
