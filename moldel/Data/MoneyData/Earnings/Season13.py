@@ -113,3 +113,12 @@ exercise5_1 = Exercise(episode = 5, alive = alive5, maximum = 3000, earned = [])
 exercise5_3 = Exercise(episode = 5, alive = alive5, maximum = 2500, earned = [])
 
 # Aflevering 6
+# Opdracht 1 (Maximaal €0): Niks verdiend
+# Opdracht 2 (Maximaal €0): Niks verdiend
+# Opdracht 3 (Maximaal €?): Gezamelijk verdiend
+
+# Aflevering 7
+# Opdracht 1 (Maximaal €6000):
+# €500 (Major: Kees, Paulien) (Minor: Allen)
+# Opdracht 2 (Maximaal €0): Niks verdiend
+# Opdracht 3 (Maximaal €2000): Niks verdiend
