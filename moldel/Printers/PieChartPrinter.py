@@ -24,7 +24,7 @@ class PieChartPrinter(Printer):
     __THRESHOLD_LIKELIHOOD = 0.015
 
     # The minimum difference between the previous and next angle
-    __THRESHOLD_MIN_ANGLE_INC = 6
+    __THRESHOLD_MIN_ANGLE_INC = 4
 
     # The relative length of the line with respect to the radius of the circle
     __THRESHOLD_LINE_LENGTH = 0.4
@@ -72,9 +72,6 @@ class PieChartPrinter(Printer):
                 plt.annotate(name.get_text() + ": " + percentage.get_text(), xy= (x, y), xytext=(x_text, y_text),
                              horizontalalignment=horizontalalignment, **kw)
 
-        # fig = plt.gcf()
-        # fig.set_size_inches(9, 6)
-        # plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0, hspace = 0, wspace = 0)
         if self.__file_name is None:
             plt.show()
         else:
@@ -92,7 +89,7 @@ class PieChartPrinter(Printer):
         new_angles = [angles.popleft()]
         for angle in angles:
             if self.__similar_angles(angle, new_angles[-1], self.__THRESHOLD_MIN_ANGLE_INC):
-                angle = (angle + self.__THRESHOLD_MIN_ANGLE_INC) % 360
+                angle = (new_angles[-1] + self.__THRESHOLD_MIN_ANGLE_INC) % 360
             new_angles.append(angle)
         new_angles = deque(new_angles)
         new_angles.rotate(i + 1)
