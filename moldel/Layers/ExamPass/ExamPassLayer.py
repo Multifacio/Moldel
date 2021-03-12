@@ -42,7 +42,7 @@ class InnerExamPassLayer(Layer):
             The estimator used to estimate the likelihood that someone drops out based on the joker usage.
         """
         train_input, train_output = self.__get_train_data(train_seasons)
-        estimator = LogisticRegression()
+        estimator = LogisticRegression(solver = "lbfgs", penalty = "none")
         estimator.fit(train_input, train_output)
         return estimator
 
