@@ -1,7 +1,7 @@
 from Data.LastEpisodes import get_last_episode
 from Data.Player import Player
 from Data.PlayerData import get_is_mol, get_mol_in_season
-from Layers.ExamUniformLayer import ExamUniformLayer
+from Layers.Special.ExamUniformLayer import ExamUniformLayer
 from Layers.Special.CompositeLayer import CompositeLayer
 from Layers.Special.ManualExclusionLayer import ManualExclusionLayer
 from scipy.stats import rankdata

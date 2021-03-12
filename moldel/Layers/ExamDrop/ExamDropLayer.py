@@ -5,6 +5,7 @@ from Layers.ExamDrop.ExamDropExtractor import ExamDropExtractor, PredictSample
 from Layers.MultiLayer.EmptyMultiLayer import EmptyMultiLayer
 from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
+from Layers.Special.PotentialMolLayer import PotentialMolLayer
 from sklearn.linear_model import LogisticRegression
 from typing import Dict, List, Set
 import numpy as np
@@ -41,7 +42,7 @@ class InnerExamDropLayer(MultiLayer):
             The trained machine learning model used to make predictions.
         """
         train_input, train_output, train_weights = extractor.get_train_data()
-        classifier = LogisticRegression(solver="lbfgs")
+        classifier = LogisticRegression(solver = "lbfgs")
         classifier.fit(train_input, train_output, train_weights)
         return classifier
 
@@ -80,7 +81,7 @@ class InnerExamDropLayer(MultiLayer):
         return {player: MultiLayerResult(np.array(predictions), player not in alive_players) for player, predictions in \
                 all_predictions.items()}
 
-class ExamDropLayer(MultiplyAggregateLayer):
+class ExamDropLayer(PotentialMolLayer):
     """ The Exam Drop Layer predicts whether you are the Mol based on what dropouts have answered during the test. """
 
     def __init__(self, feature_significance: float, pca_explain: float, max_splits: int):
@@ -93,4 +94,4 @@ class ExamDropLayer(MultiplyAggregateLayer):
                 of variance in the features.
             max_splits (int): How many additional bins should be used to discretize the features.
         """
-        super().__init__(InnerExamDropLayer(feature_significance, pca_explain, max_splits), False)
+        super().__init__(MultiplyAggregateLayer(InnerExamDropLayer(feature_significance, pca_explain, max_splits), False))

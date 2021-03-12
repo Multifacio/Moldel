@@ -1,6 +1,5 @@
 from Layers.ExamDrop.ExamDropLayer import ExamDropLayer
 from Layers.ExamPass.ExamPassLayer import ExamPassLayer
-from Layers.ExamUniformLayer import ExamUniformLayer
 from Layers.Appearance.AppearanceLayer import AppearanceLayer
 from Layers.MultiLayer.CombineLayer import CombineLayer
 from Layers.MultiLayer.StackLayer import StackLayer
@@ -30,4 +29,4 @@ class Moldel(CompositeLayer):
         Arguments:
             random_generator (RandomState): The random generator used to generate random values.
         """
-        super().__init__([MoldelStacker(random_generator), SocialMediaLayer(), ManualExclusionLayer()])
+        super().__init__([MoldelStacker(random_generator), SocialMediaLayer()])
