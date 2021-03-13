@@ -23,11 +23,15 @@ class PieChartPrinter(Printer):
     # other slices).
     __THRESHOLD_LIKELIHOOD = 0.015
 
+    # The minimum safe difference between the previous and next angle (used to prevent angles becoming to close by
+    # shifting)
+    __THRESHOLD_SAFE_MIN_ANGLE_INC = 18
+
     # The minimum difference between the previous and next angle
-    __THRESHOLD_MIN_ANGLE_INC = 4
+    __THRESHOLD_MIN_ANGLE_INC = 6
 
     # The relative length of the line with respect to the radius of the circle
-    __THRESHOLD_LINE_LENGTH = 0.4
+    __THRESHOLD_LINE_LENGTH = 0.3
 
     def __init__(self, file_name: Union[str, None] = None):
         """ Constructor of the Pie Chart Printer.
@@ -71,6 +75,14 @@ class PieChartPrinter(Printer):
                 horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
                 plt.annotate(name.get_text() + ": " + percentage.get_text(), xy= (x, y), xytext=(x_text, y_text),
                              horizontalalignment=horizontalalignment, **kw)
+            elif angle != text_angle:
+                name.update({'visible': False})
+                x, y = np.cos(np.deg2rad(angle)), np.sin(np.deg2rad(angle))
+                x_text = (1 + self.__THRESHOLD_LINE_LENGTH) * np.cos(np.deg2rad(text_angle))
+                y_text = (1 + self.__THRESHOLD_LINE_LENGTH) * np.sin(np.deg2rad(text_angle))
+                horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+                plt.annotate(name.get_text(), xy=(x, y), xytext=(x_text, y_text), horizontalalignment =
+                    horizontalalignment, **kw)
 
         if self.__file_name is None:
             plt.show()
@@ -80,9 +92,11 @@ class PieChartPrinter(Printer):
 
     @classmethod
     def __adjust_angles(self, angles: List[float]) -> List[float]:
+        if len(angles) == 1:
+            return angles
         for i, angle_pair in enumerate(zip(angles, angles[1:])):
             angle1, angle2 = angle_pair
-            if not self.__similar_angles(angle1, angle2, self.__THRESHOLD_MIN_ANGLE_INC):
+            if not self.__similar_angles(angle1, angle2, self.__THRESHOLD_SAFE_MIN_ANGLE_INC):
                 break
         angles = deque(angles)
         angles.rotate(-(i + 1))
