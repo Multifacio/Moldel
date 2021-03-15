@@ -4,12 +4,17 @@ from Data.PlayerData import get_is_mol
 from Layers.Layer import Layer
 from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.Special.NormalizeLayer import NormalizeLayer
-from scipy.special import logit
-from sklearn.linear_model import LogisticRegression
+from sklearn.decomposition import PCA
+from scipy.optimize import root
+from scipy.special import expit, logit
 from typing import Dict, List, Set, Tuple
+import math
 import numpy as np
 
 class InnerStackLayer(Layer):
+    # The maximal difference between the actual sum of weights and the expected sum of weights
+    PRECISION = 1e-4
+
     def __init__(self, predict_layer: MultiLayer, train_layer: MultiLayer, splits: List[Set[int]]):
         self.__predict_layer = predict_layer
         self.__train_layer = train_layer
@@ -22,10 +27,10 @@ class InnerStackLayer(Layer):
             return {player: 1.0 if player in predict_alive else 0.0 for player in prediction}
 
         alives_group = next(group for group in self.__splits if len(predict_alive) in group)
-        classifier = self.__train(train_seasons, alives_group)
-        return self.__stack_predictions(prediction, classifier, len(predict_alive))
+        weights = self.__train(train_seasons, alives_group)
+        return self.__stack_predictions(prediction, weights, len(predict_alive))
 
-    def __train(self, train_seasons: Set[int], alives_group: Set[int]) -> LogisticRegression:
+    def __train(self, train_seasons: Set[int], alives_group: Set[int]) -> np.array:
         """ Train the Stack Layer.
 
         Arguments:
@@ -37,12 +42,21 @@ class InnerStackLayer(Layer):
             The classifier used to predict the mol based on the predictions of the layers.
         """
         train_input, train_output = self.__get_train_data(train_seasons, alives_group)
-        classifier = LogisticRegression(solver = "lbfgs", penalty = "none")
-        classifier.fit(train_input, train_output)
-        return classifier
+        start = np.ones(len(train_input[0]) + 1)
+        while True:
+            weights = root(self.__zero_function, start, args = (train_input, train_output)).x
+            print(self.__zero_function(weights, train_input, train_output))
+            bias = weights[-2]
+            weights = np.power(weights[:-2], 2)
+            if abs(np.sum(weights) - len(weights)) < self.PRECISION:
+                weights = np.append(weights / np.sum(weights) * len(weights), [bias])
+                break
+            start = np.random.uniform(size = len(train_input[0]) + 1)
+        print(weights)
+        return weights
 
-    def __stack_predictions(self, prediction: Dict[Player, MultiLayerResult], classifier: LogisticRegression,
-                            num_alives: int) -> Dict[Player, float]:
+    def __stack_predictions(self, prediction: Dict[Player, MultiLayerResult], weights: np.array, num_alives: int) \
+            -> Dict[Player, float]:
         """ Stack the predictions.
 
         Arguments:
@@ -53,7 +67,7 @@ class InnerStackLayer(Layer):
         Returns:
             The prediction for every player after stacking all predictions
         """
-        return {p: 0.0 if r.exclusion else classifier.predict_proba(np.array([self.__input_encoding(r, num_alives)]))[0][1]
+        return {p: 0.0 if r.exclusion else self.__sigmoid(weights, self.__input_encoding(r, num_alives))
                 for p, r in prediction.items()}
 
     def __get_train_data(self, train_seasons: Set[int], alives_group: Set[int]) -> Tuple[np.array, np.array]:
@@ -94,7 +108,29 @@ class InnerStackLayer(Layer):
             The input encoding for this case.
         """
         likelihoods = np.append(result.predictions, [1 / num_alives])
-        return logit(likelihoods)
+        return np.append(logit(likelihoods), [1])
+
+    def __zero_function(self, weights: np.array, train_input: np.array, train_output: np.array) -> np.array:
+        bias = weights[-2]
+        laplacian = weights[-1]
+        weights = weights[:-2]
+        sigmoid_weights = np.append(np.power(weights, 2), [bias])
+        zero_function = []
+        for j, weight in enumerate(weights):
+            result = -sum([(self.__sigmoid(sigmoid_weights, input) - output) * 2 * weight * input[j] for input, output
+                           in zip(train_input, train_output)])
+            result -= 2 * laplacian * weight
+            zero_function.append(result)
+        result = -sum([(self.__sigmoid(sigmoid_weights, input) - output) * input[-1] for input, output
+                       in zip(train_input, train_output)])
+        zero_function.append(result)
+        result = sum(weight for weight in sigmoid_weights[:-1])
+        result -= len(train_input[0]) - 1
+        zero_function.append(result)
+        return zero_function
+
+    def __sigmoid(self, weights: np.array, input: np.array) -> float:
+        return expit(np.dot(weights, input))
 
 class StackLayer(NormalizeLayer):
     """ The Stack Layer combines multiple layers into a single prediction by applying a Logistic Regression on the
