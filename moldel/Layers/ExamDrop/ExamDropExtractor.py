@@ -57,16 +57,20 @@ class ExamDropExtractor:
             train_data.extend(self.__get_season_data(season, sys.maxsize, True))
         train_input = np.array([ExamDropEncoder.extract_features(sample, sys.maxsize) for sample in train_data])
         train_output = np.array([1.0 if get_is_mol(sample.selected_player) else 0.0 for sample in train_data])
-
-        num_bins = self.get_num_bins(train_input, self.__max_splits)
-        self.__discretizer = KBinsDiscretizer(n_bins = num_bins, encode = "onehot-dense",
-                                              strategy = ExamDropExtractor.BIN_STRATEGY)
-        train_input = self.__discretizer.fit_transform(train_input)
         train_input = self.__add_answered_on_feature(train_data, train_input)
-        self.__selected_features = self.__stats_filter_features(train_input, train_output, self.__feature_significance)
-        train_input = train_input[:,self.__selected_features]
-        self.__pca = PCA(n_components = self.__pca_explain)
+        self.__pca = PCA(n_components = 0.95)
         train_input = self.__pca.fit_transform(train_input)
+        self.__selected_features = self.__stats_filter_features(train_input, train_output, self.__feature_significance)
+        train_input = train_input[:, self.__selected_features]
+        self.__quantiles = np.quantile(train_input, np.linspace(0, 1, 5), axis = 0)
+        train_input = self.__natural_spline_encoding(train_input, self.__quantiles)
+        # num_bins = self.get_num_bins(train_input, self.__max_splits)
+        # self.__discretizer = KBinsDiscretizer(n_bins = num_bins, encode = "onehot-dense",
+        #                                      strategy = ExamDropExtractor.BIN_STRATEGY)
+        # train_input = self.__discretizer.fit_transform(train_input)
+        # train_input = self.__add_answered_on_feature(train_data, train_input)
+        # self.__pca = PCA(n_components = self.__pca_explain)
+        # train_input = self.__pca.fit_transform(train_input)
         return train_input, train_output, self.__get_train_weights(train_data)
 
     def get_predict_data(self) -> List[PredictSample]:
@@ -82,11 +86,13 @@ class ExamDropExtractor:
             return []
 
         predict_input = np.array([ExamDropEncoder.extract_features(sample, self.__predict_episode) for sample in predict_data])
-        predict_input = self.__discretizer.transform(predict_input)
         predict_input = self.__add_answered_on_feature(predict_data, predict_input)
-        predict_input = predict_input[:,self.__selected_features]
         predict_input = self.__pca.transform(predict_input)
+        predict_input = predict_input[:, self.__selected_features]
+        predict_input = self.__natural_spline_encoding(predict_input, self.__quantiles)
+        # predict_input = self.__discretizer.transform(predict_input)
 
+        #
         predict_samples = []
         weights = self.__get_train_weights(predict_data)
         for data, in_features, out_features, weight in zip(predict_data[::2], predict_input[1::2], predict_input[::2], weights):
@@ -238,3 +244,26 @@ class ExamDropExtractor:
             num_answers = sample.exam_episode.get_all_answers({sample.player}, sys.maxsize)
             train_weights.append(1 / len(num_answers))
         return np.array(train_weights)
+
+    @classmethod
+    def __natural_spline_encoding(self, train_input: np.array, knots: np.array) -> np.array:
+        rows = []
+        for row in train_input:
+            features = []
+            for x, knot in zip(row, knots.T):
+                features.extend(self.__single_natural_spline_encoding(x, knot))
+            rows.append(features)
+        return np.array(rows)
+
+    @classmethod
+    def __single_natural_spline_encoding(self, x: float, knots: np.array) -> List[float]:
+        return [x] + [self.__feature_encoding(x, i, knots) for i in range(len(knots) - 2)]
+
+    @classmethod
+    def __feature_encoding(self, x: float, i: int, knots: np.array) -> float:
+        return self.__ramp(x - knots[i]) ** 3 - self.__ramp(x - knots[-2]) ** 3 * (knots[-1] - knots[i]) / \
+               (knots[-1] - knots[-2]) + self.__ramp(x - knots[-1]) ** 3 * (knots[-2] - knots[i]) / (knots[-1] - knots[-2])
+
+    @staticmethod
+    def __ramp(x: float):
+        return x if x > 0 else 0
