@@ -37,7 +37,7 @@ class InnerStackLayer(Layer):
             The classifier used to predict the mol based on the predictions of the layers.
         """
         train_input, train_output = self.__get_train_data(train_seasons, alives_group)
-        classifier = LogisticRegression(solver = "lbfgs", penalty = "none")
+        classifier = LogisticRegression(solver = "lbfgs")
         classifier.fit(train_input, train_output)
         return classifier
 
