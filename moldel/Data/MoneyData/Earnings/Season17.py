@@ -129,7 +129,7 @@ exercise5_3 = Exercise(episode = 5, alive = alive5, maximum = 2000, earned = [
 # €150 (Major: Jochem) (Minor: Sanne, Thomas), €200 (Major: Imanuelle) (Minor: Sanne, Thomas),
 # €50 (Major: Diederik) (Minor: Sanne, Thomas)
 # Opdracht 2 (Maximaal €2000):
-# €2000 (Major: Diederik, Sanne) (Minor: Imanuelle, Jochem, Thomas)
+# €2000 (Major: Sanne) (Minor: Imanuelle, Jochem, Thomas)
 # Opdracht 3 (Maximaal €?):
 # €10 (Major: Imanuelle), €100 (Major: Thomas), €500 (Major: Imanuelle), €20 (Major: Imanuelle)
 alive6 = {Player.DIEDERIK_17, Player.IMANUELLE_17, Player.JOCHEM_17, Player.SANNE_17, Player.THOMAS_17}
@@ -139,8 +139,8 @@ exercise6_1 = Exercise(episode = 6, alive = alive6, maximum = None, earned = [
                             Earning(money = 50, major = {Player.DIEDERIK_17}, minor = {Player.SANNE_17, Player.THOMAS_17})
                         ])
 exercise6_2 = Exercise(episode = 6, alive = alive6, maximum = 2000, earned = [
-                            Earning(money = 2000, major = {Player.DIEDERIK_17, Player.SANNE_17},
-                                    minor = {Player.IMANUELLE_17, Player.JOCHEM_17, Player.THOMAS_17}),
+                            Earning(money = 2000, major = {Player.SANNE_17}, minor = {Player.IMANUELLE_17,
+                                Player.JOCHEM_17, Player.THOMAS_17}),
                         ])
 exercise6_3 = Exercise(episode = 6, alive = alive6, maximum = None, earned = [
                             Earning(money = 530, major = {Player.IMANUELLE_17}),

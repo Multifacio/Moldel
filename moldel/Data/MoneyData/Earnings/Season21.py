@@ -26,7 +26,7 @@ exercise1_3 = Exercise(episode = 3, alive = alive1, maximum = 2500, earned = [
 # €80 (Major: Ellie, Horace, Patrick, Ron) (Minor: Jeroen, Nadja, Nikkie, Peggy, Tygo),
 # €17.50 (Major: Jeroen, Nadja, Nikkie, Peggy, Tygo) (Minor: Ellie, Horace, Patrick, Ron), €2.50 (Minor: Iedereen)
 # Opdracht 2 (Maximaal €2000):
-# €260 (Major: Jeroen, Horace, Nadja, Nikkie) (Minor: Ellie, Patrick, Peggy, Ron, Tygo)
+# €260 (Major: Jeroen) (Minor: Ellie, Horace, Nadja, Nikkie, Patrick, Peggy, Ron, Tygo)
 # Opdracht 3 (Maximaal €1500):
 # €1500 (Major: Patrick)
 alive2 = {Player.ELLIE_21, Player.HORACE_21, Player.JEROEN_21, Player.NADJA_21, Player.NIKKIE_21, Player.PATRICK_21,
@@ -43,9 +43,9 @@ exercise2_1 = Exercise(episode = 2, alive = alive2, maximum = 2222.50, earned = 
                                 Player.RON_21, Player.TYGO_21})
                         ])
 exercise2_2 = Exercise(episode = 2, alive = alive2, maximum = 2000, earned = [
-                            Earning(money = 260, major = {Player.JEROEN_21, Player.HORACE_21, Player.NADJA_21,
-                                Player.NIKKIE_21}, minor = {Player.ELLIE_21, Player.PATRICK_21, Player.PEGGY_21,
-                                Player.RON_21, Player.TYGO_21})
+                            Earning(money = 260, major = {Player.JEROEN_21}, minor = {Player.ELLIE_21, Player.HORACE_21,
+                                Player.NADJA_21, Player.NIKKIE_21, Player.PATRICK_21, Player.PEGGY_21, Player.RON_21,
+                                Player.TYGO_21})
                         ])
 exercise2_3 = Exercise(episode = 2, alive = alive2, maximum = 1500, earned = [
                             Earning(money = 1500, major = {Player.PATRICK_21}, minor = set())
@@ -56,7 +56,10 @@ exercise2_3 = Exercise(episode = 2, alive = alive2, maximum = 1500, earned = [
 # €150 (Minor: Ron), €100 (Minor: Jeroen), €150 (Minor: Ellie), €150 (Minor: Patrick), €150 (Minor: Peggy),
 # €150 (Minor: Horace), €250 (Minor: Tygo), €200 (Minor: Nikkie)
 # Opdracht 2 (Maximaal €2000):
-# €600 (Major: Patrick, Peggy) (Minor: Ron, Tygo), €400 (Major: Jeroen, Nikkie) (Minor: Ellie, Horace)
+# Everything multiplied by 5/7
+# €200 (Major: Patrick) (Minor: Ron, Tygo), €200 (Major: Patrick, Peggy) (Minor: Ron, Tygo),
+# €400 (Major: Jeroen) (Minor: Ellie, Horace), €400 (Major: Peggy) (Minor: Ron, Tygo),
+# €200 (Major: Jeroen, Nikkie) (Minor: Ellie, Horace)
 # Opdracht 3 (Maximaal €1600):
 # €200 (Major: Patrick) (Minor: Jeroen, Nikkie, Ron, Tygo), €200 (Major: Nikkie) (Minor: Jeroen, Ron, Tygo),
 # €200 (Major: Peggy) (Minor: Jeroen, Nikkie, Ron, Tygo), €200 (Major: Horace) (Minor: Ellie, Patrick, Peggy),
@@ -74,10 +77,16 @@ exercise3_1 = Exercise(episode = 3, alive = alive3, maximum = 2000, earned = [
                             Earning(money = 200, major = set(), minor = {Player.NIKKIE_21}),
                         ])
 exercise3_2 = Exercise(episode = 3, alive = alive3, maximum = 2000, earned = [
-                            Earning(money = 600, major = {Player.PATRICK_21, Player.PEGGY_21}, minor = {Player.RON_21,
+                            Earning(money = 200 * 5/7, major = {Player.PATRICK_21}, minor = {Player.RON_21,
                                 Player.TYGO_21}),
-                            Earning(money = 400, major = {Player.JEROEN_21, Player.NIKKIE_21}, minor = {Player.ELLIE_21,
-                                Player.HORACE_21})
+                            Earning(money = 200 * 5/7, major = {Player.PATRICK_21, Player.PEGGY_21},
+                                minor = {Player.RON_21, Player.TYGO_21}),
+                            Earning(money = 400 * 5/7, major = {Player.JEROEN_21}, minor = {Player.ELLIE_21,
+                                Player.HORACE_21}),
+                            Earning(money = 400 * 5/7, major = {Player.PEGGY_21}, minor = {Player.RON_21,
+                                Player.TYGO_21}),
+                            Earning(money = 200 * 5/7, major = {Player.JEROEN_21, Player.NIKKIE_21},
+                                minor = {Player.ELLIE_21, Player.HORACE_21})
                         ])
 exercise3_3 = Exercise(episode = 3, alive = alive3, maximum = 1600, earned = [
                             Earning(money = 400, major = {Player.PATRICK_21}, minor = {Player.JEROEN_21, Player.NIKKIE_21,
@@ -103,8 +112,8 @@ exercise3_3 = Exercise(episode = 3, alive = alive3, maximum = 1600, earned = [
 alive4 = {Player.ELLIE_21, Player.JEROEN_21, Player.NIKKIE_21, Player.PATRICK_21, Player.PEGGY_21, Player.RON_21,
           Player.TYGO_21}
 exercise4_1 = Exercise(episode = 4, alive = alive4, maximum = 2000, earned = [
-                            Earning(money = 1000, major = {Player.ELLIE_21, Player.PATRICK_21, Player.RON_21},
-                                    minor = {Player.NIKKIE_21, Player.TYGO_21}),
+                            Earning(money = 1000, major = {Player.ELLIE_21}, minor = {Player.PATRICK_21, Player.RON_21,
+                                Player.NIKKIE_21, Player.TYGO_21}),
                         ])
 exercise4_2 = Exercise(episode = 4, alive = alive4, maximum = 2250, earned = [])
 exercise4_3 = Exercise(episode = 4, alive = alive4, maximum = 1350, earned = [

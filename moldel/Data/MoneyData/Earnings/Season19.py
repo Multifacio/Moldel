@@ -7,7 +7,7 @@ from Data.Player import Player
 # Opdracht 1 (Maximaal €2500): Niks verdiend
 # Opdracht 2 (Maximaal €1000): Gezamelijk verdiend
 # Opdracht 3 (Maximaal €1800):
-# €300 (Major: Nikkie, Minor: Rick-Paul, Niels)
+# €300 (Major: Nikkie) (Minor: Rick-Paul, Niels)
 alive1 = {Player.EVELIEN_19, Player.EVI_19, Player.JAMIE_19, Player.MEREL_19, Player.NIELS_19, Player.NIKKIE_19,
           Player.RICK_PAUL_19, Player.ROBERT_19, Player.SARAH_19, Player.SINAN_19}
 exercise1_1 = Exercise(episode = 1, alive = alive1, maximum = 2500, earned = [])
@@ -58,19 +58,18 @@ exercise3_3 = Exercise(episode = 3, alive = alive3, maximum = 2500, earned = [])
 
 # Aflevering 4
 # Opdracht 1 (Maximaal €2250):
-# €100 (Major: Evelien, Niels) (Minor: Jamie, Sinan), €150 (Major: Robert, Sarah) (Minor: Jamie, Sinan),
-# €250 (Major: Merel, Rick-Paul) (Minor: Jamie, Sinan)
+# €100 (Major: Evelien) (Minor: Jamie, Niels, Sinan), €150 (Major: Robert, Sarah) (Minor: Jamie, Sinan),
+# €250 (Major: Merel) (Minor: Jamie, Sinan)
 # Opdracht 2 (Maximaal €1500): Niks verdiend
 # Opdracht 3 (Maximaal €2000): Niks verdiend
 alive4 = {Player.EVELIEN_19, Player.JAMIE_19, Player.MEREL_19, Player.NIELS_19, Player.RICK_PAUL_19, Player.ROBERT_19,
           Player.SARAH_19, Player.SINAN_19}
 exercise4_1 = Exercise(episode = 4, alive = alive4, maximum = 2250, earned = [
-                            Earning(money = 100, major = {Player.EVELIEN_19, Player.NIELS_19}, minor = {Player.JAMIE_19,
-                                    Player.SINAN_19}),
-                            Earning(money = 150, major = {Player.ROBERT_19, Player.SARAH_19}, minor = {Player.JAMIE_19,
-                                    Player.SINAN_19}),
-                            Earning(money = 250, major = {Player.MEREL_19, Player.RICK_PAUL_19}, minor =
-                                {Player.JAMIE_19, Player.SINAN_19}),
+                            Earning(money = 100, major = {Player.EVELIEN_19}, minor = {Player.JAMIE_19, Player.NIELS_19,
+                                Player.SINAN_19}),
+                            Earning(money = 150, major = {Player.ROBERT_19}, minor = {Player.JAMIE_19, Player.SARAH_19,
+                                Player.SINAN_19}),
+                            Earning(money = 250, major = {Player.MEREL_19}, minor = {Player.JAMIE_19, Player.SINAN_19})
                         ])
 exercise4_2 = Exercise(episode = 4, alive = alive4, maximum = 1500, earned = [])
 exercise4_3 = Exercise(episode = 4, alive = alive4, maximum = 2000, earned = [])
@@ -79,15 +78,14 @@ exercise4_3 = Exercise(episode = 4, alive = alive4, maximum = 2000, earned = [])
 # Opdracht 1 (Maximaal €1800):
 # €1800 (Major: Jamie, Niels, Sinan) (Minor: Merel, Rick-Paul, Robert, Sarah)
 # Opdracht 2 (Maximaal: Unlimited):
-# €100 (Major: Merel, Sarah) (Minor: Jamie, Niels, Rick-Paul, Robert, Sinan),
-# €100 (Major: Merel, Sarah) (Minor: Jamie, Niels, Rick-Paul, Robert, Sinan),
-# €50 (Major: Merel, Sarah, Robert) (Minor: Jamie, Niels, Rick-Paul, Sinan),
-# €50 (Major: Merel, Sarah, Robert) (Minor: Jamie, Niels, Rick-Paul, Sinan)
-# €50 (Major: Merel, Sarah, Robert) (Minor: Jamie, Niels, Rick-Paul, Sinan)
-# €200 (Major: Merel, Sarah, Robert) (Minor: Jamie, Niels, Rick-Paul, Sinan)
-# €100 (Major: Merel, Sarah, Robert) (Minor: Jamie, Niels, Rick-Paul, Sinan)
-# €100 (Major: Merel, Sarah, Robert) (Minor: Jamie, Niels, Rick-Paul, Sinan)
-# €600 (Major: Merel, Sarah, Robert) (Minor: Jamie, Niels, Rick-Paul, Sinan)
+# €1350 verdiend in totaal
+# €100 (Major: Merel) (Minor: Jamie, Niels, Rick-Paul, Robert, Sarah, Sinan),
+# €100 (Major: Merel) (Minor: Jamie, Niels, Rick-Paul, Robert, Sarah, Sinan),
+# €50 (Major: Merel) (Minor: Jamie, Niels, Rick-Paul, Sarah, Sinan),
+# €50 (Major: Sarah) (Minor: Jamie, Merel, Niels, Rick-Paul, Robert, Sinan)
+# €50 (Major: Merel) (Minor: Jamie, Niels, Rick-Paul, Robert, Sarah, Sinan)
+# €200 (Major: Robert) (Minor: Jamie, Merel, Niels, Rick-Paul, Sarah, Sinan),
+# €800 (Major: Merel, Robert, Sarah) (Minor: Jamie, Niels, Rick-Paul, Sinan)
 # Opdracht 3 (Maximaal €1500):
 # €750 (Major: Sarah) (Minor: Merel)
 alive5 = {Player.JAMIE_19, Player.MEREL_19, Player.NIELS_19, Player.RICK_PAUL_19, Player.ROBERT_19, Player.SARAH_19,
@@ -97,9 +95,15 @@ exercise5_1 = Exercise(episode = 5, alive = alive5, maximum = 1800, earned = [
                                     minor = {Player.MEREL_19, Player.RICK_PAUL_19, Player.ROBERT_19, Player.SARAH_19})
                         ])
 exercise5_2 = Exercise(episode = 5, alive = alive5, maximum = None, earned = [
-                            Earning(money = 200, major = {Player.MEREL_19, Player.SARAH_19}, minor = {Player.JAMIE_19,
-                                        Player.NIELS_19, Player.RICK_PAUL_19, Player.ROBERT_19, Player.SINAN_19}),
-                            Earning(money = 1150, major = {Player.MEREL_19, Player.ROBERT_19, Player.SARAH_19},
+                            Earning(money = 250, major = {Player.MEREL_19}, minor = {Player.JAMIE_19, Player.NIELS_19,
+                                Player.RICK_PAUL_19, Player.ROBERT_19, Player.SARAH_19, Player.SINAN_19}),
+                            Earning(money = 50, major = {Player.MEREL_19}, minor = {Player.JAMIE_19, Player.NIELS_19,
+                                Player.RICK_PAUL_19, Player.SARAH_19, Player.SINAN_19}),
+                            Earning(money = 50, major = {Player.SARAH_19}, minor = {Player.JAMIE_19, Player.MEREL_19,
+                                Player.NIELS_19, Player.RICK_PAUL_19, Player.ROBERT_19, Player.SINAN_19}),
+                            Earning(money = 200, major = {Player.ROBERT_19}, minor = {Player.JAMIE_19, Player.MEREL_19,
+                                Player.NIELS_19, Player.RICK_PAUL_19, Player.SARAH_19, Player.SINAN_19}),
+                            Earning(money = 800, major = {Player.MEREL_19, Player.ROBERT_19, Player.SARAH_19},
                                     minor = {Player.JAMIE_19, Player.NIELS_19, Player.RICK_PAUL_19, Player.SINAN_19})
                         ])
 exercise5_3 = Exercise(episode = 5, alive = alive5, maximum = 1500, earned = [

@@ -7,16 +7,16 @@ from Data.Player import Player
 # Opdracht 1 (Maximaal €0): Niks verdiend
 # Opdracht 2 (Maximaal €2500): Niet duidelijk wie wat verdiend heeft
 # Opdracht 3 (Maximaal €2100):
-# €18 (Major: Anita, Buddy) (Minor: Jaike, Johan, Miljuschka, Nathan),
-# €2 (Major: Jaike, Johan) (Minor: Anita, Buddy, Miljuschka, Nathan)
+# €18 (Major: Buddy) (Minor: Anita, Jaike, Johan, Miljuschka, Nathan),
+# €2 (Major: Johan) (Minor: Jaike, Miljuschka, Nathan)
 alive1 = {Player.ANITA_20, Player.BUDDY_20, Player.CLAES_20, Player.JAIKE_20, Player.JOHAN_20, Player.LEONIE_20,
           Player.MILJUSCHKA_20, Player.NATHAN_20, Player.ROB_20, Player.TINA_20}
 exercise1_2 = Exercise(episode = 1, alive = alive1, maximum = 2500, earned = [])
 exercise1_3 = Exercise(episode = 1, alive = alive1, maximum = 2100, earned = [
-                            Earning(money = 18, major = {Player.ANITA_20, Player.BUDDY_20}, minor = {Player.JAIKE_20,
+                            Earning(money = 18, major = {Player.BUDDY_20}, minor = {Player.ANITA_20, Player.JAIKE_20,
                                 Player.JOHAN_20, Player.MILJUSCHKA_20, Player.NATHAN_20}),
-                            Earning(money = 2, major = {Player.JAIKE_20, Player.JOHAN_20}, minor = {Player.ANITA_20,
-                                Player.BUDDY_20, Player.MILJUSCHKA_20, Player.NATHAN_20})
+                            Earning(money = 2, major = {Player.JOHAN_20}, minor = {Player.JAIKE_20,
+                                Player.MILJUSCHKA_20, Player.NATHAN_20})
                         ])
 
 # Aflevering 2
@@ -43,7 +43,7 @@ exercise2_3 = Exercise(episode = 2, alive = alive2, maximum = 2000, earned = [])
 # €150 (Major: Buddy, Johan, Rob) (Minor: Claes, Miljuschka),
 # €450 (Major: Jaike, Leonie, Nathan) (Minor: Claes, Miljuschka)
 # Opdracht 3 (Maximaal €2700):
-# €1500 (Major: Johan, Miljuschka) (Minor: Buddy, Claes, Jaike, Leonie, Nathan, Rob)
+# €1500 (Major: Johan) (Minor: Buddy, Claes, Jaike, Leonie, Miljuschka, Nathan, Rob)
 alive3 = {Player.BUDDY_20, Player.CLAES_20, Player.JAIKE_20, Player.JOHAN_20, Player.LEONIE_20, Player.MILJUSCHKA_20,
           Player.NATHAN_20, Player.ROB_20}
 exercise3_1 = Exercise(episode = 3, alive = alive3, maximum = 2250, earned = [])
@@ -54,9 +54,9 @@ exercise3_2 = Exercise(episode = 3, alive = alive3, maximum = 2000, earned = [
                                     minor = {Player.CLAES_20, Player.MILJUSCHKA_20})
                         ])
 exercise3_3 = Exercise(episode = 3, alive = alive3, maximum = 2700, earned = [
-                            Earning(money = 1500, major = {Player.JOHAN_20, Player.MILJUSCHKA_20},
+                            Earning(money = 1500, major = {Player.JOHAN_20},
                                     minor = {Player.BUDDY_20, Player.CLAES_20, Player.JAIKE_20, Player.LEONIE_20,
-                                             Player.NATHAN_20, Player.ROB_20})
+                                             Player.MILJUSCHKA_20, Player.NATHAN_20, Player.ROB_20})
                         ])
 
 # Aflevering 4
