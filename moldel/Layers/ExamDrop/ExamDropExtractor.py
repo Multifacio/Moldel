@@ -7,7 +7,7 @@ from queue import PriorityQueue
 from scipy.stats import mannwhitneyu
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold, SelectFpr, f_classif
-from sklearn.preprocessing import KBinsDiscretizer
+from sklearn.preprocessing import KBinsDiscretizer, StandardScaler
 from typing import List, NamedTuple, Set, Tuple
 import numpy as np
 import scipy as sc
@@ -65,8 +65,8 @@ class ExamDropExtractor:
         train_input = self.__add_answered_on_feature(train_data, train_input)
         self.__selected_features = self.__stats_filter_features(train_input, train_output, self.__feature_significance)
         train_input = train_input[:,self.__selected_features]
-        self.__pca = PCA(n_components = self.__pca_explain)
-        train_input = self.__pca.fit_transform(train_input)
+        self.__scaler = StandardScaler()
+        train_input = self.__scaler.fit_transform(train_input)
         return train_input, train_output, self.__get_train_weights(train_data)
 
     def get_predict_data(self) -> List[PredictSample]:
@@ -85,7 +85,7 @@ class ExamDropExtractor:
         predict_input = self.__discretizer.transform(predict_input)
         predict_input = self.__add_answered_on_feature(predict_data, predict_input)
         predict_input = predict_input[:,self.__selected_features]
-        predict_input = self.__pca.transform(predict_input)
+        predict_input = self.__scaler.transform(predict_input)
 
         predict_samples = []
         weights = self.__get_train_weights(predict_data)
