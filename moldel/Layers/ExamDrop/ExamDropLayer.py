@@ -11,9 +11,9 @@ from typing import Dict, List, Set
 import numpy as np
 
 class InnerExamDropLayer(MultiLayer):
-    def __init__(self, feature_significance: float, pca_explain: float, max_splits: int):
+    def __init__(self, feature_significance: float, regularization: float, max_splits: int):
         self.__feature_significance = feature_significance
-        self.__pca_explain = pca_explain
+        self.__regularization = regularization
         self.__max_splits = max_splits
 
     def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, MultiLayerResult]:
@@ -23,7 +23,7 @@ class InnerExamDropLayer(MultiLayer):
             return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
         extractor = ExamDropExtractor(predict_season, latest_episode, train_seasons, self.__feature_significance,
-                                      self.__pca_explain, self.__max_splits)
+                                      self.__max_splits)
         classifier = self.__training(extractor)
         predict_data = extractor.get_predict_data()
         if not predict_data:
@@ -42,7 +42,7 @@ class InnerExamDropLayer(MultiLayer):
             The trained machine learning model used to make predictions.
         """
         train_input, train_output, train_weights = extractor.get_train_data()
-        classifier = LogisticRegression(solver = "lbfgs")
+        classifier = LogisticRegression(solver = "lbfgs", C = 1 / self.__regularization)
         classifier.fit(train_input, train_output, train_weights)
         return classifier
 
@@ -84,7 +84,7 @@ class InnerExamDropLayer(MultiLayer):
 class ExamDropLayer(PotentialMolLayer):
     """ The Exam Drop Layer predicts whether you are the Mol based on what dropouts have answered during the test. """
 
-    def __init__(self, feature_significance: float, pca_explain: float, max_splits: int):
+    def __init__(self, feature_significance: float, regularization: float, max_splits: int):
         """ Constructor of the Exam Drop Layer
 
         Arguments:
@@ -94,4 +94,4 @@ class ExamDropLayer(PotentialMolLayer):
                 of variance in the features.
             max_splits (int): How many additional bins should be used to discretize the features.
         """
-        super().__init__(MultiplyAggregateLayer(InnerExamDropLayer(feature_significance, pca_explain, max_splits), False))
+        super().__init__(MultiplyAggregateLayer(InnerExamDropLayer(feature_significance, regularization, max_splits), False))

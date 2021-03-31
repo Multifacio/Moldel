@@ -24,7 +24,7 @@ class ExamDropExtractor:
     BIN_STRATEGY = 'kmeans' # The method used to select the splits between the bins.
 
     def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], feature_significance: float,
-                 pca_explain: float, max_splits: int):
+                 max_splits: int):
         """ Constructor of the Exam Drop Extractor
 
         Arguments:
@@ -33,15 +33,12 @@ class ExamDropExtractor:
             train_seasons (Set[int]): The seasons which are used as train data.
             feature_significance (float): Only features with a p-value lower than this value will be selected by the
                 Mann-Whitney U Filter.
-            pca_explain (float): PCA will select the least number of components that at least explain this amount
-                of variance in the features.
             max_splits (int): How many additional bins should be used to discretize the features.
         """
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
         self.__feature_significance = feature_significance
-        self.__pca_explain = pca_explain
         self.__max_splits = max_splits
 
     def get_train_data(self) -> Tuple[np.array, np.array, np.array]:
