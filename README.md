@@ -42,6 +42,9 @@ Ik bedank iedereen die mij meegeholpen heeft bij dit project, daaronder vallen:
 * Adam Geitgey: Ik bedank Adam Geitgey voor het gebruik van zijn project om gezichten in afbeeldingen mee te herkennen (https://github.com/ageitgey/face_recognition) dat wordt gebruikt voor de Appearance Layer.  
 * Mattijn van Hoek: Ik wil Mattijn van Hoek bedanken voor zijn toestemming voor het gebruik en verbeteren van zijn idee en code (https://github.com/mattijn/widm) voor de Appearance Layer. Alle credits van dit idee gaan naar Mattijn van Hoek, net als de video parse code die ik heb gebruikt van Mattijn van Hoek. Echter heb ik zelf wel het machine learning model voor deze layer gemaakt (dat het relatief in beeld komen transleert naar een likelihood), ben ik ook verantwoordelijk voor diepere analyse van deze resultaten voor meerdere seizoenen en heb ik er zelf voor gezorgd dat deze voorspellingen gecombineerd konden worden met de andere voorspellingen. 
 * Jaap van Zessen: Ik wil Jaap van Zessen bedanken voor de toestemming om zijn voorspellingen (http://www.jaapvanzessen.nl/tag/wie-is-de-mol/) te verwerken in mijn Moldel onder de Social Media Layer.
+* Dr. Johannes Schmidt-Hieber: Ik wil Johannes Schmidt-Hieber bedanken voor ideeën die ik heb gebruikt bij enkele layers en voor het geven van feedback op mijn thesis die over dit project gaat.
+* Dr. Alexis Derumigny: Ik wil Alexis Derumigny ook bedanken voor ideeën die ik heb gebruikt bij enkele layers en voor het geven van feedback op mijn thesis die over dit project gaat.
+* Dr. Mannes Poel: Ik wil Mannes Poel bedanken voor het geven van feedback op mijn thesis die over dit project gaat.
 * Dr. Jasper de Jong: Ik wil Jasper de Jong bedanken voor zijn inspiratie voor de Exam Pass Layer.
 
 # Contact
