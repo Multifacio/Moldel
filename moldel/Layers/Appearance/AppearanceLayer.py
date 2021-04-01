@@ -6,6 +6,7 @@ from Layers.MultiLayer.EmptyMultiLayer import EmptyMultiLayer
 from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
 from Layers.Special.CutLayer import CutLayer
+from Layers.Special.PotentialMolLayer import PotentialMolLayer
 from scipy.stats import gaussian_kde
 from statistics import mean
 from typing import Dict, Set, Tuple
@@ -147,7 +148,7 @@ class InnerAppearanceLayer(MultiLayer):
             middle = (lowerbound + upperbound) / 2
         return middle
 
-class AppearanceLayer(CutLayer):
+class AppearanceLayer(PotentialMolLayer):
     """ The Appearance Layer predict which player is the Mol based on how often this player appears during the episode.
     This code is based on the project of mattijn: https://github.com/mattijn/widm """
 
@@ -171,5 +172,5 @@ class AppearanceLayer(CutLayer):
                 distributions.
             outlier_cutoff (float): This is the relative amount of highest and lowest appearance values that get removed.
         """
-        super().__init__(MultiplyAggregateLayer(InnerAppearanceLayer(first_season, aug_num_cuts, aug_min_cuts_on,
-                                                                     cdf_cutoff, outlier_cutoff)), mean, 1.0, predict_lowerbound)
+        super().__init__(CutLayer(MultiplyAggregateLayer(InnerAppearanceLayer(first_season, aug_num_cuts,
+                            aug_min_cuts_on, cdf_cutoff, outlier_cutoff)), mean, 1.0, predict_lowerbound))

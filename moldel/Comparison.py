@@ -1,9 +1,6 @@
 from Data.LastEpisodes import get_last_episode
 from Data.PlayerData import get_mol_in_season
-from Layers.Appearance.AppearanceLayer import AppearanceLayer
-from Layers.ExamDrop.ExamDropLayer import ExamDropLayer
-from Layers.PerfectLayer import PerfectLayer
-from Layers.ExamUniformLayer import ExamUniformLayer
+from Layers.Special.ExamUniformLayer import ExamUniformLayer
 from Layers.Moldel import Moldel
 from numpy.random.mtrand import RandomState
 from progress.bar import Bar
@@ -12,6 +9,8 @@ from typing import Tuple
 
 from Layers.Special.CompositeLayer import CompositeLayer
 from Layers.Special.ManualExclusionLayer import ManualExclusionLayer
+from Layers.Special.MemoryLayer import MemoryLayer
+from Layers.Special.PotentialMolLayer import PotentialMolLayer
 from Validators.ValidationMetrics import ValidationMetrics
 import numpy as np
 
@@ -38,15 +37,15 @@ def evaluate(likelihoods1: np.array, likelihoods2: np.array):
 
 RANDOM_SEED = 949019755
 VALIDATE_SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
-TRAIN_SEASONS = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+TRAIN_SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
 EPISODE_GROUPS = 9
-POTENTIAL_MOL_GROUPS = [2, 3, 4, 5, 6, 7, 8, 9, 10]
+POTENTIAL_MOL_GROUPS = [10, 9, 8, 7, 6, 5, 4, 3, 2]
 
 distributions1 = dict()
 distributions2 = dict()
 random_generator = RandomState(RANDOM_SEED)
-model1 = Moldel(random_generator)
-model2 = CompositeLayer([ExamUniformLayer(), ManualExclusionLayer()])
+model1 = MemoryLayer("Predictions/Appearance Configuration")
+model2 = PotentialMolLayer()
 
 # Obtain the predictions from the first model, which is supposed to be the better performing model.
 total_tasks = sum([get_last_episode(season) + 1 for season in VALIDATE_SEASONS])

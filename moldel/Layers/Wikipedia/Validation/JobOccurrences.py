@@ -1,7 +1,7 @@
 from Data.Wikipedia.Job import Job
 from Layers.Wikipedia.WikipediaParser import WikipediaParser
 
-SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
+SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
 
 dictionary = WikipediaParser.get_standard_dictionary()
 job_occurrences = dict()

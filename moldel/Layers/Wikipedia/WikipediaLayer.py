@@ -4,6 +4,7 @@ from Data.Wikipedia.Linker import LINKER
 from Layers.Layer import Layer
 from Layers.Special.EqualLayer import EqualLayer
 from Layers.Special.NormalizeLayer import NormalizeLayer
+from Layers.Special.PotentialMolLayer import PotentialMolLayer
 from Layers.Wikipedia.WikipediaExtractor import WikipediaExtractor
 from numpy.random import RandomState
 from typing import Dict, Set
@@ -45,7 +46,7 @@ class InnerWikipediaLayer(Layer):
         """ Get all seasons that have Wikipedia data. """
         return {get_season(player) for player in LINKER}
 
-class WikipediaLayer(NormalizeLayer):
+class WikipediaLayer(PotentialMolLayer):
     """ The Wikipedia Layer predicts which player is the Mol based on their Wikipedia pages. It tries to find the
     correlation between the number of words on your Wikipedia page and the likelihood of being the Mol. Furthermore it
     tries to find a correlation to which job a player belongs and the likelihood of being the Mol. """
@@ -59,4 +60,5 @@ class WikipediaLayer(NormalizeLayer):
             pca_components (int): The number of PCA components extracted from the job features before LDA is applied.
             random_generator (RandomState): The random generator used to generate random values.
         """
-        super().__init__(InnerWikipediaLayer(unlikely_z_score, lower_likelihood, pca_components, random_generator))
+        super().__init__(NormalizeLayer(InnerWikipediaLayer(unlikely_z_score, lower_likelihood, pca_components,
+                                                            random_generator)))

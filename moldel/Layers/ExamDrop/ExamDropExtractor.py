@@ -4,7 +4,7 @@ from Data.Player import Player
 from Data.PlayerData import get_is_mol
 from Layers.ExamDrop.ExamDropEncoder import ExamDropEncoder, TrainSample
 from queue import PriorityQueue
-from scipy import stats
+from scipy.stats import mannwhitneyu
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold, SelectFpr, f_classif
 from sklearn.preprocessing import KBinsDiscretizer
@@ -23,7 +23,7 @@ class ExamDropExtractor:
 
     BIN_STRATEGY = 'kmeans' # The method used to select the splits between the bins.
 
-    def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], anova_f_significance: float,
+    def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], feature_significance: float,
                  pca_explain: float, max_splits: int):
         """ Constructor of the Exam Drop Extractor
 
@@ -31,8 +31,8 @@ class ExamDropExtractor:
             predict_season (int): The season for which we make the prediction.
             predict_episode (int): The latest episode in the predict season that could be used.
             train_seasons (Set[int]): The seasons which are used as train data.
-            anova_f_significance (float): Only features with a p-value lower than this value will be selected by the
-                ANOVA F filter.
+            feature_significance (float): Only features with a p-value lower than this value will be selected by the
+                Mann-Whitney U Filter.
             pca_explain (float): PCA will select the least number of components that at least explain this amount
                 of variance in the features.
             max_splits (int): How many additional bins should be used to discretize the features.
@@ -40,7 +40,7 @@ class ExamDropExtractor:
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
-        self.__anova_f_significance = anova_f_significance
+        self.__feature_significance = feature_significance
         self.__pca_explain = pca_explain
         self.__max_splits = max_splits
 
@@ -63,8 +63,8 @@ class ExamDropExtractor:
                                               strategy = ExamDropExtractor.BIN_STRATEGY)
         train_input = self.__discretizer.fit_transform(train_input)
         train_input = self.__add_answered_on_feature(train_data, train_input)
-        self.__anova_f_filter = SelectFpr(f_classif, alpha = self.__anova_f_significance)
-        train_input = self.__anova_f_filter.fit_transform(train_input, train_output)
+        self.__selected_features = self.__stats_filter_features(train_input, train_output, self.__feature_significance)
+        train_input = train_input[:,self.__selected_features]
         self.__pca = PCA(n_components = self.__pca_explain)
         train_input = self.__pca.fit_transform(train_input)
         return train_input, train_output, self.__get_train_weights(train_data)
@@ -84,7 +84,7 @@ class ExamDropExtractor:
         predict_input = np.array([ExamDropEncoder.extract_features(sample, self.__predict_episode) for sample in predict_data])
         predict_input = self.__discretizer.transform(predict_input)
         predict_input = self.__add_answered_on_feature(predict_data, predict_input)
-        predict_input = self.__anova_f_filter.transform(predict_input)
+        predict_input = predict_input[:,self.__selected_features]
         predict_input = self.__pca.transform(predict_input)
 
         predict_samples = []
@@ -208,6 +208,17 @@ class ExamDropExtractor:
             features = np.append(features, [answered_on])
             new_features.append(features)
         return np.array(new_features)
+
+    @staticmethod
+    def __stats_filter_features(train_input: np.array, train_output: np.array, significance: float) -> List[int]:
+        selection = []
+        for i, features in enumerate(train_input.T):
+            non_mol_values = [f for f, to in zip(features, train_output) if to == 0]
+            mol_values = [f for f, to in zip(features, train_output) if to == 1]
+            _, p_value = mannwhitneyu(non_mol_values, mol_values, alternative = 'two-sided')
+            if p_value <= significance:
+                selection.append(i)
+        return selection
 
     @staticmethod
     def __get_train_weights(train_data: List[TrainSample]) -> np.array:

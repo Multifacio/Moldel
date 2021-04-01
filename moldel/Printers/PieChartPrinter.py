@@ -1,8 +1,11 @@
+from collections import deque
+
 from Data.PlayerData import get_name
 from Data.Player import Player
 from iteround import saferound
+from matplotlib.patches import Wedge
 from Printers.Printer import Printer
-from typing import Dict, Union
+from typing import Dict, Union, List
 import math
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,11 +23,15 @@ class PieChartPrinter(Printer):
     # other slices).
     __THRESHOLD_LIKELIHOOD = 0.015
 
+    # The minimum safe difference between the previous and next angle (used to prevent angles becoming to close by
+    # shifting)
+    __THRESHOLD_SAFE_MIN_ANGLE_INC = 18
+
     # The minimum difference between the previous and next angle
-    __THRESHOLD_MIN_ANGLE_INC = 4
+    __THRESHOLD_MIN_ANGLE_INC = 6
 
     # The relative length of the line with respect to the radius of the circle
-    __THRESHOLD_LINE_LENGTH = 0.5
+    __THRESHOLD_LINE_LENGTH = 0.3
 
     def __init__(self, file_name: Union[str, None] = None):
         """ Constructor of the Pie Chart Printer.
@@ -55,23 +62,27 @@ class PieChartPrinter(Printer):
 
         wedges, names, percentages = plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%')
         kw = dict(arrowprops=dict(arrowstyle="-"), zorder=0, va="center")
-        previous_angle = None
-        for i, it in enumerate(zip(wedges, names, percentages, sizes)):
-            wedge, name, percentage, size = it
+        angles = [(wedge.theta2 - wedge.theta1) / 2 + wedge.theta1 for wedge in wedges]
+        text_angles = self.__adjust_angles(angles)
+        for i, it in enumerate(zip(angles, text_angles, names, percentages, sizes)):
+            angle, text_angle, name, percentage, size = it
             if size < self.__THRESHOLD_LIKELIHOOD:
                 name.update({'visible': False})
                 percentage.update({'visible': False})
-                angle = (wedge.theta2 - wedge.theta1) / 2 + wedge.theta1
-                text_angle = angle
-                if previous_angle is not None and self.__angle_distance(angle, previous_angle) < self.__THRESHOLD_MIN_ANGLE_INC:
-                    text_angle = (previous_angle + self.__THRESHOLD_MIN_ANGLE_INC + 360) % 360
                 x, y = np.cos(np.deg2rad(angle)), np.sin(np.deg2rad(angle))
                 x_text = (1 + self.__THRESHOLD_LINE_LENGTH) * np.cos(np.deg2rad(text_angle))
                 y_text = (1 + self.__THRESHOLD_LINE_LENGTH) * np.sin(np.deg2rad(text_angle))
                 horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
-                plt.annotate(name.get_text() + ": " + percentage.get_text(), xy=(x, y), xytext=(x_text, y_text),
+                plt.annotate(name.get_text() + ": " + percentage.get_text(), xy= (x, y), xytext=(x_text, y_text),
                              horizontalalignment=horizontalalignment, **kw)
-                previous_angle = angle
+            elif angle != text_angle:
+                name.update({'visible': False})
+                x, y = np.cos(np.deg2rad(angle)), np.sin(np.deg2rad(angle))
+                x_text = (1 + self.__THRESHOLD_LINE_LENGTH) * np.cos(np.deg2rad(text_angle))
+                y_text = (1 + self.__THRESHOLD_LINE_LENGTH) * np.sin(np.deg2rad(text_angle))
+                horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+                plt.annotate(name.get_text(), xy=(x, y), xytext=(x_text, y_text), horizontalalignment =
+                    horizontalalignment, **kw)
 
         if self.__file_name is None:
             plt.show()
@@ -79,8 +90,27 @@ class PieChartPrinter(Printer):
             plt.savefig(self.__file_name)
             plt.clf()
 
+    @classmethod
+    def __adjust_angles(self, angles: List[float]) -> List[float]:
+        if len(angles) == 1:
+            return angles
+        for i, angle_pair in enumerate(zip(angles, angles[1:])):
+            angle1, angle2 = angle_pair
+            if not self.__similar_angles(angle1, angle2, self.__THRESHOLD_SAFE_MIN_ANGLE_INC):
+                break
+        angles = deque(angles)
+        angles.rotate(-(i + 1))
+        new_angles = [angles.popleft()]
+        for angle in angles:
+            if self.__similar_angles(angle, new_angles[-1], self.__THRESHOLD_MIN_ANGLE_INC):
+                angle = (new_angles[-1] + self.__THRESHOLD_MIN_ANGLE_INC) % 360
+            new_angles.append(angle)
+        new_angles = deque(new_angles)
+        new_angles.rotate(i + 1)
+        return new_angles
+
     @staticmethod
-    def __angle_distance(angle1: float, angle2: float):
+    def __similar_angles(angle1: float, angle2: float, max_distance: float) -> bool:
         forward_distance = (angle1 - angle2) % 360
         backward_distance = (angle2 - angle1) % 360
-        return min(forward_distance, backward_distance)
+        return min(forward_distance, backward_distance) < max_distance

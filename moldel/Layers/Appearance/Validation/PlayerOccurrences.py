@@ -2,7 +2,7 @@
 from Data.PlayerData import get_name
 from Layers.Appearance.VideoParser import VideoParser, ParsedVideo
 
-SEASON = 17
+SEASON = 22
 EPISODE = 5
 
 parsed_video = VideoParser.load_parsed_video(SEASON, EPISODE)

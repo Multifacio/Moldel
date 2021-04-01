@@ -6,6 +6,7 @@ from Data.PlayerData import get_players_in_season
 from Layers.Layer import Layer
 from Layers.Special.EqualLayer import EqualLayer
 from Layers.Special.NormalizeLayer import NormalizeLayer
+from Layers.Special.PotentialMolLayer import PotentialMolLayer
 from sklearn.linear_model import LogisticRegression
 from typing import Dict, List, Set, Tuple
 import itertools as it
@@ -41,7 +42,7 @@ class InnerExamPassLayer(Layer):
             The estimator used to estimate the likelihood that someone drops out based on the joker usage.
         """
         train_input, train_output = self.__get_train_data(train_seasons)
-        estimator = LogisticRegression()
+        estimator = LogisticRegression(solver = "lbfgs", penalty = "none")
         estimator.fit(train_input, train_output)
         return estimator
 
@@ -140,8 +141,8 @@ class InnerExamPassLayer(Layer):
         more_1_joker = sum(usage >= own_usage + 1 for p, usage in joker_usage.items() if p != player)
         return [less_1_joker, same_jokers, more_1_joker]
 
-class ExamPassLayer(NormalizeLayer):
+class ExamPassLayer(PotentialMolLayer):
     """ The Exam Pass Layer predicts whether a player is the Mol based on how many jokers and exemptions players used
     during the test. """
     def __init__(self):
-        super().__init__(InnerExamPassLayer())
+        super().__init__(NormalizeLayer(InnerExamPassLayer()))

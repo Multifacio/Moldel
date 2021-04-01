@@ -5,13 +5,14 @@ from Layers.ExamDrop.ExamDropExtractor import ExamDropExtractor, PredictSample
 from Layers.MultiLayer.EmptyMultiLayer import EmptyMultiLayer
 from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
+from Layers.Special.PotentialMolLayer import PotentialMolLayer
 from sklearn.linear_model import LogisticRegression
 from typing import Dict, List, Set
 import numpy as np
 
 class InnerExamDropLayer(MultiLayer):
-    def __init__(self, anova_f_significance: float, pca_explain: float, max_splits: int):
-        self.__anova_f_significance = anova_f_significance
+    def __init__(self, feature_significance: float, pca_explain: float, max_splits: int):
+        self.__feature_significance = feature_significance
         self.__pca_explain = pca_explain
         self.__max_splits = max_splits
 
@@ -21,7 +22,7 @@ class InnerExamDropLayer(MultiLayer):
         if predict_season not in available_seasons:
             return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
-        extractor = ExamDropExtractor(predict_season, latest_episode, train_seasons, self.__anova_f_significance,
+        extractor = ExamDropExtractor(predict_season, latest_episode, train_seasons, self.__feature_significance,
                                       self.__pca_explain, self.__max_splits)
         classifier = self.__training(extractor)
         predict_data = extractor.get_predict_data()
@@ -41,7 +42,7 @@ class InnerExamDropLayer(MultiLayer):
             The trained machine learning model used to make predictions.
         """
         train_input, train_output, train_weights = extractor.get_train_data()
-        classifier = LogisticRegression(solver="lbfgs")
+        classifier = LogisticRegression(solver = "lbfgs", penalty = "none")
         classifier.fit(train_input, train_output, train_weights)
         return classifier
 
@@ -80,17 +81,17 @@ class InnerExamDropLayer(MultiLayer):
         return {player: MultiLayerResult(np.array(predictions), player not in alive_players) for player, predictions in \
                 all_predictions.items()}
 
-class ExamDropLayer(MultiplyAggregateLayer):
+class ExamDropLayer(PotentialMolLayer):
     """ The Exam Drop Layer predicts whether you are the Mol based on what dropouts have answered during the test. """
 
-    def __init__(self, anova_f_significance: float, pca_explain: float, max_splits: int):
+    def __init__(self, feature_significance: float, pca_explain: float, max_splits: int):
         """ Constructor of the Exam Drop Layer
 
         Arguments:
-            anova_f_significance (float): Only features with a p-value lower than this value will be selected by the
-                ANOVA F filter.
+            feature_significance (float): Only features with a p-value lower than this value will be selected by the
+                Mann-Whitney U Filter.
             pca_explain (float): PCA will select the least number of components that at least explain this amount
                 of variance in the features.
             max_splits (int): How many additional bins should be used to discretize the features.
         """
-        super().__init__(InnerExamDropLayer(anova_f_significance, pca_explain, max_splits), False)
+        super().__init__(MultiplyAggregateLayer(InnerExamDropLayer(feature_significance, pca_explain, max_splits), False))
