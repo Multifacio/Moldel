@@ -26,7 +26,11 @@ class Exercise:
     earned: List[Earning]
 
     def contains_information(self) -> bool:
-        """ Check if the exercise has any information. """
+        """ Check if the exercise has any information.
+
+        Returns:
+            True if this exercise contains information, false otherwise.
+        """
         return bool(self.earned)
 
     def major_earned(self) -> Counter[Player]:
