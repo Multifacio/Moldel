@@ -44,7 +44,7 @@ class InnerMoneyLayer(MultiLayer):
             The trained machine learning model used to make predictions.
         """
         train_input, train_output = extractor.get_train_data()
-        classifier = LogisticRegression(solver = "lbfgs", penalty = "none")
+        classifier = LogisticRegression(solver = "lbfgs")
         classifier.fit(train_input, train_output)
         return classifier
 
