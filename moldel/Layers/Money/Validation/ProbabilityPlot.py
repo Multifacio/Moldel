@@ -8,7 +8,7 @@ QUANTILES = 6
 SPLINE_CLUSTERS = 4
 MIN_RANGE = -10000
 MAX_RANGE = 10000
-TEST_SEASONS = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+TEST_SEASONS = {8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22}
 
 encoder = MoneyEncoder(SPLINE_CLUSTERS, QUANTILES, RandomState())
 samples = encoder.get_money_samples(TEST_SEASONS, math.inf)

@@ -1,14 +1,11 @@
+from Data.MoneyData.Earnings.All import MONEY_DATA
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import QuantileTransformer
-
-from Data.MoneyData.Earnings.All import MONEY_DATA
-from Data.PlayerData import get_is_mol
-from statistics import mean
 import math
 import numpy as np
 
 KMEANS = 4
-TEST_SEASONS = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+TEST_SEASONS = {8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22}
 
 major_earned = []
 for season in TEST_SEASONS:
