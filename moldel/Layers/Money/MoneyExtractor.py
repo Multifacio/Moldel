@@ -1,6 +1,6 @@
 from Data.MoneyData.Earnings.All import MONEY_DATA
 from Data.Player import Player
-from Data.PlayerData import get_is_mol
+from Data.PlayerData import get_is_mol, get_players_in_season
 from Layers.Money.MoneyEncoder import MoneyEncoder
 from numpy.random import RandomState
 from sklearn.decomposition import PCA
@@ -62,6 +62,9 @@ class MoneyExtractor:
             A dictionary with as key a player and as value a list of all feature rows associated to that player.
         """
         samples = self.__encoder.get_money_samples({self.__predict_season}, self.__predict_episode)
+        if not samples:
+            return dict()
+
         predict_input = np.array([self.__encoder.extract_features(sample, self.__major_pattern, self.__minor_pattern)
                                 for sample in samples])
         predict_input = self.__pca.transform(predict_input)
