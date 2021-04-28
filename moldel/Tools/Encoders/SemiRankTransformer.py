@@ -96,8 +96,8 @@ class SemiRankTransformer(Encoder):
             cluster_order = {cluster_order[center]: i for i, center in enumerate(splits[:,0])}
             splits = np.array([(c1[0] + c2[0]) / 2 for c1, c2 in zip(splits, splits[1:])])
             splits = np.concatenate((np.array([np.min(column)]), splits, np.array([np.max(column)])))
-            rank_splits = rank_transformer.transform(splits[:,np.newaxis])
+            self.rank_splits = rank_transformer.transform(splits[:,np.newaxis])
             ignored_clusters = {clustering.predict(np.array([[value]]))[0] for value in setting.ignore_values}
-            ignored_bounds = {c: IgnoredBound(splits[cluster_order[c]], rank_splits[cluster_order[c]][0],
-                splits[cluster_order[c] + 1], rank_splits[cluster_order[c] + 1][0]) for c in ignored_clusters}
+            ignored_bounds = {c: IgnoredBound(splits[cluster_order[c]], self.rank_splits[cluster_order[c]][0],
+                splits[cluster_order[c] + 1], self.rank_splits[cluster_order[c] + 1][0]) for c in ignored_clusters}
             self.ignored_bounds.append(ignored_bounds)
