@@ -1,6 +1,7 @@
 from Layers.ExamDrop.ExamDropLayer import ExamDropLayer
 from Layers.ExamPass.ExamPassLayer import ExamPassLayer
 from Layers.Appearance.AppearanceLayer import AppearanceLayer
+from Layers.Money.MoneyLayer import MoneyLayer
 from Layers.MultiLayer.CombineLayer import CombineLayer
 from Layers.MultiLayer.StackLayer import StackLayer
 from Layers.SocialMediaLayer import SocialMediaLayer
@@ -15,9 +16,9 @@ class MoldelStacker(StackLayer):
 
     def __init__(self, random_generator: RandomState):
         predict_layers = [ExamDropLayer(1e-2, 0.95, 40), WikipediaLayer(-0.524, 0.675, 5, random_generator),
-                          AppearanceLayer(1/5, 13, 4, 2, 0.01, 0.01), ExamPassLayer()]
+            AppearanceLayer(1/5, 13, 4, 2, 0.01, 0.01), ExamPassLayer(), MoneyLayer(0.99, 4, 9, random_generator)]
         train_layers = [MemoryLayer("Exam Drop Stacker"), MemoryLayer("Wikipedia Stacker"),
-                        MemoryLayer("Appearance Stacker"), MemoryLayer("Exam Pass Stacker")]
+            MemoryLayer("Appearance Stacker"), MemoryLayer("Exam Pass Stacker"), MemoryLayer("Money Stacker")]
         super().__init__(CombineLayer(predict_layers, True), CombineLayer(train_layers, True), self.SPLITS)
 
 class Moldel(CompositeLayer):
