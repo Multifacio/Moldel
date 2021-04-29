@@ -11,6 +11,9 @@ Het Moldel is een programma dat voor elke kandidaat bepaald hoe waarschijnlijk d
 * Social Media Layer: Deze layer geeft kandidaten een lagere/hogere kans op basis van de social media analyse door Jaap van Zessen (http://www.jaapvanzessen.nl/tag/wie-is-de-mol/). Hierbij wordt onder andere gekeken naar foto's die gelekt zijn, hoe actief kandidaten op social media (Facebook, Twitter, Youtube, etc.) waren tijdens de opname periode en andere informatie die aantoont dat een kandidaat wel/niet aanwezig was tijdens een later stadium van de opname periode.
 * Appearance Layer: Het idee van deze layer komt van Mattijn van Hoek (https://github.com/mattijn/widm). Deze layer probeert te voorspellen wie de 'Mol' is op basis van hoe vaak de 'Mol' in beeld komt tijdens de eerste 4 afleveringen (de 'Mol' komt vaak minder in beeld). 
 
+# Documentatie
+Meer (technische) details over dit project kun je vinden in de thesis die ik geschreven heb over het Moldel. Deze thesis is geschreven in het Engels en kun je downloaden via: https://essay.utwente.nl/86073/. 
+
 # Oude Resultaten
 Het Moldel is getest op de seizoenen 13 tot en met 21 (Renaissance) en is getest op de seizoen 9 tot en met 12. Echter voor de seizoenen 9 tot en met 12 zijn alleen de Exam Drop Layer, Exam Pass Layer, Wikipedia Layer gebruikt, omdat er geen social media analyses zijn gedaan in deze periode en omdat de 'Mol' in deze periode nog niet minder in beeld kwam. Het Moldel laat goede resultaten zien voor de seizoenen 9 t/m 21 (Renaissance), e.g. in 13 van de 13 finales krijgt de echte 'Mol' de hoogste likelihood, zie de afbeelding hieronder: 
 <details>
@@ -42,6 +45,9 @@ Ik bedank iedereen die mij meegeholpen heeft bij dit project, daaronder vallen:
 * Adam Geitgey: Ik bedank Adam Geitgey voor het gebruik van zijn project om gezichten in afbeeldingen mee te herkennen (https://github.com/ageitgey/face_recognition) dat wordt gebruikt voor de Appearance Layer.  
 * Mattijn van Hoek: Ik wil Mattijn van Hoek bedanken voor zijn toestemming voor het gebruik en verbeteren van zijn idee en code (https://github.com/mattijn/widm) voor de Appearance Layer. Alle credits van dit idee gaan naar Mattijn van Hoek, net als de video parse code die ik heb gebruikt van Mattijn van Hoek. Echter heb ik zelf wel het machine learning model voor deze layer gemaakt (dat het relatief in beeld komen transleert naar een likelihood), ben ik ook verantwoordelijk voor diepere analyse van deze resultaten voor meerdere seizoenen en heb ik er zelf voor gezorgd dat deze voorspellingen gecombineerd konden worden met de andere voorspellingen. 
 * Jaap van Zessen: Ik wil Jaap van Zessen bedanken voor de toestemming om zijn voorspellingen (http://www.jaapvanzessen.nl/tag/wie-is-de-mol/) te verwerken in mijn Moldel onder de Social Media Layer.
+* Dr. Johannes Schmidt-Hieber: Ik wil Johannes Schmidt-Hieber bedanken voor ideeën die ik heb gebruikt bij enkele layers en voor het geven van feedback op mijn thesis die over dit project gaat.
+* Dr. Alexis Derumigny: Ik wil Alexis Derumigny ook bedanken voor ideeën die ik heb gebruikt bij enkele layers en voor het geven van feedback op mijn thesis die over dit project gaat.
+* Dr. Mannes Poel: Ik wil Mannes Poel bedanken voor het geven van feedback op mijn thesis die over dit project gaat.
 * Dr. Jasper de Jong: Ik wil Jasper de Jong bedanken voor zijn inspiratie voor de Exam Pass Layer.
 
 # Contact
