@@ -5,7 +5,7 @@ from Layers.Wikipedia.WikipediaExtractor import WikipediaExtractor
 from numpy.random.mtrand import RandomState
 
 RANDOM_SEED = 949019755
-SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22}
 PCA_COMPONENTS = 5
 UNLIKELY_Z_SCORE = 0.0
 
