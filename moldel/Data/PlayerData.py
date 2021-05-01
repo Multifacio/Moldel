@@ -135,11 +135,11 @@ __ALL_PLAYER_DATA = {
     Player.PEGGY_21: PlayerData("Peggy", 21, False, 43), Player.RON_21: PlayerData("Ron", 21, False, 56),
     Player.TINA_21: PlayerData("Tina", 21, False, 45), Player.TYGO_21: PlayerData("Tygo", 21, False, 46),
 
-    Player.CHARLOTTE_22: PlayerData("Charlotte", 22, None, 32), Player.ERIK_22: PlayerData("Erik", 22, None, 63),
-    Player.FLORENTIJN_22: PlayerData("Florentijn", 22, None, 43), Player.JOSHUA_22: PlayerData("Joshua", 22, None, 32),
-    Player.LAKSHMI_22: PlayerData("Lakshmi", 22, None, 27), Player.MARIJE_22: PlayerData("Marije", 22, None, 33),
-    Player.RENEE_22: PlayerData("Renée", 22, None, 59), Player.REMCO_22: PlayerData("Remco", 22, None, 47),
-    Player.ROCKY_22: PlayerData("Rocky", 22, None, 36), Player.SPLINTER_22: PlayerData("Splinter", 22, None, 24)
+    Player.CHARLOTTE_22: PlayerData("Charlotte", 22, False, 32), Player.ERIK_22: PlayerData("Erik", 22, False, 63),
+    Player.FLORENTIJN_22: PlayerData("Florentijn", 22, False, 43), Player.JOSHUA_22: PlayerData("Joshua", 22, False, 32),
+    Player.LAKSHMI_22: PlayerData("Lakshmi", 22, False, 27), Player.MARIJE_22: PlayerData("Marije", 22, False, 33),
+    Player.RENEE_22: PlayerData("Renée", 22, True, 59), Player.REMCO_22: PlayerData("Remco", 22, False, 47),
+    Player.ROCKY_22: PlayerData("Rocky", 22, False, 36), Player.SPLINTER_22: PlayerData("Splinter", 22, False, 24)
 }
 
 def get_name(player: Player) -> str:
