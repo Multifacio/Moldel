@@ -100,8 +100,11 @@ class MoneyEncoder:
         Returns:
             A function that returns based on how many money that player minor earned how likely that player is the Mol.
         """
-        train_input = np.array([[sample.minor_self] for sample in samples])
+        minor_input = np.array([[sample.minor_self] for sample in samples])
+        major_input = np.array([[sample.major_self] for sample in samples])
+        train_input = np.concatenate((minor_input, major_input), axis = 0)
         train_output = np.array([1.0 if get_is_mol(sample.player) else 0.0 for sample in samples])
+        train_output = np.concatenate((train_output, train_output))
         return self.__learn_money_pattern(train_input, train_output)
 
     def __learn_money_pattern(self, train_input: np.array, train_output: np.array) -> Callable[[float], float]:
@@ -139,12 +142,6 @@ class MoneyEncoder:
         """
         major_earned = exercise.major_earned()
         minor_earned = exercise.minor_earned()
-
-        # Normalize the earning amounts by multiplying them by the number of players still alive
-        for player, earned in major_earned.items():
-            major_earned[player] = len(exercise.alive) * earned
-        for player, earned in minor_earned.items():
-            minor_earned[player] = len(exercise.alive) * earned
 
         return [self.__extract_single_sample(exercise, player, major_earned, minor_earned) for player in exercise.alive]
 

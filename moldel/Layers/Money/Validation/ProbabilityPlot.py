@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 QUANTILES = 6
 SPLINE_CLUSTERS = 4
-MIN_RANGE = -10000
-MAX_RANGE = 10000
+MIN_RANGE = -2000
+MAX_RANGE = 2000
 TEST_SEASONS = {8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22}
 
 encoder = MoneyEncoder(SPLINE_CLUSTERS, QUANTILES, RandomState())
