@@ -54,7 +54,7 @@ class ExamDropExtractor:
         """
         train_data = []
         for season in self.__train_seasons:
-            train_data.extend(self.__get_season_data(season, sys.maxsize, True))
+            train_data.extend(self.get_season_data(season, sys.maxsize, True))
         train_input = np.array([ExamDropEncoder.extract_features(sample, sys.maxsize) for sample in train_data])
         train_output = np.array([1.0 if get_is_mol(sample.selected_player) else 0.0 for sample in train_data])
 
@@ -62,7 +62,7 @@ class ExamDropExtractor:
         self.__discretizer = KBinsDiscretizer(n_bins = num_bins, encode = "onehot-dense",
                                               strategy = ExamDropExtractor.BIN_STRATEGY)
         train_input = self.__discretizer.fit_transform(train_input)
-        train_input = self.__add_answered_on_feature(train_data, train_input)
+        train_input = self.add_answered_on_feature(train_data, train_input)
         self.__selected_features = self.__stats_filter_features(train_input, train_output, self.__feature_significance)
         train_input = train_input[:,self.__selected_features]
         self.__pca = PCA(n_components = self.__pca_explain)
@@ -77,13 +77,13 @@ class ExamDropExtractor:
             and not included in the answer. Also a prediction sample consist of the features for the participants
             included in the answer and not included in the answer.
         """
-        predict_data = self.__get_season_data(self.__predict_season, self.__predict_episode, False)
+        predict_data = self.get_season_data(self.__predict_season, self.__predict_episode, False)
         if not predict_data:
             return []
 
         predict_input = np.array([ExamDropEncoder.extract_features(sample, self.__predict_episode) for sample in predict_data])
         predict_input = self.__discretizer.transform(predict_input)
-        predict_input = self.__add_answered_on_feature(predict_data, predict_input)
+        predict_input = self.add_answered_on_feature(predict_data, predict_input)
         predict_input = predict_input[:,self.__selected_features]
         predict_input = self.__pca.transform(predict_input)
 
@@ -96,7 +96,7 @@ class ExamDropExtractor:
         return predict_samples
 
     @staticmethod
-    def __get_season_data(season_num: int, max_episode: int, training_data: bool) -> List[TrainSample]:
+    def get_season_data(season_num: int, max_episode: int, training_data: bool) -> List[TrainSample]:
         """ Get all raw answer data from a season.
 
         Arguments:
@@ -185,7 +185,7 @@ class ExamDropExtractor:
         return sc.stats.entropy(new_entropy / np.sum(new_entropy))
 
     @staticmethod
-    def __add_answered_on_feature(samples: List[TrainSample], all_features: np.array) -> np.array:
+    def add_answered_on_feature(samples: List[TrainSample], all_features: np.array) -> np.array:
         """ Translate the features such that answered_on is also included as feature which represents whether the player
         is included in the answer or not. This translation adds a new feature which is 1 if the player is in the answer
         and 0 if not. Also it adds all features multiplied by this answered on features.
