@@ -1,3 +1,5 @@
+from jenkspy import JenksNaturalBreaks
+
 from Tools.Encoders.Encoder import Encoder
 from numpy.random import RandomState
 from sklearn.cluster import KMeans
@@ -18,15 +20,12 @@ class SemiRankTransformer(Encoder):
         Arguments:
             settings (List[Setting]): A list of settings, where each setting represents how many clusters should be
                 used per feature and which clusters containing a particular value should not be rank transformed.
-            random_generator (RandomState): The Random State used for the KMeans procedure.
         """
         self.__settings = settings
-        self.__random_generator = random_generator
 
     def fit(self, X: np.array):
         self.__fit_rank_transformers(X)
         self.__fit_clusters(X)
-        self.__fit_ignored_bounds(X)
 
     def transform(self, X: np.array) -> np.array:
         Y = []
@@ -44,7 +43,7 @@ class SemiRankTransformer(Encoder):
         Returns:
             The Semi-Rank Transformed value.
         """
-        cluster = self.clusterings[feature_index].predict(np.array([[value]]))[0]
+        cluster = int(self.clusterings[feature_index].predict(value))
         if cluster in self.ignored_bounds[feature_index]:
             lowerbound, lowerrank, upperbound, upperrank = self.ignored_bounds[feature_index][cluster]
             value = min(max(value, lowerbound), upperbound)
@@ -66,38 +65,21 @@ class SemiRankTransformer(Encoder):
             self.rank_transformers.append(rank_transformer)
 
     def __fit_clusters(self, X: np.array):
-        """ Fit all the KMeans clusters for every feature.
+        """ Fit all the clusters for every feature and determine the lowest value & rank and highest value & rank for
+        each cluster.
 
         Arguments:
-            X (np.array): The train input used to train the KMeans clusters.
+            X (np.array): The train input used to train the clusters.
         """
         self.clusterings = []
-        for column, setting in zip(X.T, self.__settings):
-            column = column[:, np.newaxis]
-            clustering = KMeans(n_clusters = setting.num_clusters, random_state = self.__random_generator)
+        self.ignored_bounds = []
+        for column, setting, rank_transformer in zip(X.T, self.__settings, self.rank_transformers):
+            print(column)
+            clustering = JenksNaturalBreaks(nb_class = setting.num_clusters)
             clustering.fit(column)
             self.clusterings.append(clustering)
-
-    def __fit_ignored_bounds(self, X: np.array):
-        """ For every ignored cluster for every feature determine the lowest & highest rank and the lowest & highest
-        value belonging to that cluster.
-
-        Arguments:
-            X (np.array): The train input used.
-        """
-        self.ignored_bounds = []
-        for column, setting, rank_transformer, clustering in zip(X.T, self.__settings, self.rank_transformers,
-                                                                    self.clusterings):
-            column = column[:, np.newaxis]
-            # Clusters are not numbered in chronological order by the KMeans library in sklearn, so we use a cluster
-            # order mapping that maps chronological numbers to the corresponding cluster.
-            cluster_order = {center: i for i, center in enumerate(clustering.cluster_centers_[:,0])}
-            splits = np.sort(clustering.cluster_centers_, axis = 0)
-            cluster_order = {cluster_order[center]: i for i, center in enumerate(splits[:,0])}
-            splits = np.array([(c1[0] + c2[0]) / 2 for c1, c2 in zip(splits, splits[1:])])
-            splits = np.concatenate((np.array([np.min(column)]), splits, np.array([np.max(column)])))
-            self.rank_splits = rank_transformer.transform(splits[:,np.newaxis])
-            ignored_clusters = {clustering.predict(np.array([[value]]))[0] for value in setting.ignore_values}
-            ignored_bounds = {c: IgnoredBound(splits[cluster_order[c]], self.rank_splits[cluster_order[c]][0],
-                splits[cluster_order[c] + 1], self.rank_splits[cluster_order[c] + 1][0]) for c in ignored_clusters}
+            self.rank_splits = rank_transformer.transform(np.array(clustering.breaks_)[:, np.newaxis])
+            ignored_clusters = {int(clustering.predict(value)) for value in setting.ignore_values}
+            ignored_bounds = {c: IgnoredBound(clustering.breaks_[c], self.rank_splits[c][0], clustering.breaks_[c + 1],
+                                              self.rank_splits[c + 1][0]) for c in ignored_clusters}
             self.ignored_bounds.append(ignored_bounds)
