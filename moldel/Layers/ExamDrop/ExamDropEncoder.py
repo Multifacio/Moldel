@@ -14,6 +14,12 @@ TrainSample = NamedTuple("TrainSample", [("player", Player), ("season", int), ("
                                          ("selected_player", Union[bool, Player])])
 class ExamDropEncoder:
     """ The Exam Drop Encoder deals with the encoding of the features used for the Exam Drop Layer. """
+    FEATURE_NAMES = ["Exam Episode Number", "Drop Episode Number", "Fail Executie", "Real Executie", "Exam Players",
+                     "Drop Players", "Entropy", "Answer Players", "Answer Probability", "Same Pickers",
+                     "Probability Same Picker", "Drop Test Jokers More", "Drop Test Jokers Less",
+                     "Exam Test Jokers More", "Exam Test Jokers Less", "Drop More Jokers", "Drop Less Jokers"]
+
+    MAX_EPISODE_NUMBER = 9 # The highest possible episode number.
     EXEMPTION_JOKER_VALUE = 1000 # The value of an exemption expressed in jokers.
 
     @classmethod
@@ -38,12 +44,12 @@ class ExamDropEncoder:
         exam_jokers_more, exam_jokers_less = self.__joker_discretization(sample.player, sample.exam_episode, exam_dropouts)
         drop_player_jokers_more, drop_player_jokers_less = self.__exam_joker_features(sample.player, sample.exam_episode)
 
-        return np.array([drop_episode, exam_episode, fail_test, execution_episode, num_players_drop, num_players_exam,
+        return np.array([exam_episode, drop_episode, fail_test, execution_episode, num_players_exam, num_players_drop,
             entropy, num_answer_players, answer_probability, num_same_pickers, prob_same_picker, drop_jokers_more,
             drop_jokers_less, exam_jokers_more, exam_jokers_less, drop_player_jokers_more, drop_player_jokers_less])
 
-    @staticmethod
-    def __episode_features(sample: TrainSample) -> Tuple[float, ...]:
+    @classmethod
+    def __episode_features(self, sample: TrainSample) -> Tuple[float, ...]:
         """ Get all features related to the drop and exam episodes.
 
         Arguments:
@@ -52,7 +58,8 @@ class ExamDropEncoder:
         Returns:
             The feature values.
         """
-        return sample.drop_episode.episode_number(), sample.exam_episode.episode_number(), \
+        return min(sample.drop_episode.episode_number(), self.MAX_EPISODE_NUMBER), \
+               min(sample.exam_episode.episode_number(), self.MAX_EPISODE_NUMBER), \
                sample.drop_episode == sample.exam_episode, sample.exam_episode.result.drop == DropType.EXECUTION_DROP
 
     @staticmethod
@@ -97,7 +104,7 @@ class ExamDropEncoder:
         selected_players = set(probabilities.keys()).difference(exam_dropouts).difference({sample.player})
         num_same_pickers = sum([prob > 0.0 for player, prob in probabilities.items() if player in selected_players])
         prob_same_picker = mean([prob for player, prob in probabilities.items() if player in selected_players])
-        return num_same_pickers / len(selected_players), prob_same_picker
+        return num_same_pickers, prob_same_picker
 
     @classmethod
     def __joker_discretization(self, player: Player, episode: Episode, excluded: Set[Player]) -> Tuple[float, ...]:
@@ -114,8 +121,8 @@ class ExamDropEncoder:
         """
         joker_usage = episode.total_joker_usage(self.EXEMPTION_JOKER_VALUE)
         included = set(joker_usage.keys()).difference(excluded)
-        jokers_more = sum([usage > joker_usage[player] for p, usage in joker_usage.items() if p in included]) / (len(included) - 1)
-        jokers_less = sum([usage < joker_usage[player] for p, usage in joker_usage.items() if p in included]) / (len(included) - 1)
+        jokers_more = sum([usage > joker_usage[player] for p, usage in joker_usage.items() if p in included])
+        jokers_less = sum([usage < joker_usage[player] for p, usage in joker_usage.items() if p in included])
         return jokers_more, jokers_less
 
     @classmethod
