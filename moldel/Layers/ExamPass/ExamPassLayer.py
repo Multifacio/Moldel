@@ -36,7 +36,6 @@ class InnerExamPassLayer(Layer):
                 result[player] *= likelihood
         return result
 
-    @classmethod
     def __train(self, train_seasons: Set[int]) -> LogisticRegression:
         """ Train the estimator, which estimates the probability that someone drops off, based on the jokers used.
 
