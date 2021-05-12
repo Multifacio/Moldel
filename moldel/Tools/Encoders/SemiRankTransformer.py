@@ -74,7 +74,6 @@ class SemiRankTransformer(Encoder):
         self.clusterings = []
         self.ignored_bounds = []
         for column, setting, rank_transformer in zip(X.T, self.__settings, self.rank_transformers):
-            print(column)
             clustering = JenksNaturalBreaks(nb_class = setting.num_clusters)
             clustering.fit(column)
             self.clusterings.append(clustering)
