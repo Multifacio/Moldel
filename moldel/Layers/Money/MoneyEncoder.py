@@ -119,11 +119,10 @@ class MoneyEncoder:
             A function that returns based on how many money that player major/minor earned how likely that player is the
             Mol.
         """
-        transformer = SemiRankTransformer([Setting(self.__spline_clusters, self.SEMI_RANK_TRANSFORM_IGNORED_VALUES)],
-                                          self.__random_generator)
+        transformer = SemiRankTransformer([Setting(self.__spline_clusters, self.SEMI_RANK_TRANSFORM_IGNORED_VALUES)])
         transformer.fit(train_input)
         train_input = transformer.transform(train_input)
-        spline_encoder = NaturalSplineEncoding([self.__spline_clusters], self.__random_generator)
+        spline_encoder = NaturalSplineEncoding([self.__spline_clusters])
         spline_encoder.knots = transformer.rank_splits
         train_input = spline_encoder.transform(train_input)
 

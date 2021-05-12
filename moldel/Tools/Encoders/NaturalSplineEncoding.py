@@ -1,7 +1,7 @@
+from jenkspy import jenks_breaks
 from Tools.Encoders.Encoder import Encoder
 from numpy.random import RandomState
-from sklearn.cluster import KMeans
-from typing import List, NamedTuple, Set
+from typing import List
 import numpy as np
 
 class NaturalSplineEncoding(Encoder):
@@ -13,20 +13,18 @@ class NaturalSplineEncoding(Encoder):
     for more information.
     """
 
-    def __init__(self, num_curves: List[int], random_generator: RandomState):
+    def __init__(self, num_curves: List[int]):
         """ Constructor of the Natural Spline Encoding.
 
         Arguments:
             num_curves (List[int]): How many polynomials per feature should be used to encode the natural spline.
-            random_generator (RandomState): The Random State used for the KMeans procedure.
         """
         self.num_curves = num_curves
-        self.__random_generator = random_generator
 
     def fit(self, X: np.array):
-        self.__kmeans_knots(X)
+        self.__determine_knots(X)
 
-    def transform(self, X: np.array):
+    def transform(self, X: np.array) -> np.array:
         rows = []
         for row in X:
             features = []
@@ -35,21 +33,16 @@ class NaturalSplineEncoding(Encoder):
             rows.append(features)
         return np.array(rows)
 
-    def __kmeans_knots(self, X: np.array):
-        """ Determine the locations of the knots for every feature using KMeans clustering.
+    def __determine_knots(self, X: np.array):
+        """ Determine the locations of the knots for every feature using Jenks Natural Breaks.
 
         Arguments:
             X (np.array): The train input used to determine the location of the knots.
         """
         self.knots = []
         for column, num_curves in zip(X.T, self.num_curves):
-            column = column[:, np.newaxis]
-            kmeans = KMeans(n_clusters = num_curves)
-            kmeans.fit(column)
-            knots = np.sort(kmeans.cluster_centers_.flatten())
-            knots = np.array([(k1 + k2) / 2 for k1, k2 in zip(knots, knots[1:])])
-            knots = np.concatenate((np.array([np.min(column)]), knots, np.array([np.max(column)])))
-            self.knots.append(knots)
+            breaks = jenks_breaks(column, nb_class = num_curves)
+            self.knots.append(breaks)
         self.knots = np.array(self.knots).T
 
     @classmethod
