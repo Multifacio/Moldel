@@ -23,3 +23,16 @@ class Encoder:
             A transformed version of X.
         """
         pass
+
+    def fit_transform(self, X: np.array) -> np.array:
+        """ Prepares the encoder with given data which is directly used to transform the given data.
+
+        Arguments:
+            X (np.array): A two dimensional matrix where every column represents a feature and every row represents a
+                data point.
+
+        Returns:
+            A transformed version of X.
+        """
+        self.fit(X)
+        return self.transform(X)
