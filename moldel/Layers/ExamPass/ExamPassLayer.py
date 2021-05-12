@@ -1,3 +1,5 @@
+from numpy.random import RandomState
+
 from Data.ExamData.Dataclasses.DropType import DropType
 from Data.ExamData.Dataclasses.Episode import Episode
 from Data.ExamData.Exams.All import EXAM_DATA
@@ -14,6 +16,9 @@ import numpy as np
 import sys
 
 class InnerExamPassLayer(Layer):
+    def __init__(self, random_generator: RandomState):
+        self.__random_generator = random_generator
+
     def compute_distribution(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, float]:
         available_seasons = EXAM_DATA.keys()
         train_seasons = train_seasons.intersection(available_seasons)
@@ -31,7 +36,6 @@ class InnerExamPassLayer(Layer):
                 result[player] *= likelihood
         return result
 
-    @classmethod
     def __train(self, train_seasons: Set[int]) -> LogisticRegression:
         """ Train the estimator, which estimates the probability that someone drops off, based on the jokers used.
 
@@ -42,7 +46,7 @@ class InnerExamPassLayer(Layer):
             The estimator used to estimate the likelihood that someone drops out based on the joker usage.
         """
         train_input, train_output = self.__get_train_data(train_seasons)
-        estimator = LogisticRegression(solver = "lbfgs", penalty = "none")
+        estimator = LogisticRegression(solver = "lbfgs", penalty = "none", random_state = self.__random_generator)
         estimator.fit(train_input, train_output)
         return estimator
 
@@ -144,5 +148,11 @@ class InnerExamPassLayer(Layer):
 class ExamPassLayer(PotentialMolLayer):
     """ The Exam Pass Layer predicts whether a player is the Mol based on how many jokers and exemptions players used
     during the test. """
-    def __init__(self):
-        super().__init__(NormalizeLayer(InnerExamPassLayer()))
+
+    def __init__(self, random_generator: RandomState):
+        """ Constructor of the Exam Pass Layer.
+
+        Arguments:
+            random_generator (RandomState): The random generator used to generate random values.
+        """
+        super().__init__(NormalizeLayer(InnerExamPassLayer(random_generator)))

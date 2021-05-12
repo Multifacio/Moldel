@@ -126,7 +126,7 @@ class MoneyEncoder:
         spline_encoder.knots = transformer.rank_splits
         train_input = spline_encoder.transform(train_input)
 
-        regression = LogisticRegression()
+        regression = LogisticRegression(solver = "lbfgs", random_state = self.__random_generator)
         regression.fit(train_input, train_output)
         return lambda money: regression.predict_proba(spline_encoder.transform(transformer.transform(np.array([[money]]))))[0][1]
 
