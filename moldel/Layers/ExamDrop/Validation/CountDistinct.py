@@ -1,5 +1,4 @@
 from collections import Counter
-
 from Data.PlayerData import get_is_mol
 from Layers.ExamDrop.ExamDropEncoder import ExamDropEncoder
 from Layers.ExamDrop.ExamDropExtractor import ExamDropExtractor
