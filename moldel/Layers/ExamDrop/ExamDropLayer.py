@@ -1,3 +1,5 @@
+from numpy.random import RandomState
+
 from Data.ExamData.Exams.All import EXAM_DATA
 from Data.Player import Player
 from Data.PlayerData import get_players_in_season
@@ -11,9 +13,12 @@ from typing import Dict, List, Set, Tuple
 import numpy as np
 
 class InnerExamDropLayer(MultiLayer):
-    def __init__(self, min_cluster_size: int, spline_curves: int):
+    MAX_TRAIN_ITERATIONS = 1000 # The maximum iterations to train the Logistic Regression
+
+    def __init__(self, min_cluster_size: int, spline_curves: int, random_generator: RandomState):
         self.__min_cluster_size = min_cluster_size
         self.__spline_curves = spline_curves
+        self.__random_generator = random_generator
 
     def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, MultiLayerResult]:
         available_seasons = EXAM_DATA.keys()
@@ -47,13 +52,15 @@ class InnerExamDropLayer(MultiLayer):
         in_input = [ti for ti, answer in zip(train_input, in_answer) if answer == 1.0]
         in_output = [to for to, answer in zip(train_output, in_answer) if answer == 1.0]
         in_weights = [tw for tw, answer in zip(train_weights, in_answer) if answer == 1.0]
-        in_classifier = LogisticRegression(solver = "lbfgs", max_iter = 1000)
+        in_classifier = LogisticRegression(solver = "lbfgs", max_iter = self.MAX_TRAIN_ITERATIONS,
+                                           random_state = self.__random_generator)
         in_classifier.fit(in_input, in_output, in_weights)
 
         out_input = [ti for ti, answer in zip(train_input, in_answer) if answer == 0.0]
         out_output = [to for to, answer in zip(train_output, in_answer) if answer == 0.0]
         out_weights = [tw for tw, answer in zip(train_weights, in_answer) if answer == 0.0]
-        out_classifier = LogisticRegression(solver = "lbfgs", max_iter = 1000)
+        out_classifier = LogisticRegression(solver = "lbfgs", max_iter = self.MAX_TRAIN_ITERATIONS,
+                                            random_state = self.__random_generator)
         out_classifier.fit(out_input, out_output, out_weights)
         return in_classifier, out_classifier
 
@@ -98,12 +105,14 @@ class InnerExamDropLayer(MultiLayer):
 class ExamDropLayer(PotentialMolLayer):
     """ The Exam Drop Layer predicts whether you are the Mol based on what dropouts have answered during the test. """
 
-    def __init__(self, min_cluster_size: int, spline_curves: int):
+    def __init__(self, min_cluster_size: int, spline_curves: int, random_generator: RandomState):
         """ Constructor of the Exam Drop Layer
 
         Arguments:
             min_cluster_size (int): The minimum number of elements every cluster must have in the stable discretization
                 of discrete features.
             spline_curves (int): The number of curves used for the natural spline encoding of the continuous features.
+            random_generator (RandomState): The random generator used to generate random values.
         """
-        super().__init__(MultiplyAggregateLayer(InnerExamDropLayer(min_cluster_size, spline_curves), False))
+        super().__init__(MultiplyAggregateLayer(InnerExamDropLayer(min_cluster_size, spline_curves, random_generator),
+                                                False))

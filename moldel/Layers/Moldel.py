@@ -15,7 +15,7 @@ class MoldelStacker(StackLayer):
     SPLITS = [{2, 3, 4}, {5, 6}, {7, 8}, {9, 10, 11}]
 
     def __init__(self, random_generator: RandomState):
-        predict_layers = [ExamDropLayer(120, 4), WikipediaLayer(-0.524, 0.782, 5, random_generator),
+        predict_layers = [ExamDropLayer(120, 4, random_generator), WikipediaLayer(-0.524, 0.782, 5, random_generator),
                           AppearanceLayer(2/11, 13, 4, 2, 0.01, 0.01), ExamPassLayer(random_generator),
                           MoneyLayer(0.99, 4, 9, random_generator)]
         train_layers = [MemoryLayer("Exam Drop Stacker"), MemoryLayer("Wikipedia Stacker"),
