@@ -13,7 +13,7 @@ class NaturalSplineEncoding(Encoder):
     for more information.
     """
 
-    def __init__(self, num_curves: List[int], random_generator: RandomState):
+    def __init__(self, num_curves: List[int]):
         """ Constructor of the Natural Spline Encoding.
 
         Arguments:
@@ -24,7 +24,7 @@ class NaturalSplineEncoding(Encoder):
     def fit(self, X: np.array):
         self.__determine_knots(X)
 
-    def transform(self, X: np.array):
+    def transform(self, X: np.array) -> np.array:
         rows = []
         for row in X:
             features = []
@@ -41,7 +41,6 @@ class NaturalSplineEncoding(Encoder):
         """
         self.knots = []
         for column, num_curves in zip(X.T, self.num_curves):
-            column = column[:, np.newaxis]
             breaks = jenks_breaks(column, nb_class = num_curves)
             self.knots.append(breaks)
         self.knots = np.array(self.knots).T

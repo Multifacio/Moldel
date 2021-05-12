@@ -14,7 +14,7 @@ class SemiRankTransformer(Encoder):
     """ Semi-Rank Transformer applies a rank transformation individually per feature at some regions and linear
     interpolates ranks at other regions individually per feature. """
 
-    def __init__(self, settings: List[Setting], random_generator: RandomState):
+    def __init__(self, settings: List[Setting]):
         """ Constructor of the Semi Rank Transformer.
 
         Arguments:
@@ -27,7 +27,7 @@ class SemiRankTransformer(Encoder):
         self.__fit_rank_transformers(X)
         self.__fit_clusters(X)
 
-    def transform(self, X: np.array):
+    def transform(self, X: np.array) -> np.array:
         Y = []
         for feature_index, column in enumerate(X.T):
             Y.append([self.__transform_value(value, feature_index) for value in column])
