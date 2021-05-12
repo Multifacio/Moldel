@@ -11,13 +11,14 @@ import numpy as np
 # not included in the answer (False).
 TrainSample = NamedTuple("TrainSample", [("player", Player), ("season", int), ("drop_episode", Episode),
                                          ("exam_episode", Episode), ("question", Question), ("answer", Set[Player]),
-                                         ("selected_player", Union[bool, Player])])
+                                         ("selected_player", Union[Player, None])])
 class ExamDropEncoder:
     """ The Exam Drop Encoder deals with the encoding of the features used for the Exam Drop Layer. """
     FEATURE_NAMES = ["Exam Episode Number", "Drop Episode Number", "Fail Executie", "Real Executie", "Exam Players",
-                     "Drop Players", "Entropy", "Answer Players", "Answer Probability", "Same Pickers",
-                     "Probability Same Picker", "Drop Test Jokers More", "Drop Test Jokers Less",
-                     "Exam Test Jokers More", "Exam Test Jokers Less", "Drop More Jokers", "Drop Less Jokers"]
+                     "Drop Players", "Answer Players",  "Same Pickers", "Drop Test Jokers More", "Drop Test Jokers Less",
+                     "Exam Test Jokers More", "Exam Test Jokers Less", "Drop More Jokers", "Drop Less Jokers",
+                     "Entropy", "Answer Probability", "Probability Same Picker"]
+    NUM_CONTINUOUS_FEATURES = 3 # The number of continuous features, which should always be the last features.
 
     MAX_EPISODE_NUMBER = 9 # The highest possible episode number.
     EXEMPTION_JOKER_VALUE = 1000 # The value of an exemption expressed in jokers.
@@ -45,8 +46,9 @@ class ExamDropEncoder:
         drop_player_jokers_more, drop_player_jokers_less = self.__exam_joker_features(sample.player, sample.exam_episode)
 
         return np.array([exam_episode, drop_episode, fail_test, execution_episode, num_players_exam, num_players_drop,
-            entropy, num_answer_players, answer_probability, num_same_pickers, prob_same_picker, drop_jokers_more,
-            drop_jokers_less, exam_jokers_more, exam_jokers_less, drop_player_jokers_more, drop_player_jokers_less])
+            num_answer_players, num_same_pickers, drop_jokers_more, drop_jokers_less, exam_jokers_more,
+            exam_jokers_less, drop_player_jokers_more, drop_player_jokers_less,
+            entropy, answer_probability, prob_same_picker])
 
     @classmethod
     def __episode_features(self, sample: TrainSample) -> Tuple[float, ...]:
