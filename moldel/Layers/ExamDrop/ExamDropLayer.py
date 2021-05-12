@@ -1,5 +1,3 @@
-from numpy.random import RandomState
-
 from Data.ExamData.Exams.All import EXAM_DATA
 from Data.Player import Player
 from Data.PlayerData import get_players_in_season
@@ -8,6 +6,7 @@ from Layers.MultiLayer.EmptyMultiLayer import EmptyMultiLayer
 from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
 from Layers.Special.PotentialMolLayer import PotentialMolLayer
+from numpy.random import RandomState
 from sklearn.linear_model import LogisticRegression
 from typing import Dict, List, Set, Tuple
 import numpy as np
@@ -27,7 +26,7 @@ class InnerExamDropLayer(MultiLayer):
             return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
         extractor = ExamDropExtractor(predict_season, latest_episode, train_seasons, self.__min_cluster_size,
-                                      self.__spline_curves)
+                                      self.__spline_curves, self.__random_generator)
         in_classifier, out_classifier = self.__training(extractor)
         predict_data = extractor.get_predict_data()
         if not predict_data:

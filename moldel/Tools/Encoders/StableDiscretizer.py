@@ -1,6 +1,7 @@
 from bisect import bisect_left
 from collections import Counter as counter
 from k_means_constrained import KMeansConstrained
+from numpy.random import RandomState
 from Tools.Encoders.Encoder import Encoder
 from typing import List
 import numpy as np
@@ -10,13 +11,15 @@ class StableDiscretizer(Encoder):
     values that do not occur often. For this we cluster every feature individually, where every cluster must contain
     a minimum number of elements. The centers of these clusters will be used for a continuous One Hot Encoding. """
 
-    def __init__(self, min_cluster_size: int):
+    def __init__(self, min_cluster_size: int, random_generator: RandomState):
         """ Constructor of the Stable Discretizer.
 
         Arguments:
             min_cluster_size (int): The minimum number of elements every cluster must have for every feature.
+            random_generator (RandomState): The random generator used to generate random values.
         """
         self.__min_cluster_size = min_cluster_size
+        self.__random_generator = random_generator
 
     def fit(self, X: np.array):
         self.bins = [self.__fit_clusters(column) for column in X.T]
@@ -64,7 +67,8 @@ class StableDiscretizer(Encoder):
         max_clusters = sum(min(count, self.__min_cluster_size) for count in distinct_counter.values()) // \
                        self.__min_cluster_size
         for num_clusters in range(max_clusters, 0, -1):
-            clustering = KMeansConstrained(n_clusters = num_clusters, size_min = self.__min_cluster_size)
+            clustering = KMeansConstrained(n_clusters = num_clusters, size_min = self.__min_cluster_size,
+                                           random_state = self.__random_generator)
             clusters = clustering.fit_predict(column[:, np.newaxis])
             if self.__correct_clustering(column, clusters):
                 return self.__cluster_centers(column, clusters)

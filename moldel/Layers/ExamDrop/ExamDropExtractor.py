@@ -5,6 +5,7 @@ from Data.PlayerData import get_is_mol
 from Layers.ExamDrop.ExamDropEncoder import ExamDropEncoder, TrainSample
 from Tools.Encoders.NaturalSplineEncoding import NaturalSplineEncoding
 from Tools.Encoders.StableDiscretizer import StableDiscretizer
+from numpy.random import RandomState
 from queue import PriorityQueue
 from scipy.stats import mannwhitneyu
 from typing import List, NamedTuple, Set, Tuple
@@ -20,7 +21,7 @@ class ExamDropExtractor:
     a stable discretization technique for discrete feature and natural spline encoding for continuous features. """
 
     def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], min_cluster_size: int,
-                 spline_curves: int):
+                 spline_curves: int, random_generator: RandomState):
         """ Constructor of the Exam Drop Extractor
 
         Arguments:
@@ -30,12 +31,14 @@ class ExamDropExtractor:
             min_cluster_size (int): The minimum number of elements every cluster must have in the stable discretization
                 of discrete features.
             spline_curves (int): The number of curves used for the natural spline encoding of the continuous features.
+            random_generator (RandomState): The random generator used to generate random values.
         """
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
         self.__min_cluster_size = min_cluster_size
         self.__spline_curves = spline_curves
+        self.__random_generator = random_generator
 
     def get_train_data(self) -> Tuple[np.array, np.array, np.array, np.array]:
         """ Get the formatted and sampled train data with train weights useable for machine learning algorithms.
@@ -55,7 +58,7 @@ class ExamDropExtractor:
         answered_on = np.array([1.0 if sample.selected_player in sample.answer else 0.0 for sample in train_data])
         m = ExamDropEncoder.NUM_CONTINUOUS_FEATURES
 
-        self.__discretizer = StableDiscretizer(self.__min_cluster_size)
+        self.__discretizer = StableDiscretizer(self.__min_cluster_size, self.__random_generator)
         discrete_input = self.__discretizer.fit_transform(train_input[:, :-m])
         self.__spline_encoder = NaturalSplineEncoding([self.__spline_curves for _ in range(m)])
         continuous_input = self.__spline_encoder.fit_transform(train_input[:, -m:])
