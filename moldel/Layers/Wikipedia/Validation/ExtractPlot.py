@@ -6,6 +6,8 @@ from scipy.stats import kruskal, levene, norm
 import matplotlib.pyplot as plt
 import numpy as np
 
+from Tools.Classifiers.NaiveKDEClassifier import NaiveKDEClassifier
+
 TRAIN_SEASONS = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 PREDICT_SEASON = 5
 TRAIN_SEASONS.difference_update({PREDICT_SEASON})
@@ -13,7 +15,7 @@ RANDOM_SEED = 949019755
 PCA_COMPONENTS = 4
 LOWER_Z_SCORE = -0.674
 
-extractor = WikipediaExtractor(PREDICT_SEASON, TRAIN_SEASONS, PCA_COMPONENTS, RandomState(RANDOM_SEED))
+extractor = WikipediaExtractor(PREDICT_SEASON, TRAIN_SEASONS, PCA_COMPONENTS, LOWER_Z_SCORE, RandomState(RANDOM_SEED))
 train_input, train_output = extractor.get_train_data()
 train_input = np.squeeze(train_input)
 
@@ -22,9 +24,6 @@ non_mol_features = [value for value, is_mol in zip(train_input, train_output) if
 _, mean_p_value = kruskal(mol_features, non_mol_features)
 _, std_p_value = levene(mol_features, non_mol_features)
 print("Mean: " + str(mean_p_value) + ", Std: " + str(std_p_value))
-
-mol_kde = InnerAppearanceLayer.kernel_density_estimation(mol_features)
-non_mol_kde = InnerAppearanceLayer.kernel_density_estimation(non_mol_features)
 
 predict_data = extractor.get_predict_data()
 predict_input = np.array([data for data in predict_data.values()])

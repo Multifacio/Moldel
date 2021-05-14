@@ -7,20 +7,14 @@ from Layers.MultiLayer.MultiLayer import MultiLayer, MultiLayerResult
 from Layers.MultiLayer.MultiplyAggregateLayer import MultiplyAggregateLayer
 from Layers.Special.CutLayer import CutLayer
 from Layers.Special.PotentialMolLayer import PotentialMolLayer
+from Tools.Classifiers.Classifier import Classifier
+from Tools.Classifiers.NaiveKDEClassifier import NaiveKDEClassifier
 from scipy.stats import gaussian_kde
 from statistics import mean
-from typing import Dict, Set, Tuple
+from typing import Dict, Set
 import numpy as np
 
-from Tools.Classifiers.NaiveKDEClassifier import NaiveKDEClassifier
-
-
 class InnerAppearanceLayer(MultiLayer):
-    # Values related to computing the cumulative distribution function and to determine the boundaries.
-    MIN_VALUE = -6.0 # The lowest value used when searching for the boundaries. It is also used to compute the cdf.
-    MAX_VALUE = 6.0 # The highest value used when searching for the boundaries.
-    SEARCH_STEPS = 12 # In how many steps the boundary is found. The precision of the boundary is (MAX_VALUE - MIN_VALUE) / 2^(SEARCH_STEPS)
-
     def __init__(self, first_season: int, aug_num_cuts: int, aug_min_cuts_on: int, cdf_cutoff: float):
         self.__first_season = first_season
         self.__aug_num_cuts = aug_num_cuts
@@ -35,8 +29,8 @@ class InnerAppearanceLayer(MultiLayer):
 
         extractor = AppearanceExtractor(predict_season, max_episode, train_seasons, self.__aug_num_cuts,
                                         self.__aug_min_cuts_on)
-        non_mol_kde, mol_kde = self.__training(extractor)
-        return self.__prediction(extractor, non_mol_kde, mol_kde, predict_season)
+        classifier = self.__training(extractor)
+        return self.__prediction(extractor, classifier, predict_season)
 
     def __latest_available_episode(self, predict_season: int, latest_episode: int) -> int:
         """ Determine the latest episode that is available and can be used in the prediction season.
@@ -56,30 +50,28 @@ class InnerAppearanceLayer(MultiLayer):
                 return max_episode
         return max_episode
 
-    def __training(self, extractor: AppearanceExtractor) -> Tuple[gaussian_kde, gaussian_kde]:
+    def __training(self, extractor: AppearanceExtractor) -> Classifier:
         """ Execute the training phase of the Appearance Layer.
 
         Arguments:
             extractor (AppearanceExtractor): The extractor which delivers the training data.
 
         Returns:
-            The kernel density estimator for respectively the Mol data and non-Mol data.
+            A classifier which classifies players as either Mol or non-Mol based on how often they appear.
         """
         train_input, train_output = extractor.get_train_data()
-        non_mol_input = np.array([ti[0] for ti, to in zip(train_input, train_output) if to == 0.0])
-        mol_input = np.array([ti[0] for ti, to in zip(train_input, train_output) if to == 1.0])
-        non_mol_kde = self.kernel_density_estimation(non_mol_input)
-        mol_kde = self.kernel_density_estimation(mol_input)
-        return non_mol_kde, mol_kde
+        classifier = NaiveKDEClassifier(cdf_cutoff = self.__cdf_cutoff)
+        classifier.train(train_input, train_output)
+        return classifier
 
-    def __prediction(self, extractor: AppearanceExtractor, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde,
-                     predict_season: int) -> Dict[Player, MultiLayerResult]:
+    def __prediction(self, extractor: AppearanceExtractor, classifier: Classifier, predict_season: int) -> \
+            Dict[Player, MultiLayerResult]:
         """ Execute the prediction phase of the Appearance Layer.
 
         Arguments:
             extractor (AppearanceExtractor): The extractor which delivers the prediction data.
-            non_mol_kde (gaussian_kde): The Kernel Density Estimator for non-Mol appearance values.
-            mol_kde (gaussian_kde): The Kernel Density Estimator for Mol appearance values.
+            classifier (Classifier): A classifier which classifies players as either Mol or non-Mol based on how often
+                they appear.
             predict_season (int): For which season we make the prediction.
 
         Returns:
@@ -91,63 +83,16 @@ class InnerAppearanceLayer(MultiLayer):
         if not predict_data:
             return EmptyMultiLayer().predict(predict_season, 0, set())
 
-        min_value = self.get_boundary(non_mol_kde, mol_kde, len(predict_data), self.__cdf_cutoff / 2, self.MIN_VALUE,
-                                      self.MAX_VALUE)
-        max_value = self.get_boundary(non_mol_kde, mol_kde, len(predict_data), 1 - self.__cdf_cutoff / 2, self.MIN_VALUE,
-                                      self.MAX_VALUE)
         for player in get_players_in_season(predict_season):
             if player in predict_data:
                 predictions = []
                 for data in predict_data[player]:
-                    data = min(max(data, min_value), max_value)
-                    non_mol_likelihood = non_mol_kde.pdf(data)[0] * (len(predict_data) - 1) / len(predict_data)
-                    mol_likelihood = mol_kde.pdf(data)[0] / len(predict_data)
-                    likelihood = mol_likelihood / (non_mol_likelihood + mol_likelihood)
-                    predictions.append(likelihood)
+                    predictions.append(classifier.predict_proba([data]))
                 all_predictions[player] = MultiLayerResult(np.array(predictions), False)
             else:
                 all_predictions[player] = MultiLayerResult(np.array([]), True)
 
         return all_predictions
-
-    @staticmethod
-    def kernel_density_estimation(train_input: np.array) -> gaussian_kde:
-        """ Do a Kernel Density Estimation for the data.
-
-        Arguments:
-            train_input (np.array): The data on which Kernel Density Estimation is applied.
-
-        Returns:
-            The Kernel Density Estimator.
-        """
-        return gaussian_kde(train_input, bw_method = 'silverman')
-
-    @classmethod
-    def get_boundary(self, non_mol_kde: gaussian_kde, mol_kde: gaussian_kde, num_players: int, cdf: float,
-                     lowerbound: float, upperbound: float) -> float:
-        """ Get the approximated boundary value x such that the cumulative distribution function of x is equal to cdf.
-
-        Arguments:
-            non_mol_kde (gaussian_kde): The Kernel Density Estimation of the non-mol data.
-            mol_kde (gaussian_kde): The Kernel Density Estimation of the mol data.
-            num_players (int): The number of players still in the game.
-            cdf (float): The cumulative distribution value of this x.
-            lowerbound (float): The lowest value used when searching for the boundary
-            upperbound (float): The highest value used when searching for the boundary.
-
-        Returns:
-            The boundary value x.
-        """
-        middle = (lowerbound + upperbound) / 2
-        for _ in range(self.SEARCH_STEPS):
-            cur_cdf = non_mol_kde.integrate_box_1d(self.MIN_VALUE, middle) * (num_players - 1) / num_players + \
-                      mol_kde.integrate_box_1d(self.MIN_VALUE, middle) / num_players
-            if cur_cdf < cdf:
-                lowerbound = middle
-            else:
-                upperbound = middle
-            middle = (lowerbound + upperbound) / 2
-        return middle
 
 class AppearanceLayer(PotentialMolLayer):
     """ The Appearance Layer predict which player is the Mol based on how often this player appears during the episode.
