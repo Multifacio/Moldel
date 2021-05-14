@@ -12,19 +12,20 @@ from statistics import mean
 from typing import Dict, Set, Tuple
 import numpy as np
 
+from Tools.Classifiers.NaiveKDEClassifier import NaiveKDEClassifier
+
+
 class InnerAppearanceLayer(MultiLayer):
     # Values related to computing the cumulative distribution function and to determine the boundaries.
     MIN_VALUE = -6.0 # The lowest value used when searching for the boundaries. It is also used to compute the cdf.
     MAX_VALUE = 6.0 # The highest value used when searching for the boundaries.
     SEARCH_STEPS = 12 # In how many steps the boundary is found. The precision of the boundary is (MAX_VALUE - MIN_VALUE) / 2^(SEARCH_STEPS)
 
-    def __init__(self, first_season: int, aug_num_cuts: int, aug_min_cuts_on: int,
-                 cdf_cutoff: float, outlier_cutoff: float):
+    def __init__(self, first_season: int, aug_num_cuts: int, aug_min_cuts_on: int, cdf_cutoff: float):
         self.__first_season = first_season
         self.__aug_num_cuts = aug_num_cuts
         self.__aug_min_cuts_on = aug_min_cuts_on
         self.__cdf_cutoff = cdf_cutoff
-        self.__outlier_cutoff = outlier_cutoff
 
     def predict(self, predict_season: int, latest_episode: int, train_seasons: Set[int]) -> Dict[Player, np.array]:
         train_seasons = {season for season in train_seasons if season >= self.__first_season}
@@ -33,7 +34,7 @@ class InnerAppearanceLayer(MultiLayer):
             return EmptyMultiLayer().predict(predict_season, latest_episode, train_seasons)
 
         extractor = AppearanceExtractor(predict_season, max_episode, train_seasons, self.__aug_num_cuts,
-                                        self.__aug_min_cuts_on, self.__outlier_cutoff)
+                                        self.__aug_min_cuts_on)
         non_mol_kde, mol_kde = self.__training(extractor)
         return self.__prediction(extractor, non_mol_kde, mol_kde, predict_season)
 
@@ -153,7 +154,7 @@ class AppearanceLayer(PotentialMolLayer):
     This code is based on the project of mattijn: https://github.com/mattijn/widm """
 
     def __init__(self, predict_lowerbound: float, first_season: int, aug_num_cuts: int, aug_min_cuts_on: int,
-                 cdf_cutoff: float, outlier_cutoff: float):
+                 cdf_cutoff: float):
         """ Constructor of the Appearance Layer.
 
         Arguments:
@@ -170,7 +171,6 @@ class AppearanceLayer(PotentialMolLayer):
                 distributions (mol and non-mol distribution). All appearance values that lie in the cutoff zone of both
                 distributions are changed to the closest value that lies in the range of at least one of the
                 distributions.
-            outlier_cutoff (float): This is the relative amount of highest and lowest appearance values that get removed.
         """
         super().__init__(CutLayer(MultiplyAggregateLayer(InnerAppearanceLayer(first_season, aug_num_cuts,
-                            aug_min_cuts_on, cdf_cutoff, outlier_cutoff)), mean, 1.0, predict_lowerbound))
+                            aug_min_cuts_on, cdf_cutoff)), mean, 1.0, predict_lowerbound))

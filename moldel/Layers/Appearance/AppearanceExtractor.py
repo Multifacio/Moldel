@@ -11,18 +11,13 @@ TrainSample = NamedTuple("TrainSample", [("season", int), ("relative_occurrence"
 class AppearanceExtractor:
     """ The Appearance Extractor deals with obtaining the train data and predict data. For this feature encoding
     and extraction techniques are used. Likewise train data gets resampled such that closer seasons have more influence
-    in the training process than seasons further aways. """
-
-    # The size of the resampled train data list. Higher sample sizes will decrease the variance in the results (with
-    # resampling the results you obtain when re-running the layer might be different), but will increase the running
-    # time of the Appearance layer.
-    SAMPLE_SIZE = 100000
+    in the training process than seasons further away. """
 
     # A small log addition constant used to prevent situations where the log is taken of zero.
     SMALL_LOG_ADDITION = 0.0001
 
     def __init__(self, predict_season: int, predict_episode: int, train_seasons: Set[int], aug_num_cuts: int,
-                 aug_min_cuts_on: int, outlier_cutoff: float):
+                 aug_min_cuts_on: int):
         """ Constructor of the Appearance Extractor.
 
         Arguments:
@@ -32,14 +27,12 @@ class AppearanceExtractor:
             aug_num_cuts (int): In how many cuts the episodes get divided. All cuts are turned on/off, where the
                 appearance value is computed over only the cuts that are turned on. This is done to create more data.
             aug_min_cuts_on (int): How many cuts should be turned on at least.
-            outlier_cutoff (float): This is the relative amount of highest and lowest appearance values that get removed.
         """
         self.__predict_season = predict_season
         self.__predict_episode = predict_episode
         self.__train_seasons = train_seasons
         self.__aug_num_cuts = aug_num_cuts
         self.__aug_min_cuts_on = aug_min_cuts_on
-        self.__outlier_cutoff = outlier_cutoff
 
     def get_train_data(self) -> Tuple[np.array, np.array]:
         """ Get the train data useable for machine learning algorithms.
@@ -61,7 +54,6 @@ class AppearanceExtractor:
                             relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode], selection)
                             train_data.append(TrainSample(season, relative_occurrence, get_is_mol(player)))
 
-        train_data = self.__filter_outliers(train_data)
         train_input = np.array([[ts.relative_occurrence] for ts in train_data])
         train_output = np.array([1.0 if ts.is_mol else 0.0 for ts in train_data])
         return train_input, train_output
@@ -81,19 +73,6 @@ class AppearanceExtractor:
                 relative_occurrence = self.get_relative_occurrence(player, parsed_videos[episode], (True,))
                 predict_data[player] = predict_data.get(player, []) + [np.array([relative_occurrence])]
         return predict_data
-
-    def __filter_outliers(self, train_data: List[TrainSample]) -> List[TrainSample]:
-        """ Remove the outliers from a list of train data.
-
-        Arguments:
-            train_data (List[TrainSample]): The train data from which the outliers are removed.
-
-        Returns:
-            The train data without outliers.
-        """
-        appearances = [td.relative_occurrence for td in train_data]
-        quantiles = np.quantile(appearances, [self.__outlier_cutoff / 2, 1 - self.__outlier_cutoff / 2])
-        return [td for td in train_data if quantiles[0] <= td.relative_occurrence <= quantiles[1]]
 
     @staticmethod
     def get_relative_occurrence(player: Player, parsed_video: ParsedVideo, selection: Tuple[bool, ...]) -> float:
