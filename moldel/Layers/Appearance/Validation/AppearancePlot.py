@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 TEST_SEASONS = {13, 14, 15, 16, 17, 18, 19, 20}
-AUGMENTATION_CUTS = 4
-AUGMENTATION_MIN_CUTS_ON = 2
+AUGMENTATION_CUTS = 1
+AUGMENTATION_MIN_CUTS_ON = 1
 OUTLIER_CUTOFF = 0.01
 
-extractor = AppearanceExtractor(0, 0, TEST_SEASONS, AUGMENTATION_CUTS, AUGMENTATION_MIN_CUTS_ON, OUTLIER_CUTOFF)
+extractor = AppearanceExtractor(0, 0, TEST_SEASONS, AUGMENTATION_CUTS, AUGMENTATION_MIN_CUTS_ON)
 train_input, train_output = extractor.get_train_data()
 
 non_mol = [data[0] for data, label in zip(train_input, train_output) if label == 0.0]
