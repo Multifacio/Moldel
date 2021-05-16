@@ -21,17 +21,21 @@ class TestInput:
             question number (int) and the value is the answer number (int) that the player answered on that question or
             a DelayedAnswer in case the answer was revealed in a later episode. If a question number is not contained in
             this dict then it is unknown what the player answered on this question.
+        mentions (Set[Player]): Who the player mentions he suspects to be the Mol.
         immunity (bool): Whether the player used/had a 'Vrijstelling' for the test. If this value is equal to true
             then the player used/had a 'Vrijstelling' for the test, false otherwise.
         jokers (int): How many jokers the player used on the test.
     """
     answers: Dict[int, Union[int, DelayedAnswer]] = None
+    mentions: Set[Player] = None
     immunity: bool = False
     jokers: int = 0
 
     def __post_init__(self):
         if self.answers is None:
             self.answers = dict()
+        if self.mentions is None:
+            self.mentions = set()
 
     def joker_usage(self, exemption_value: int) -> int:
         """ Determine the joker usage of this player, where exemptions are given a certain joker value.
