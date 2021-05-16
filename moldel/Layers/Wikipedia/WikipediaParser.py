@@ -45,11 +45,10 @@ class WikipediaParser:
                     job_counts[(player, job)] = 0.0 if data.number_words == 0 else data.job_counts[job] / data.number_words
 
             for job in Job:
-                job_sum = sum(job_counts[(player, job)] for player in raw_data)
                 for player, data in raw_data.items():
                     job_count = job_counts[(player, job)]
                     if job_count > 0.0:
-                        job_count = math.log(job_count / job_sum)
+                        job_count = math.log(job_count)
                         job_counts[(player, job)] = job_count
                         min_job_features[job] = min(job_count, min_job_features.get(job, math.inf))
                     else:
