@@ -52,10 +52,17 @@ question1_20 = Question({1: [Player.ANITA_20], 2: [Player.BUDDY_20], 3: [Player.
                          9: [Player.ROB_20], 10: [Player.TINA_20]})
 result1 = Result(DropType.EXECUTION_DROP, [Player.ANITA_20])
 episode1 = Episode(players1, result1,
-                   {Player.LEONIE_20: TestInput({4: 2}), Player.ROB_20: TestInput({18: 2}),
-                    Player.TINA_20: TestInput({11: 1}), Player.JOHAN_20: TestInput({20: 1}),
-                    Player.JAIKE_20: TestInput({2: 1}), Player.NATHAN_20: TestInput({1: 1}),
-                    Player.CLAES_20: TestInput({13: 2})},
+                   {Player.LEONIE_20: TestInput({4: 2}, mentions = {Player.ANITA_20, Player.BUDDY_20, Player.JOHAN_20,
+                                                Player.TINA_20}),
+                    Player.BUDDY_20: TestInput(mentions = {Player.LEONIE_20}),
+                    Player.ROB_20: TestInput({18: 2}),
+                    Player.ANITA_20: TestInput(mentions = {Player.MILJUSCHKA_20, Player.ROB_20, Player.TINA_20}),
+                    Player.TINA_20: TestInput({11: 1}),
+                    Player.JOHAN_20: TestInput({20: 1}, mentions = {Player.ANITA_20}),
+                    Player.JAIKE_20: TestInput({2: 1}, mentions = {Player.ANITA_20, Player.BUDDY_20, Player.MILJUSCHKA_20}),
+                    Player.MILJUSCHKA_20: TestInput(mentions = {Player.NATHAN_20}),
+                    Player.NATHAN_20: TestInput({1: 1}, mentions = {Player.TINA_20}),
+                    Player.CLAES_20: TestInput({13: 2}, mentions = {Player.TINA_20})},
                    {1: question1_1, 2: question1_2, 4: question1_4, 11: question1_11, 13: question1_13,
                     18: question1_18, 20: question1_20})
 
@@ -92,8 +99,12 @@ question2_18 = Question({1: [Player.JOHAN_20, Player.LEONIE_20],
                              Player.ROB_20, Player.TINA_20]})
 result2 = Result(DropType.EXECUTION_DROP, [Player.TINA_20])
 episode2 = Episode(players2, result2,
-                   {Player.MILJUSCHKA_20: TestInput({1: 2}), Player.BUDDY_20: TestInput({5: 3}),
-                    Player.JOHAN_20: TestInput({9: 2}), Player.JAIKE_20: TestInput({14: 5}),
+                   {Player.MILJUSCHKA_20: TestInput({1: 2}, mentions = {Player.LEONIE_20, Player.TINA_20}),
+                    Player.BUDDY_20: TestInput({5: 3}, mentions = {Player.JOHAN_20, Player.LEONIE_20, Player.NATHAN_20,
+                                                Player.TINA_20}),
+                    Player.JOHAN_20: TestInput({9: 2}, mentions = {Player.LEONIE_20, Player.MILJUSCHKA_20,
+                                                Player.ROB_20, Player.TINA_20}),
+                    Player.JAIKE_20: TestInput({14: 5}, mentions = {Player.MILJUSCHKA_20}),
                     Player.CLAES_20: TestInput({18: 1})},
                    {1: question2_1, 5: question2_5, 9: question2_9, 14: question2_14, 18: question2_18})
 
@@ -126,9 +137,15 @@ question3_20 = Question({1: [Player.BUDDY_20], 2: [Player.CLAES_20], 3: [Player.
                          5: [Player.LEONIE_20], 6: [Player.MILJUSCHKA_20], 7: [Player.NATHAN_20], 8: [Player.ROB_20]})
 result3 = Result(DropType.EXECUTION_DROP, [Player.JAIKE_20])
 episode3 = Episode(players3, result3,
-                   {Player.JAIKE_20: TestInput({3: 1}), Player.JOHAN_20: TestInput({7: 3}),
-                    Player.MILJUSCHKA_20: TestInput({18: 1}), Player.CLAES_20: TestInput({20: 1}),
-                    Player.ROB_20: TestInput({1: 1}), Player.BUDDY_20: TestInput({20: 5})},
+                   {Player.JAIKE_20: TestInput({3: 1}),
+                    Player.JOHAN_20: TestInput({7: 3}, mentions = {Player.BUDDY_20, Player.LEONIE_20,
+                                                Player.MILJUSCHKA_20, Player.ROB_20}),
+                    Player.NATHAN_20: TestInput(mentions = {Player.MILJUSCHKA_20}),
+                    Player.MILJUSCHKA_20: TestInput({18: 1}),
+                    Player.CLAES_20: TestInput({20: 1}, mentions = {Player.BUDDY_20}),
+                    Player.BUDDY_20: TestInput({20: 5}, mentions = {Player.LEONIE_20}),
+                    Player.LEONIE_20: TestInput(mentions = {Player.BUDDY_20}),
+                    Player.ROB_20: TestInput({1: 1}, mentions = {Player.BUDDY_20})},
                    {1: question3_1, 3: question3_3, 7: question3_7, 18: question3_18, 20: question3_20})
 
 # Aflevering 4 (geen afvaller en geen informatie, maar wel data ingevoerd voor de regressie)
@@ -160,9 +177,16 @@ question4_20 = Question({1: [Player.BUDDY_20], 2: [Player.CLAES_20], 3: [Player.
                          5: [Player.MILJUSCHKA_20], 6: [Player.NATHAN_20], 7: [Player.ROB_20]})
 result4 = Result(DropType.NO_DROP_NOR_SCREENS, [])
 episode4 = Episode(players4, result4,
-                   {Player.CLAES_20: TestInput({1: 1}), Player.ROB_20: TestInput({5: 7}),
-                    Player.NATHAN_20: TestInput({7: 3}), Player.JOHAN_20: TestInput({14: 2}),
-                    Player.LEONIE_20: TestInput({20: 5}), Player.MILJUSCHKA_20: TestInput({20: 6})},
+                   {Player.CLAES_20: TestInput({1: 1}, mentions = {Player.BUDDY_20, Player.LEONIE_20}),
+                    Player.ROB_20: TestInput({5: 7}, mentions = {Player.BUDDY_20, Player.JOHAN_20, Player.LEONIE_20}),
+                    Player.NATHAN_20: TestInput({7: 3}, mentions = {Player.BUDDY_20, Player.JOHAN_20, Player.LEONIE_20,
+                                                Player.MILJUSCHKA_20}),
+                    Player.JOHAN_20: TestInput({14: 2}, mentions = {Player.BUDDY_20, Player.LEONIE_20,
+                                                Player.MILJUSCHKA_20}),
+                    Player.BUDDY_20: TestInput(mentions = {Player.JOHAN_20, Player.LEONIE_20}),
+                    Player.LEONIE_20: TestInput({20: 5}, mentions = {Player.BUDDY_20, Player.JOHAN_20,
+                                                Player.MILJUSCHKA_20}),
+                    Player.MILJUSCHKA_20: TestInput({20: 6}, mentions = {Player.NATHAN_20})},
                    {1: question4_1, 5: question4_5, 7: question4_7, 14: question4_14, 20: question4_20})
 
 # Aflevering 5 (afvaller: Johan)
@@ -197,10 +221,15 @@ question5_20 = Question({1: [Player.BUDDY_20], 2: [Player.CLAES_20], 3: [Player.
                          5: [Player.MILJUSCHKA_20], 6: [Player.NATHAN_20], 7: [Player.ROB_20]})
 result5 = Result(DropType.EXECUTION_DROP, [Player.JOHAN_20])
 episode5 = Episode(players5, result5,
-                   {Player.BUDDY_20: TestInput({2: 3}), Player.LEONIE_20: TestInput({20: 5}),
-                    Player.MILJUSCHKA_20: TestInput({6: 2}), Player.JOHAN_20: TestInput({17: 3}),
-                    Player.CLAES_20: TestInput({3: 2}), Player.NATHAN_20: TestInput({11: 2}),
-                    Player.ROB_20: TestInput({20: 1})},
+                   {Player.BUDDY_20: TestInput({2: 3}, mentions = {Player.LEONIE_20}),
+                    Player.LEONIE_20: TestInput({20: 5}, mentions = {Player.BUDDY_20, Player.MILJUSCHKA_20}),
+                    Player.MILJUSCHKA_20: TestInput({6: 2}, mentions = {Player.LEONIE_20}),
+                    Player.JOHAN_20: TestInput({17: 3}, mentions = {Player.BUDDY_20, Player.LEONIE_20,
+                                                Player.MILJUSCHKA_20}),
+                    Player.CLAES_20: TestInput({3: 2}, mentions = {Player.BUDDY_20}),
+                    Player.NATHAN_20: TestInput({11: 2}, mentions = {Player.BUDDY_20, Player.JOHAN_20, Player.LEONIE_20,
+                                                Player.MILJUSCHKA_20}),
+                    Player.ROB_20: TestInput({20: 1}, mentions = {Player.BUDDY_20})},
                    {2: question5_2, 3: question5_3, 6: question5_6, 11: question5_11, 17: question5_17,
                     20: question5_20})
 
@@ -229,9 +258,13 @@ question6_20 = Question({1: [Player.BUDDY_20], 2: [Player.CLAES_20], 3: [Player.
                          5: [Player.NATHAN_20], 6: [Player.ROB_20]})
 result6 = Result(DropType.EXECUTION_DROP, [Player.CLAES_20])
 episode6 = Episode(players6, result6,
-                   {Player.ROB_20: TestInput({1: 1}), Player.BUDDY_20: TestInput({4: 2}),
-                    Player.LEONIE_20: TestInput({8: 5}), Player.CLAES_20: TestInput({14: 2}),
-                    Player.MILJUSCHKA_20: TestInput({20: 3}), Player.NATHAN_20: TestInput({20: 4})},
+                   {Player.ROB_20: TestInput({1: 1}, mentions = {Player.BUDDY_20, Player.MILJUSCHKA_20, Player.LEONIE_20}),
+                    Player.BUDDY_20: TestInput({4: 2}, mentions = {Player.LEONIE_20}),
+                    Player.LEONIE_20: TestInput({8: 5}, mentions = {Player.BUDDY_20, Player.MIlJUSCHKA_20}),
+                    Player.CLAES_20: TestInput({14: 2}, mentions = {Player.BUDDY_20}),
+                    Player.MILJUSCHKA_20: TestInput({20: 3}, mentions = {Player.LEONIE_20, Player.ROB_20}),
+                    Player.NATHAN_20: TestInput({20: 4}, mentions = {Player.BUDDY_20, Player.LEONIE_20,
+                                                                     Player.MILJUSCHKA_20})},
                    {1: question6_1, 4: question6_4, 8: question6_8, 14: question6_14, 20: question6_20})
 
 # Aflevering 7 (geen afvaller, alleen Buddy en Nathan kregen hun scherm te zien)
@@ -252,7 +285,10 @@ question7_20 = Question({1: [Player.BUDDY_20], 2: [Player.LEONIE_20], 3: [Player
                          5: [Player.ROB_20]})
 result7 = Result(DropType.POSSIBLE_DROP, [Player.LEONIE_20, Player.MILJUSCHKA_20, Player.ROB_20])
 episode7 = Episode(players7, result7,
-                   {Player.MILJUSCHKA_20: TestInput({1: 2}), Player.LEONIE_20: TestInput({5: 2}),
+                   {Player.MILJUSCHKA_20: TestInput({1: 2}, mentions = {Player.LEONIE_20, Player.ROB_20}),
+                    Player.ROB_20: TestInput(mentions = {Player.BUDDY_20, Player.LEONIE_20}),
+                    Player.LEONIE_20: TestInput({5: 2}, mentions = {Player.MILJUSCHKA_20, Player.ROB_20}),
+                    Player.NATHAN_20: TestInput(mentions = {Player.BUDDY_20, Player.LEONIE_20, Player.MILJUSCHKA_20}),
                     Player.BUDDY_20: TestInput({20: 2})},
                    {1: question7_1, 5: question7_5, 20: question7_20})
 
@@ -286,9 +322,10 @@ question8_20 = Question({1: [Player.BUDDY_20], 2: [Player.LEONIE_20], 3: [Player
                          5: [Player.ROB_20]})
 result8 = Result(DropType.EXECUTION_DROP, [Player.LEONIE_20])
 episode8 = Episode(players8, result8,
-                   {Player.ROB_20: TestInput({3: 4, 20: 2}), Player.BUDDY_20: TestInput({14: 1, 20: 2}),
-                    Player.MILJUSCHKA_20: TestInput({13: 1, 20: 2}, immunity = True),
-                    Player.NATHAN_20: TestInput({5: 2, 20: 2})},
+                   {Player.ROB_20: TestInput({3: 4, 20: 2}, mentions = {Player.LEONIE_20}),
+                    Player.BUDDY_20: TestInput({14: 1, 20: 2}, mentions = {Player.LEONIE_20}),
+                    Player.MILJUSCHKA_20: TestInput({13: 1, 20: 2}, mentions = {Player.LEONIE_20}, immunity = True),
+                    Player.NATHAN_20: TestInput({5: 2, 20: 2}, mentions = {Player.LEONIE_20})},
                    {3: question8_3, 5: question8_5, 13: question8_13, 14: question8_14, 20: question8_20})
 
 # Aflevering 9 (afvaller: Miljuschka, Nathan) (pas in de reunie bekend)
@@ -325,8 +362,10 @@ question9_38 = Question({1: [Player.MILJUSCHKA_20], 2: [Player.ROB_20], 3: [Play
 question9_40 = Question({1: [Player.BUDDY_20], 2: [Player.MILJUSCHKA_20], 3: [Player.NATHAN_20], 4: [Player.ROB_20]})
 result9 = Result(DropType.EXECUTION_DROP, [Player.MILJUSCHKA_20, Player.NATHAN_20])
 episode9 = Episode(players9, result9,
-                   {Player.BUDDY_20: TestInput({18: 3, 27: 1, 40: 4}), Player.ROB_20: TestInput({6: 2, 11: 1, 40: 1}),
-                    Player.NATHAN_20: TestInput({35: 3, 40: 4}), Player.MILJUSCHKA_20: TestInput({38: 2, 40: 4})},
+                   {Player.MILJUSCHKA_20: TestInput({38: 2, 40: 4}, mentions = {Player.ROB_20}),
+                    Player.BUDDY_20: TestInput({18: 3, 27: 1, 40: 4}, mentions = {Player.ROB_20}),
+                    Player.ROB_20: TestInput({6: 2, 11: 1, 40: 1}, mentions = {Player.BUDDY_20}),
+                    Player.NATHAN_20: TestInput({35: 3, 40: 4}, mentions = {Player.ROB_20})},
                    {6: question9_6, 11: question9_11, 18: question9_18, 27: question9_27, 35: question9_35,
                     38: question9_38, 40: question9_40}, num_questions = 40)
 

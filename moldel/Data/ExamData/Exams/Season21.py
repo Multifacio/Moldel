@@ -39,9 +39,14 @@ question1_20 = Question({1: [Player.ELLIE_21], 2: [Player.HORACE_21], 3: [Player
                          9: [Player.TINA_21], 10: [Player.TYGO_21]})
 result1 = Result(DropType.EXECUTION_DROP, [Player.TINA_21])
 episode1 = Episode(players1, result1,
-                   {Player.JEROEN_21: TestInput({3: 1}), Player.RON_21: TestInput(jokers = 1),
-                    Player.NIKKIE_21: TestInput({7: 2}), Player.TYGO_21: TestInput({20: 1}),
-                    Player.TINA_21: TestInput({18: 3}), Player.PEGGY_21: TestInput({13: 1}),
+                   {Player.HORACE_21: TestInput(mentions = {Player.NADJA_21, Player.TINA_21}),
+                    Player.JEROEN_21: TestInput({3: 1}, mentions = {Player.NIKKIE_21}),
+                    Player.RON_21: TestInput(mentions = {Player.HORACE_21, Player.NIKKIE_21, Player.PEGGY_21,
+                                            Player.TINA_21, Player.TYGO_21}, jokers = 1),
+                    Player.NIKKIE_21: TestInput({7: 2}, mentions = {Player.TYGO_21}),
+                    Player.TYGO_21: TestInput({20: 1}),
+                    Player.TINA_21: TestInput({18: 3}),
+                    Player.PEGGY_21: TestInput({13: 1}, mentions = {Player.ELLIE_21, Player.HORACE_21, Player.TINA_21}),
                     Player.ELLIE_21: TestInput({20: 6})},
                    {3: question1_3, 7: question1_7, 13: question1_13, 18: question1_18, 20: question1_20})
 
@@ -78,10 +83,16 @@ question2_20 = Question({1: [Player.ELLIE_21], 2: [Player.HORACE_21], 3: [Player
                          9: [Player.TYGO_21]})
 result2 = Result(DropType.EXECUTION_DROP, [Player.NADJA_21])
 episode2 = Episode(players2, result2,
-                   {Player.ELLIE_21: TestInput(immunity = True), Player.RON_21: TestInput({1: 1}),
-                    Player.PEGGY_21: TestInput({9: 4}), Player.HORACE_21: TestInput({5: 2}, jokers = 1),
-                    Player.NIKKIE_21: TestInput({16: 1}), Player.NADJA_21: TestInput(jokers = 1),
-                    Player.TYGO_21: TestInput({20: 2}), Player.PATRICK_21: TestInput({20: 4}, jokers = 1)},
+                   {Player.ELLIE_21: TestInput(immunity = True),
+                    Player.RON_21: TestInput({1: 1}, mentions = {Player.ELLIE_21, Player.HORACE_21, Player.NIKKIE_21,
+                                            Player.PEGGY_21, Player.TYGO_21}),
+                    Player.PEGGY_21: TestInput({9: 4}, mentions = {Player.ELLIE_21, Player.NADJA_21}),
+                    Player.HORACE_21: TestInput({5: 2}, jokers = 1),
+                    Player.NIKKIE_21: TestInput({16: 1}, mentions = {Player.NADJA_21}),
+                    Player.NADJA_21: TestInput(jokers = 1),
+                    Player.JEROEN_21: TestInput(mentions = {Player.TYGO_21}),
+                    Player.TYGO_21: TestInput({20: 2}, mentions = {Player.HORACE_21}),
+                    Player.PATRICK_21: TestInput({20: 4}, mentions = {Player.NADJA_21, Player.PEGGY_21}, jokers = 1)},
                    {1: question2_1, 5: question2_5, 9: question2_9, 16: question2_16, 20: question2_20})
 
 # Aflevering 3 (afvaller: Horace)
@@ -119,9 +130,14 @@ question3_18 = Question({1: [Player.HORACE_21, Player.JEROEN_21, Player.NIKKIE_2
                          2: [Player.ELLIE_21, Player.RON_21, Player.TYGO_21]})
 result3 = Result(DropType.EXECUTION_DROP, [Player.HORACE_21])
 episode3 = Episode(players3, result3,
-                   {Player.TYGO_21: TestInput({6: 1}), Player.RON_21: TestInput({10: 2}),
-                    Player.JEROEN_21: TestInput({12: 5}), Player.PATRICK_21: TestInput({4: 1}),
-                    Player.PEGGY_21: TestInput({16: 2}), Player.ELLIE_21: TestInput({18: 1})},
+                   {Player.TYGO_21: TestInput({6: 1}, mentions = {Player.ELLIE_21, Player.JEROEN_21}),
+                    Player.RON_21: TestInput({10: 2}, mentions = {Player.PEGGY_21}),
+                    Player.NIKKIE_21: TestInput(mentions = {Player.JEROEN_21}),
+                    Player.JEROEN_21: TestInput({12: 5}, mentions = {Player.PATRICK_21}),
+                    Player.PATRICK_21: TestInput({4: 1}, mentions = {Player.PEGGY_21}),
+                    Player.PEGGY_21: TestInput({16: 2}, mentions = {Player.ELLIE_21}),
+                    Player.ELLIE_21: TestInput({18: 1}, mentions = {Player.HORACE_21, Player.PEGGY_21}),
+                    Player.HORACE_21: TestInput(mentions = {Player.ELLIE_21, Player.PATRICK_21, Player.PEGGY_21})},
                    {4: question3_4, 6: question3_6, 10: question3_10, 12: question3_12, 16: question3_16,
                     18: question3_18})
 
@@ -152,8 +168,11 @@ question4_20 = Question({1: [Player.ELLIE_21], 2: [Player.JEROEN_21], 3: [Player
                          5: [Player.PEGGY_21], 6: [Player.RON_21], 7: [Player.TYGO_21]})
 result4 = Result(DropType.EXECUTION_DROP, [Player.ELLIE_21])
 episode4 = Episode(players4, result4,
-                   {Player.PEGGY_21: TestInput({5: 5}), Player.RON_21: TestInput({20: 1}),
-                    Player.TYGO_21: TestInput({14: 2}), Player.NIKKIE_21: TestInput({10: 5}),
+                   {Player.PATRICK_21: TestInput(mentions = {Player.PEGGY_21, Player.RON_21}),
+                    Player.PEGGY_21: TestInput({5: 5}, mentions = {Player.RON_21}),
+                    Player.RON_21: TestInput({20: 1}, mentions = {Player.ELLIE_21, Player.NIKKIE_21, Player.PEGGY_21}),
+                    Player.TYGO_21: TestInput({14: 2}, mentions = {Player.ELLIE_21, Player.PEGGY_21}),
+                    Player.NIKKIE_21: TestInput({10: 5}, mentions = {Player.ELLIE_21, Player.JEROEN_21, Player.RON_21}),
                     Player.JEROEN_21: TestInput({20: 1})},
                    {5: question4_5, 10: question4_10, 14: question4_14, 20: question4_20})
 
@@ -185,12 +204,14 @@ question6_20 = Question({1: [Player.JEROEN_21], 2: [Player.NIKKIE_21], 3: [Playe
                          5: [Player.RON_21], 6: [Player.TYGO_21]})
 result6 = Result(DropType.EXECUTION_DROP, [Player.PATRICK_21, Player.RON_21])
 episode6 = Episode(players6, result6,
-                   {Player.TYGO_21: TestInput(immunity = True), Player.NIKKIE_21: TestInput(immunity = True),
-                    Player.PATRICK_21: TestInput({11: 1, 20: 4}), Player.PEGGY_21: TestInput({17: 1, 20: 5}),
-                    Player.JEROEN_21: TestInput({16: 1, 20: 2})},
+                   {Player.TYGO_21: TestInput(immunity = True),
+                    Player.NIKKIE_21: TestInput(immunity = True),
+                    Player.PATRICK_21: TestInput({11: 1, 20: 4}, mentions = {Player.PEGGY_21}),
+                    Player.PEGGY_21: TestInput({17: 1, 20: 5}, mentions = {Player.RON_21}),
+                    Player.JEROEN_21: TestInput({16: 1, 20: 2}, mentions = {Player.NIKKIE_21})},
                    {10: question6_10, 11: question6_11, 16: question6_16, 17: question6_17, 20: question6_20})
 
-# Aflevering 7 (afvaller: Peggy)
+# Aflevering 7 - First (afvaller: Peggy)
 # Vragen:
 # 20 - Wie is de Mol:
 # 1: Jeroen; 2: Nikkie; 3: Peggy; 4: Tygo;
@@ -199,11 +220,13 @@ players7 = [Player.JEROEN_21, Player.NIKKIE_21, Player.PEGGY_21, Player.TYGO_21]
 question7_20 = Question({1: [Player.JEROEN_21], 2: [Player.NIKKIE_21], 3: [Player.PEGGY_21], 4: [Player.TYGO_21]})
 result7 = Result(DropType.EXECUTION_DROP, [Player.PEGGY_21])
 episode7 = Episode(players7, result7,
-                   {Player.JEROEN_21: TestInput({20: 2}), Player.TYGO_21: TestInput({20: 3}),
-                    Player.PEGGY_21: TestInput({20: 4}), Player.NIKKIE_21: TestInput({20: 1})},
+                   {Player.JEROEN_21: TestInput({20: 2}, mentions = {Player.NIKKIE_21}),
+                    Player.TYGO_21: TestInput({20: 3}, mentions = {Player.PEGGY_21}),
+                    Player.PEGGY_21: TestInput({20: 4}),
+                    Player.NIKKIE_21: TestInput({20: 1}, mentions = {Player.JEROEN_21})},
                    {20: question7_20})
 
-# Aflevering 8 (afvaller: Tygo)
+# Aflevering 7 - Second (afvaller: Tygo)
 # Vragen:
 # 6 - Met wie vormde de Mol een team tijdens de opdracht 'Gastenlijst':
 # 1: Jeroen; 2: Tygo; 3: Nikkie;
@@ -219,8 +242,9 @@ question8_14 = Question({1: [Player.TYGO_21], 2: [Player.JEROEN_21, Player.NIKKI
 question8_40 = Question({1: [Player.JEROEN_21], 2: [Player.NIKKIE_21], 3: [Player.TYGO_21]})
 result8 = Result(DropType.EXECUTION_DROP, [Player.TYGO_21])
 episode8 = Episode(players8, result8,
-                   {Player.TYGO_21: TestInput({6: 3, 40: 2}), Player.NIKKIE_21: TestInput({14: 2, 40: 1}),
-                    Player.JEROEN_21: TestInput({40: 2})},
+                   {Player.TYGO_21: TestInput({6: 3, 40: 2}, mentions = {Player.NIKKIE_21}),
+                    Player.NIKKIE_21: TestInput({14: 2, 40: 1}, mentions = {Player.JEROEN_21}),
+                    Player.JEROEN_21: TestInput({40: 2}, mentions = {Player.NIKKIE_21})},
                    {6: question8_6, 14: question8_14, 40: question8_40})
 
 season21 = Season(players1, {1: episode1, 2: episode2, 3: episode3, 4: episode4, 6: episode6, 7: episode7, 8: episode8})
