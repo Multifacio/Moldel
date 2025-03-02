@@ -25,18 +25,11 @@ Het Moldel is getest op de seizoenen 13 tot en met 21 (Renaissance) en is getest
 Meer voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https://github.com/Multifacio/Moldel/tree/master/results). De voorspellingen van de laatste versie van het Moldel vind je in de map 'results/Latest Version (2021-01-01)' (https://github.com/Multifacio/Moldel/tree/master/results/Latest%20Version%20(2021-01-01)). In alle voorspellingen zijn spelers met een likelihood lager dan 1.5% verwijdert om de leesbaarheid te bevorderen, dus als een speler niet in de plot te zien is betekent dat niet dat speler niet meer meedeed.
 
 # Voorspelling
-Ook voor de nieuwste aflevering van seizoen 21 is een voorspelling gedaan. (Laatst geüpdate op 28 Februari 2021)
+Ook voor de nieuwste aflevering van seizoen 25 is een voorspelling gedaan. (Laatst geüpdate op 2 Maart 2025)
 <details>
-  <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling voor seizoen 21, aflevering 10</summary>
+  <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling voor seizoen 25, aflevering 9</summary>
   
-  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Season%2022%20(Original)/09%20-%20After%20Episode%209.png)
-</details>
-
-Daarnaast bij wijze van uitzondering zijn de voorspellingen van alle individuele layers voor de ontknoping beschikbaar:
-<details>
-  <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling van alle individuele layers voor seizoen 21, aflevering 10</summary>
-  
-  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Season%2022%20(Original)/09%20-%20After%20Episode%209%20(Individual%20Layers).png)
+  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Season%2026%20(Original)/09%20-%20After%20Episode%209.png)
 </details>
 
 # Credits
