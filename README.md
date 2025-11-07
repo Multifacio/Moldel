@@ -29,7 +29,7 @@ Ook voor de nieuwste aflevering van seizoen 25 is een voorspelling gedaan. (Laat
 <details>
   <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling voor seizoen 25, aflevering 9</summary>
   
-  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Season%2026%20(Original)/09%20-%20After%20Episode%209.png)
+  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Anniversary%Season/01%-%After%Episode%1.png)
 </details>
 
 # Credits
