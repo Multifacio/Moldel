@@ -27,9 +27,9 @@ Meer voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https
 # Voorspelling
 Ook voor de nieuwste aflevering van seizoen 25 is een voorspelling gedaan. (Laatst geüpdate op 2 Maart 2025)
 <details>
-  <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling voor seizoen 25, aflevering 9</summary>
+  <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling voor het jubileum seizoen, na aflevering 1</summary>
   
-  ![Voorspelling](https://github.com/Multifacio/Moldel/blob/master/results/Anniversary%Season/01%-%After%Episode%1.png)
+  ![Voorspelling](https://raw.githubusercontent.com/Multifacio/Moldel/refs/heads/master/results/Anniversary%20Season/01%20-%20After%20Episode%201.png)
 </details>
 
 # Credits
