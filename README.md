@@ -25,11 +25,11 @@ Het Moldel is getest op de seizoenen 13 tot en met 21 (Renaissance) en is getest
 Meer voorspellingen voor deze seizoenen kun je vinden in de map 'results' (https://github.com/Multifacio/Moldel/tree/master/results). De voorspellingen van de laatste versie van het Moldel vind je in de map 'results/Latest Version (2021-01-01)' (https://github.com/Multifacio/Moldel/tree/master/results/Latest%20Version%20(2021-01-01)). In alle voorspellingen zijn spelers met een likelihood lager dan 1.5% verwijdert om de leesbaarheid te bevorderen, dus als een speler niet in de plot te zien is betekent dat niet dat speler niet meer meedeed.
 
 # Voorspelling
-Ook voor de nieuwste aflevering van seizoen 25 is een voorspelling gedaan. (Laatst geüpdate op 2 Maart 2025)
+Ook voor de nieuwste aflevering van het jubileum seizoen is een voorspelling gedaan. (Laatst geüpdate op 9 November 2025)
 <details>
-  <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling voor het jubileum seizoen, na aflevering 1</summary>
+  <summary>Spoiler Alert! Klink links op het pijltje voor de laatste voorspelling voor het jubileum seizoen, na aflevering 2</summary>
   
-  ![Voorspelling](https://raw.githubusercontent.com/Multifacio/Moldel/refs/heads/master/results/Anniversary%20Season/01%20-%20After%20Episode%201.png)
+  ![Voorspelling](https://raw.githubusercontent.com/Multifacio/Moldel/refs/heads/master/results/Anniversary%20Season/02%20-%20After%20Episode%202.png)
 </details>
 
 # Credits
